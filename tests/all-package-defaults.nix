@@ -13,6 +13,15 @@ let
   };
 
   disabledPackages = [
+    # 2026-02-02 build failure
+    "crystalline"
+
+    # 2026-01-22 build failure
+    "shopify"
+
+    # 2026-01-22 build failure
+    "dmd"
+
     # 2025-12-24: phpPackages.php-codesniffer is broken
     # https://github.com/NixOS/nixpkgs/pull/459254#issuecomment-3689578764
     "php-codesniffer"
@@ -24,6 +33,9 @@ let
 
     # 2025-10-12 dependency mbedtls is marked as insecure
     "haxe"
+
+    # 2026-02-05: build failure
+    "skim"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # "tabnine"
@@ -63,6 +75,10 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2026-02-04 dependency llvmPackages_22.llvm is broken
+    "ameba"
+    "crystal"
+
     # 2025-11-26 build failure
     "nvim-spectre"
 
@@ -105,6 +121,15 @@ let
     "wl-clipboard" # wayland
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
+    # 2026-02-05: dependency gdb is broken
+    "nimlangserver"
+    "nimlsp"
+    "x86_64-apple-darwin-nim-wrapper"
+
+    # 2026-01-23: dependency models-dev is broken
+    "opencode"
+    "opencode.nvim"
+
     # 2025-12-24: build failure
     # I (@GaetanLepage) am able to build this package on my system, but it is not cached on
     # hydra.nixos.org and builbot fails at building it
@@ -143,10 +168,26 @@ let
     "zf"
     "zls"
 
+    # 2026-01-23: build failures on x86_64-darwin
+    "arrow-cpp"
+    "azurite"
+    "basedpyright"
+    "ccls"
+    "dbee-bin"
+    "gemini-cli"
+    "github-copilot-cli"
+    "nvim-dbee"
+    "odin"
+    "ols"
+    "thrift"
+
     # luau-lsp is marked as broken on x86_64-darwin
     "luau-lsp.nvim"
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
+    # 2026-02-05: build failure
+    "marksman"
+
     # 2025-10-20: build failure
     # error: 'to_chars' is unavailable: introduced in macOS 13.3 unknown
     "mesonlsp"
@@ -158,12 +199,18 @@ let
     # 2025-10-20: dependency mlton build failure
     "smlfmt"
 
+    # 2026-01-23: build failure on aarch64-darwin
+    "github-copilot-cli"
+
     # As of 2025-07-25, zig-zlint is failing on aarch64-darwin
     "zig-zlint"
 
     # 2025-09-08, build failure
     # https://github.com/NixOS/nixpkgs/pull/441058
     "verible"
+
+    # 2025-09-16 zig/zig-hook is marked as broken on x86_64-darwin; also fails on aarch64-darwin
+    "zf"
   ];
 
   isEnabled = p: !(builtins.elem (lib.getName p) disabledPackages);

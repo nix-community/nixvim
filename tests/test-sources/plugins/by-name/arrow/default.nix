@@ -30,9 +30,9 @@
           prev_item = "[";
         };
         custom_actions = {
-          open = ''function(target_file_name, current_file_name) end'';
-          split_vertical = ''function(target_file_name, current_file_name) end'';
-          split_horizontal = ''function(target_file_name, current_file_name) end'';
+          open = "function(target_file_name, current_file_name) end";
+          split_vertical = "function(target_file_name, current_file_name) end";
+          split_horizontal = "function(target_file_name, current_file_name) end";
         };
         window = {
           width = "auto";

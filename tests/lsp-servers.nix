@@ -37,6 +37,9 @@ let
     let
 
       disabled = [
+        # 2026-02-02 build failure
+        "crystalline"
+
         # TODO: 2025-07-25 build failure
         "mint"
 
@@ -48,6 +51,9 @@ let
         # See https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig.lua
         "ruff_lsp"
         "typst_lsp"
+
+        # TODO: 2026-01-23 build failure
+        "shopify_theme_ls"
       ];
     in
     {

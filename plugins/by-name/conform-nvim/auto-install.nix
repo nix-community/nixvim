@@ -23,7 +23,12 @@ rec {
     name:
     let
       permittedNames = lib.optionals (lib.isAttrs configuredFormatters) (attrNames configuredFormatters);
-      stateList = map (state: lib.fix (lib.toFunction state)) (attrValues states);
+      stateList = lib.pipe states [
+        attrValues
+        (map lib.toFunction)
+        (map (fn: fn null))
+        (filter isString)
+      ];
       isState =
         maybePackage:
         lib.throwIf (isFunction maybePackage) "The '${name}' conform-nvim formatter package is a function" (

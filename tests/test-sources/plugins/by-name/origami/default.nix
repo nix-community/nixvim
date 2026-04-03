@@ -8,7 +8,10 @@
       enable = true;
 
       settings = {
-        useLspFoldsWithTreesitterFallback = true;
+        useLspFoldsWithTreesitterFallback = {
+          enabled = true;
+          foldmethodIfNeitherIsAvailable = "indent";
+        };
         pauseFoldsOnSearch = true;
         foldtext = {
           enabled = true;
@@ -29,7 +32,7 @@
         };
         foldKeymaps = {
           setup = true;
-          hOnlyOpensOnFirstColumn = false;
+          closeOnlyOnFirstColumn = false;
         };
       };
     };

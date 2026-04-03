@@ -28,7 +28,7 @@ lib.nixvim.plugins.mkVimPlugin {
         haskell = {
           parentheses = [
             "start=/\\[/ end=/\\]/ fold"
-            "start=/\v\{\ze[^-]/ end=/}/ fold"
+            "start=/\\v\\{\\ze[^-]/ end=/}/ fold"
           ];
         };
         css = 0;

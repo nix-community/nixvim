@@ -6,36 +6,14 @@ with pkgs;
 let
   states = {
     broken = _package: "broken";
-    darwinOnly = _package: "Darwin only";
+    darwinOnly = p: if stdenv.hostPlatform.isDarwin then p else "Darwin only";
+    linuxOnly = p: if stdenv.hostPlatform.isLinux then p else "Linux only";
     unpackaged = "unpackaged";
   };
 in
 {
   inherit states;
   formatter-packages = {
-    # 2025-12-24: phpPackages.php-codesniffer is broken
-    # https://github.com/NixOS/nixpkgs/pull/459254#issuecomment-3689578764
-    phpcbf = states.broken php84Packages.php-codesniffer;
-
-    # 2025-11-15 dependency swift is broken
-    # https://github.com/NixOS/nixpkgs/issues/461474
-    swift = states.broken swift;
-    swift_format = states.broken swift-format;
-    swiftformat = states.broken swiftformat;
-    swiftlint = states.broken swiftlint;
-
-    # 2025-10-12 build failure on Darwin
-    smlfmt = if stdenv.isDarwin then states.broken smlfmt else smlfmt;
-
-    # 2025-11-25 build failure
-    roc = states.broken roc;
-    # 2025-09-13 build failure
-    inko = states.broken inko;
-    # 2025-09-17 build failure
-    gci = states.broken gci;
-    # 2025-10-08 build failure (haskellPackages.hindent)
-    hindent = states.broken haskellPackages.hindent;
-
     format-queries = null; # Uses neovim itself
     init = null; # Internal thingamajig
     injected = null; # Internal formatter
@@ -98,8 +76,8 @@ in
     biome-check = biome;
     biome-organize-imports = biome;
     cabal_fmt = haskellPackages.cabal-fmt;
-    clang_format = clang-tools;
     clang-format = clang-tools;
+    clang_format = clang-tools;
     cmake_format = cmake-format;
     css_beautify = nodePackages.js-beautify;
     cue_fmt = cue;
@@ -107,6 +85,8 @@ in
     deno_fmt = deno;
     dioxus = dioxus-cli;
     inherit (python313Packages) docformatter;
+    # FIXME: 2026-01-23 docstrfmt test failure in nixpkgs
+    docstrfmt = states.broken python313Packages.docstrfmt;
     elm_format = elmPackages.elm-format;
     erb_format = rubyPackages.erb-formatter;
     fish_indent = fishMinimal;
@@ -116,6 +96,8 @@ in
     gofmt = go;
     goimports = gotools;
     hcl = hclfmt;
+    # FIXME: 2025-10-08 build failure (haskellPackages.hindent)
+    hindent = states.broken haskellPackages.hindent;
     html_beautify = nodePackages.js-beautify;
     inherit (rubyPackages) htmlbeautifier;
     hurlfmt = hurl;
@@ -126,24 +108,28 @@ in
     mago_format = mago;
     mago_lint = mago;
     markdownlint = markdownlint-cli;
-    mix = beamMinimal28Packages.elixir;
     mh_style = python3Packages.miss-hit;
+    mix = beamMinimal28Packages.elixir;
     nginxfmt = nginx-config-formatter;
     nimpretty = nim;
     nixpkgs_fmt = nixpkgs-fmt;
     inherit (ocamlPackages) ocp-indent;
     odinfmt = ols;
-    opa_fmt = open-policy-agent;
-    perltidy = perl538Packages.PerlTidy;
+    # TODO: added 2026-02-08 broken on darwin
+    opa_fmt = states.linuxOnly open-policy-agent;
+    perltidy = perlPackages.PerlTidy;
     pg_format = pgformatter;
+    phpcbf = php84Packages.php-codesniffer;
     php_cs_fixer = php83Packages.php-cs-fixer;
     inherit (php84Packages) phpinsights;
     prolog = swi-prolog;
     pyproject-fmt = python313Packages.pyproject-parser;
     inherit (python313Packages) python-ly;
     qmlformat = libsForQt5.qt5.qtdeclarative;
-    racketfmt = racket;
+    # TODO: added 2026-02-08 marked unsupported on darwin
+    racketfmt = states.linuxOnly racket;
     inherit (python313Packages) reorder-python-imports;
+    roc = states.linuxOnly roc;
     ruff_fix = ruff;
     ruff_format = ruff;
     ruff_organize_imports = ruff;
@@ -152,6 +138,10 @@ in
     squeeze_blanks = coreutils;
     standardrb = rubyPackages.standard;
     styler = R;
+    swift = states.darwinOnly swift;
+    swiftformat = states.darwinOnly swiftformat;
+    swift_format = states.darwinOnly swift-format;
+    swiftlint = states.darwinOnly swiftlint;
     inherit (rubyPackages) syntax_tree;
     tclfmt = tclint;
     terraform_fmt = tenv;

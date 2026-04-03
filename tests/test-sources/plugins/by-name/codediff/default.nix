@@ -1,10 +1,10 @@
 {
   empty = {
-    plugins.vscode-diff.enable = true;
+    plugins.codediff.enable = true;
   };
 
   defaults = {
-    plugins.vscode-diff = {
+    plugins.codediff = {
       enable = true;
 
       settings = {
@@ -32,7 +32,7 @@
   };
 
   example = {
-    plugins.vscode-diff = {
+    plugins.codediff = {
       enable = true;
 
       settings = {

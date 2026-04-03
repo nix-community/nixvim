@@ -66,7 +66,7 @@
             enable = true;
             timeout = 750;
           };
-          _log_level.__raw = ''vim.log.levels.WARN'';
+          _log_level.__raw = "vim.log.levels.WARN";
         };
       };
     };

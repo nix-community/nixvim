@@ -255,8 +255,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
   settingsExample = {
     highlight = {
       pattern = [
-        ".*<(KEYWORDS)\s*:"
-        ".*<(KEYWORDS)\s*"
+        ".*<(KEYWORDS)\\s*:"
+        ".*<(KEYWORDS)\\s*"
       ];
     };
   };
