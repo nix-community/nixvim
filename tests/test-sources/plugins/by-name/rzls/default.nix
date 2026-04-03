@@ -14,7 +14,7 @@
               return nil
           end
         '';
-        capabilities.__raw = ''vim.lsp.protocol.make_client_capabilities()'';
+        capabilities.__raw = "vim.lsp.protocol.make_client_capabilities()";
       };
     };
   };

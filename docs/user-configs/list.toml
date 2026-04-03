@@ -61,11 +61,6 @@ owner = "hbjydev"
 repo = "hvim"
 
 [[config]]
-owner = "HeitorAugustoLN"
-repo = "nvim-config"
-description = "HeitorAugustoLN's personal Neovim configuration made with Nixvim"
-
-[[config]]
 owner = "JMartJonesy"
 repo = "kickstart.nixvim"
 description = "An implementation of kickstart.nvim using nixvim"
@@ -190,3 +185,15 @@ owner = "literally-sai"
 title = "vermvim"
 description = "nixvim flake, with custom base16 loader"
 url = "https://github.com/literally-sai/vermvim"
+
+[[config]]
+owner = "carl0xs"
+title = "nixcfg"
+description = "Nix configuration setup, including nixvim"
+url = "https://github.com/carl0xs/nixcfg/blob/main/modules/workstation/neovim.nix"
+
+[[config]]
+owner = "ar-at-localhost"
+title = "np"
+description = "Nixvim setup, focused on Project Oriented Development"
+url = "https://github.com/ar-at-localhost/np"

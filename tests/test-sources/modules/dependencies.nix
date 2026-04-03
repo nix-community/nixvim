@@ -7,12 +7,17 @@ let
     # Transient dependency `vmr` has a build failure
     # https://github.com/NixOS/nixpkgs/issues/431811
     "roslyn_ls"
+    "skim"
   ];
 
   isDepEnabled =
     name: package:
-    # Filter disabled dependencies
+    let
+      packageName = lib.getName package;
+    in
+    # Filter disabled dependencies by dependency key or package name
     (!lib.elem name disabledDeps)
+    && (!lib.elem packageName disabledDeps)
 
     # Disable if the package is not compatible with hostPlatform
     && lib.meta.availableOn hostPlatform package;
@@ -62,6 +67,56 @@ in
             inherit package;
           }
         ))
+      ];
+    };
+
+  package-fallback-false =
+    {
+      lib,
+      pkgs,
+      config,
+      ...
+    }:
+    {
+      dependencies.git = {
+        enable = true;
+        packageFallback = false;
+      };
+
+      assertions = [
+        {
+          assertion = lib.elem pkgs.git config.extraPackages;
+          message = "Expected git to be in extraPackages.";
+        }
+        {
+          assertion = !lib.elem pkgs.git config.extraPackagesAfter;
+          message = "Expected git not to be in extraPackagesAfter.";
+        }
+      ];
+    };
+
+  package-fallback-true =
+    {
+      lib,
+      pkgs,
+      config,
+      ...
+    }:
+    {
+      dependencies.git = {
+        enable = true;
+        packageFallback = true;
+      };
+
+      assertions = [
+        {
+          assertion = !lib.elem pkgs.git config.extraPackages;
+          message = "Expected git not to be in extraPackages.";
+        }
+        {
+          assertion = lib.elem pkgs.git config.extraPackagesAfter;
+          message = "Expected git to be in extraPackagesAfter.";
+        }
       ];
     };
 

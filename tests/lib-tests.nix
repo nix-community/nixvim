@@ -105,7 +105,7 @@ let
           };
         };
       };
-      expected = ''{ a = { b = 1, c = 2, d = { e = 3 } } }'';
+      expected = "{ a = { b = 1, c = 2, d = { e = 3 } } }";
     };
 
     testToLuaObjectNestedList = {
@@ -133,7 +133,7 @@ let
         d = false;
         e = null;
       };
-      expected = ''{ a = 1.0, b = 2, c = true, d = false }'';
+      expected = "{ a = 1.0, b = 2, c = true, d = false }";
     };
 
     testToLuaObjectNilPrim = {
@@ -175,7 +175,7 @@ let
           f = { };
         };
       };
-      expected = ''{ }'';
+      expected = "{ }";
     };
 
     testToLuaObjectAttrListFilters = {
@@ -224,7 +224,7 @@ let
           ]
         ];
       };
-      expected = ''{ { { }, { }, { { }, { } } }, g = { { }, { } } }'';
+      expected = "{ { { }, { }, { { }, { } } }, g = { { }, { } } }";
     };
 
     testToLuaObjectEmptyTable = {
@@ -240,7 +240,7 @@ let
           g = helpers.emptyTable;
         };
       };
-      expected = ''{ c = { }, d = { g = { } } }'';
+      expected = "{ c = { }, d = { g = { } } }";
     };
 
     testToLuaObjectEmptyListEntries = {

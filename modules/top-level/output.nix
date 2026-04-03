@@ -7,7 +7,7 @@
 }:
 let
   inherit (lib) types mkOption mkPackageOption;
-  inherit (lib) optional optionalAttrs;
+  inherit (lib) optional;
   builders = lib.nixvim.builders.withPkgs pkgs;
   inherit (pkgs.stdenv.hostPlatform) system;
 in
@@ -199,9 +199,18 @@ in
         else
           config.extraLuaPackages;
 
-      neovimConfig = pkgs.neovimUtils.makeNeovimConfig (
-        {
-          inherit extraLuaPackages;
+      vimPackageInfo = pkgs.neovimUtils.makeVimPackageInfo config.build.plugins;
+
+      luaPackagesForWrapper =
+        ps:
+        extraLuaPackages ps
+        ++ lib.optionals (vimPackageInfo ? luaDependencies) vimPackageInfo.luaDependencies;
+
+      luaEnv = package.lua.withPackages luaPackagesForWrapper;
+
+      wrappedNeovim =
+        (pkgs.wrapNeovimUnstable package {
+          extraLuaPackages = luaPackagesForWrapper;
           inherit (config)
             extraPython3Packages
             viAlias
@@ -212,29 +221,25 @@ in
             withPerl
             withPython3
             ;
-          # inherit customRC;
           inherit (config.build) plugins;
-        }
-        # Necessary to make sure the runtime path is set properly in NixOS 22.05,
-        # or more generally before the commit:
-        # cda1f8ae468 - neovim: pass packpath via the wrapper
-        // optionalAttrs (lib.functionArgs pkgs.neovimUtils.makeNeovimConfig ? configure) {
-          configure.packages = {
-            nixvim = {
-              start = map (x: x.plugin) config.build.plugins;
-              opt = [ ];
-            };
+          wrapperArgs = lib.optionals (luaEnv != null) [
+            "--prefix"
+            "LUA_PATH"
+            ";"
+            (package.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
+            "--prefix"
+            "LUA_CPATH"
+            ";"
+            (package.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
+          ];
+        }).overrideAttrs
+          {
+            # TODO: 2025-01-06
+            # Wait for user feedback on disabling the fixup phase.
+            # Ideally this will be upstreamed to nixpkgs.
+            # See https://github.com/nix-community/nixvim/pull/3660#discussion_r2326250439
+            dontFixup = true;
           };
-        }
-      );
-
-      # TODO: 2025-01-06
-      # Wait for user feedback on disabling the fixup phase.
-      # Ideally this will be upstreamed to nixpkgs.
-      # See https://github.com/nix-community/nixvim/pull/3660#discussion_r2326250439
-      wrappedNeovim = (pkgs.wrapNeovimUnstable package neovimConfig).overrideAttrs {
-        dontFixup = true;
-      };
 
       customRC = lib.nixvim.concatNonEmptyLines [
         (lib.nixvim.wrapVimscriptForLua wrappedNeovim.initRc)

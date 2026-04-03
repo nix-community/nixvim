@@ -256,7 +256,7 @@ lib.nixvim.plugins.mkVimPlugin {
 
     matchparen_nomode = defaultNullOpts.mkStr' {
       pluginDefault = "";
-      example = "vV\<c-v>";
+      example = "vV\\<c-v>";
       description = ''
         When not empty, match highlighting will be disabled in the specified modes, where each mode
         is a single character like in the `|mode()|` function.

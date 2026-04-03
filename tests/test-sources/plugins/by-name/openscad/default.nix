@@ -8,7 +8,8 @@
       enable = true;
 
       settings = {
-        fuzzy_finder = "skim";
+        # FIXME: Added 2026-02-08 skim dependency broken
+        # fuzzy_finder = "skim";
         cheatsheet_window_blend = 15;
         load_snippets = false;
         auto_open = false;

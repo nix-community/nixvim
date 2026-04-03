@@ -48,7 +48,7 @@ types.submodule {
     '';
 
     transform_items = defaultNullOpts.mkRaw' {
-      pluginDefault = ''function(_, items) return items end'';
+      pluginDefault = "function(_, items) return items end";
       description = ''
         Function to transform the items before they're returned.
       '';

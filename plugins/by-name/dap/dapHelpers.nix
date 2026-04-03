@@ -55,9 +55,9 @@ rec {
   serverAdapterOption = mkAdapterType {
     host = lib.nixvim.defaultNullOpts.mkStr "127.0.0.1" "Host to connect to.";
 
-    port = mkNullOrOption (types.either types.int (types.enum [ "$\{port}" ])) ''
+    port = mkNullOrOption (types.either types.int (types.enum [ "\${port}" ])) ''
       Port to connect to.
-      If "$\{port}" dap resolves a free port.
+      If "$${port}" dap resolves a free port.
       This is intended to be used with `executable.args`.
     '';
 
@@ -78,7 +78,7 @@ rec {
   };
 
   pipeAdapterOption = mkAdapterType {
-    pipe = lib.nixvim.defaultNullOpts.mkStr "$\{pipe}" "Pipe name.";
+    pipe = lib.nixvim.defaultNullOpts.mkStr "\${pipe}" "Pipe name.";
 
     executable = {
       command = mkNullOrOption types.str "Command that spawns the adapter.";

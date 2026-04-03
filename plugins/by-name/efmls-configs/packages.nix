@@ -75,7 +75,9 @@ in
       "jq"
       "languagetool"
       "mypy"
+      "nixfmt"
       "php"
+      "phpstan"
       "prettypst"
       "proselint"
       "protolint"
@@ -118,7 +120,6 @@ in
       ];
       phpPackages = [
         "phan"
-        "phpstan"
         "psalm"
       ];
       luaPackages = [
@@ -148,7 +149,6 @@ in
       lua_format = "luaformatter";
       markdownlint = "markdownlint-cli";
       mcs = "mono";
-      nixfmt = "nixfmt-classic";
       phpcbf = [
         "phpPackages"
         "php-codesniffer"

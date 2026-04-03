@@ -46,7 +46,6 @@
     "dts_lsp"
     "ecsact"
     "ember"
-    "erlangls"
     "esbonio"
     "expert"
     "facility_language_server"
@@ -63,6 +62,7 @@
     "glasgow"
     "glint"
     "gnls"
+    "gn_language_server"
     "gradle_ls"
     "grammarly"
     "graphql" # nodePackages.graphql-language-service-cli was removed in https://github.com/NixOS/nixpkgs/pull/382557
@@ -106,6 +106,7 @@
     "nxls"
     "opencl_ls"
     "openscad_ls"
+    "oso"
     "pact_ls"
     "pasls"
     "pbls"
@@ -120,6 +121,7 @@
     "prolog_ls"
     "prosemd_lsp"
     "pug"
+    "pony_language_server"
     "puppet"
     "purescriptls"
     "pyre"
@@ -264,6 +266,7 @@
     glslls = "glslls";
     golangci_lint_ls = "golangci-lint-langserver";
     gopls = "gopls";
+    graphql = "graphql-language-service-cli";
     harper_ls = "harper";
     helm_ls = "helm-ls";
     hls = "haskell-language-server";
@@ -324,6 +327,7 @@
     ols = "ols";
     omnisharp = "omnisharp-roslyn";
     openscad_lsp = "openscad-lsp";
+    oxfmt = "oxfmt";
     oxlint = "oxlint";
     perlnavigator = "perlnavigator";
     perlpls = [

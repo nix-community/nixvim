@@ -6,7 +6,24 @@
 
   all-formatters =
     let
-      allFormatters = lib.importJSON ../../../../../generated/conform-formatters.json;
+      inherit
+        (import ../../../../../plugins/by-name/conform-nvim/formatter-packages.nix { inherit pkgs; })
+        formatter-packages
+        states
+        ;
+      stateList = lib.pipe states [
+        builtins.attrValues
+        (map lib.toFunction)
+        (map (fn: fn null))
+        (builtins.filter builtins.isString)
+      ];
+      allFormatters = builtins.filter (
+        name:
+        let
+          maybePackage = formatter-packages.${name} or null;
+        in
+        maybePackage != null && !builtins.elem maybePackage stateList
+      ) (lib.importJSON ../../../../../generated/conform-formatters.json);
     in
     {
       plugins.conform-nvim = {
@@ -17,6 +34,43 @@
         };
         settings.formatters_by_ft."*" = allFormatters;
       };
+    };
+
+  darwin-only-auto-install =
+    { config, ... }:
+    let
+      inherit (pkgs.stdenv) isDarwin;
+    in
+    {
+      plugins.conform-nvim = {
+        enable = true;
+        autoInstall.enable = true;
+        settings.formatters_by_ft."*" = [ "swift" ];
+      };
+
+      test = {
+        buildNixvim = false;
+        warnings =
+          expect:
+          if isDarwin then
+            [ (expect "count" 0) ]
+          else
+            [
+              (expect "count" 1)
+              (expect "any" "marked 'Darwin only'")
+            ];
+      };
+
+      assertions = [
+        {
+          assertion = isDarwin == lib.elem pkgs.swift config.extraPackages;
+          message =
+            if isDarwin then
+              "Expected `swift` to be in `extraPackages` on Darwin."
+            else
+              "Expected `swift` not to be in `extraPackages` on non-Darwin systems.";
+        }
+      ];
     };
 
   default = {
@@ -83,7 +137,7 @@
         notify_no_formatters = false;
         formatters = {
           nixfmt = {
-            command = lib.getExe pkgs.nixfmt-rfc-style;
+            command = lib.getExe pkgs.nixfmt;
           };
           myFormatter = {
             command = "myCmd";

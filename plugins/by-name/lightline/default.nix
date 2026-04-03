@@ -61,7 +61,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     component =
       defaultNullOpts.mkAttrsOf types.str
         {
-          mode = ''%{lightline#mode()}'';
+          mode = "%{lightline#mode()}";
           absolutepath = "%F";
           relativepath = "%f";
           filename = "%t";
@@ -81,7 +81,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           line = "%l";
           column = "%c";
           close = "%999X X ";
-          winnr = ''%{winnr()}'';
+          winnr = "%{winnr()}";
         }
         ''
           Lightline component definitions. Uses 'statusline' syntax.
@@ -151,7 +151,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
         "filename"
         "modified"
       ];
-    } ''A dictionary to store the tab components in each tabs.'';
+    } "A dictionary to store the tab components in each tabs.";
 
     mode_map =
       defaultNullOpts.mkAttrsOf types.str
@@ -161,11 +161,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
           "R" = "REPLACE";
           "v" = "VISUAL";
           "V" = "V-LINE";
-          "\<C-v>" = "V-BLOCK";
+          "<C-v>" = "V-BLOCK";
           "c" = "COMMAND";
           "s" = "SELECT";
           "S" = "S-LINE";
-          "\<C-s>" = "S-BLOCK";
+          "<C-s>" = "S-BLOCK";
           "t" = "TERMINAL";
         }
         ''

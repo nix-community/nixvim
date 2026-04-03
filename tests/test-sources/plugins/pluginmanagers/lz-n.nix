@@ -74,11 +74,8 @@ in
           dial-nvim
           vimtex
           telescope-nvim
-          nvim-biscuits
           crates-nvim
         ]);
-
-      plugins.treesitter.enable = true;
 
       plugins.lz-n = {
         enable = true;
@@ -129,16 +126,6 @@ in
                   vim.g.vimtex_compiler_method = "latexmk"
                 end
               '';
-          }
-          # On event
-          {
-            __unkeyed-1 = "nvim-biscuits";
-            event.__raw = "{ 'BufEnter *.lua' }";
-            after.__raw = ''
-              function()
-              require('nvim-biscuits').setup({})
-              end
-            '';
           }
           # On command no setup function, priority
           {

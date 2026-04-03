@@ -59,7 +59,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       preConfig = ''
         local coq = require 'coq'
       '';
-      setupWrappers = [ (s: ''coq.lsp_ensure_capabilities(${s})'') ];
+      setupWrappers = [ (s: "coq.lsp_ensure_capabilities(${s})") ];
     };
   };
 }

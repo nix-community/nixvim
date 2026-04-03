@@ -55,6 +55,7 @@ in
       "fprettify"
       "gersemi"
       "gitlint"
+      "gitleaks"
       "gofumpt"
       "golines"
       "hadolint"
@@ -67,6 +68,7 @@ in
       "mdformat"
       "mdl"
       "mypy"
+      "nixfmt"
       "pmd"
       "prettierd"
       "proselint"
@@ -184,7 +186,6 @@ in
       meson_format = "meson";
       mix = "elixir";
       nimpretty = "nim";
-      nixfmt = "nixfmt-classic";
       nixpkgs_fmt = "nixpkgs-fmt";
       opacheck = "open-policy-agent";
       opentofu_fmt = "opentofu";
