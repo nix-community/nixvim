@@ -153,6 +153,7 @@ in
       grep.default = "gnugrep";
       gzip.default = "gzip";
       imagemagick.default = "imagemagick";
+      inotify-tools.default = "inotify-tools";
       jupytext.default = [
         "python313Packages"
         "jupytext"
