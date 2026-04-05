@@ -36,14 +36,28 @@ lib.nixvim.plugins.mkNeovimPlugin {
           Defaults to the capitalized filetype.
         '';
 
-        size = lib.nixvim.mkNullOrOption types.ints.unsigned ''
-          Size of the short edge of the edgebar.
-          For edgebars, this is the minimum width.
-          For panels, minimum height.
-        '';
+        size =
+          lib.nixvim.mkCompositeOption
+            ''
+              Size of the short edge of the edgebar.
+              `width` is the minimum width for edgebars.
+              `height` is the minimum height for panels.
+            ''
+            {
+              width = lib.nixvim.mkNullOrOption types.ints.unsigned ''
+                Minimum width of the view when it's in an edgebar.
+              '';
+              height = lib.nixvim.mkNullOrOption types.ints.unsigned ''
+                Minimum height of the view when it's in a panel.
+              '';
+            };
 
         pinned = lib.nixvim.mkNullOrOption types.bool ''
           If true, the view will always be shown in the edgebar even when it has no windows.
+        '';
+
+        collapsed = lib.nixvim.mkNullOrOption types.bool ''
+          When a view is pinned and collapsed, it will be shown closed on start.
         '';
 
         open = lib.nixvim.mkNullOrStr ''
@@ -276,7 +290,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     bottom = [
       {
         ft = "toggleterm";
-        size = 30;
+        size.width = 30;
         filter = ''
           function(buf, win)
             return vim.api.nvim_win_get_config(win).relative == ""
@@ -285,7 +299,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       }
       {
         ft = "help";
-        size = 20;
+        size.width = 20;
         filter = ''
           function(buf)
             return vim.bo[buf].buftype == "help"
@@ -297,7 +311,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       {
         title = "nvimtree";
         ft = "NvimTree";
-        size = 30;
+        size.height = 30;
       }
       {
         ft = "Outline";
