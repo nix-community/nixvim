@@ -70,6 +70,7 @@ in
       "mypy"
       "nixfmt"
       "pmd"
+      "prettier"
       "prettierd"
       "proselint"
       "protolint"
@@ -112,7 +113,6 @@ in
     // scoped {
       nodePackages = [
         "alex"
-        "prettier"
       ];
       phpPackages = [
         "phpmd"
