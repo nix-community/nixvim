@@ -113,6 +113,7 @@ in
     # Scoped packages
     // scoped {
       nodePackages = [
+        "alex"
       ];
       phpPackages = [
         "phpmd"
