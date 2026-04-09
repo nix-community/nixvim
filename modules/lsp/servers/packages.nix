@@ -81,6 +81,7 @@
     "janet_lsp"
     "jinja_lsp"
     "julials"
+    "kakehashi"
     "kcl"
     "kotlin_lsp"
     "kulala_ls"
@@ -154,6 +155,7 @@
     "sorbet"
     "spyglassmc_language_server"
     "sqlls"
+    "stan_ls"
     "steep"
     "stimulus_ls"
     "stylua3p_ls"
@@ -177,6 +179,7 @@
     "veridian"
     "vespa_ls"
     "visualforce_ls"
+    "vimdoc_ls"
     # coqPackages.vscoq-language-server is unavailable since the bump to coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
     "vscoqtop"
     "wasm_language_tools"
@@ -252,6 +255,7 @@
     fennel_ls = "fennel-ls";
     fish_lsp = "fish-lsp";
     flow = "flow";
+    fortitude = "fortitude";
     fortls = "fortls";
     fsautocomplete = "fsautocomplete";
     fstar = "fstar";
@@ -302,6 +306,7 @@
     mesonlsp = "mesonlsp";
     metals = "metals";
     mint = "mint";
+    mpls = "mpls";
     mlir_lsp_server = [
       "llvmPackages"
       "mlir"
@@ -340,6 +345,7 @@
       "phan"
     ];
     phpactor = "phpactor";
+    pony_lsp = "ponyc";
     postgres_lsp = "postgres-language-server";
     protols = "protols";
     psalm = [
