@@ -107,20 +107,20 @@
     withRuby = true;
 
     extraConfigLua = ''
-      if vim.fn.executable("nvim-node") ~= 1 then
-        print("Unable to find Node.js provider.")
+      if type(vim.g.node_host_prog) ~= "string" or not vim.g.node_host_prog:match("node") then
+        print("Node.js host program was not configured.")
       end
 
-      if vim.fn.executable("nvim-perl") ~= 1 then
-        print("Unable to find Perl provider.")
+      if type(vim.g.perl_host_prog) ~= "string" or not vim.g.perl_host_prog:match("perl") then
+        print("Perl host program was not configured.")
       end
 
-      if vim.fn.executable("nvim-python3") ~= 1 then
-        print("Unable to find Python3 provider.")
+      if type(vim.g.python3_host_prog) ~= "string" or not vim.g.python3_host_prog:match("python3") then
+        print("Python3 host program was not configured.")
       end
 
-      if vim.fn.executable("nvim-ruby") ~= 1 then
-        print("Unable to find Ruby provider.")
+      if type(vim.g.ruby_host_prog) ~= "string" or not vim.g.ruby_host_prog:match("ruby") then
+        print("Ruby host program was not configured.")
       end
     '';
   };
@@ -132,20 +132,20 @@
     withRuby = false;
 
     extraConfigLua = ''
-      if vim.fn.executable("nvim-node") == 1 then
-        print("Node.js provider was found.")
+      if vim.g.loaded_node_provider ~= 0 then
+        print("Node.js provider discovery was not disabled.")
       end
 
-      if vim.fn.executable("nvim-perl") == 1 then
-        print("Perl provider was found.")
+      if vim.g.loaded_perl_provider ~= 0 then
+        print("Perl provider discovery was not disabled.")
       end
 
-      if vim.fn.executable("nvim-python3") == 1 then
-        print("Python3 provider was found.")
+      if vim.g.loaded_python3_provider ~= 0 then
+        print("Python3 provider discovery was not disabled.")
       end
 
-      if vim.fn.executable("nvim-ruby") == 1 then
-        print("Ruby provider was found.")
+      if vim.g.loaded_ruby_provider ~= 0 then
+        print("Ruby provider discovery was not disabled.")
       end
     '';
   };
