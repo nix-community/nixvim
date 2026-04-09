@@ -75,10 +75,6 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
-    # 2026-04-09: OCaml toolchain build failure on Darwin
-    "flow"
-    "fstar"
-
     # 2026-04-09: build failure
     "fortitude"
 
