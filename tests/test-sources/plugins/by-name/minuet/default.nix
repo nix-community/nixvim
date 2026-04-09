@@ -17,9 +17,11 @@
         lsp = {
           enabled_ft.__empty = { };
           disabled_ft.__empty = { };
-          enabled_auto_trigger_ft.__empty = { };
-          disabled_auto_trigger_ft.__empty = { };
-          warn_on_blink_or_cmp = true;
+          completion = {
+            enabled_auto_trigger_ft.__empty = { };
+            disabled_auto_trigger_ft.__empty = { };
+            warn_on_blink_or_cmp = true;
+          };
         };
         virtualtext = {
           auto_trigger_ft.__empty = { };
