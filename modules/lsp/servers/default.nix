@@ -70,7 +70,18 @@ in
         {
           # Declare explicit options for each `packages.nix` entry with a known package
           options = builtins.mapAttrs (
-            name: package: mkServerOption { inherit name package; }
+            name: value:
+            let
+              args =
+                if builtins.isAttrs value then
+                  { inherit name; } // value
+                else
+                  {
+                    inherit name;
+                    package = value;
+                  };
+            in
+            mkServerOption args
           ) (import ./packages.nix).packages;
         }
         {
