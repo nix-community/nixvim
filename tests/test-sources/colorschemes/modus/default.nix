@@ -9,7 +9,10 @@
 
       settings = {
         style = "modus_operandi";
-        variant = "default";
+        variants = {
+          modus_operandi = "default";
+          modus_vivendi = "default";
+        };
         transparent = false;
         dim_inactive = false;
         hide_inactive_statusline = false;

@@ -24,22 +24,31 @@ lib.nixvim.plugins.mkNeovimPlugin {
           The theme comes in a light `modus_operandi` style and a dark `modus_vivendi` style.
         '';
 
-    variant =
-      defaultNullOpts.mkEnumFirstDefault
-        [
-          "default"
-          "tinted"
-          "deuteranopia"
-          "tritanopia"
-        ]
-        ''
-          Styles come in four variants:
+    variants = {
+      modus_operandi =
+        defaultNullOpts.mkEnumFirstDefault
+          [
+            "default"
+            "tinted"
+            "deuteranopia"
+            "tritanopia"
+          ]
+          ''
+            Variant to use for the `modus_operandi` style.
+          '';
 
-          - `default` is the plugin's main style designed to cover a broad range of needs.
-          - `tinted` tones down intensity and provides more color variety.
-          - `deuteranopia` is optimized for users with red-green color deficiency.
-          - `tritanopia` is optimized for users with blue-yellow color deficiency.
-        '';
+      modus_vivendi =
+        defaultNullOpts.mkEnumFirstDefault
+          [
+            "default"
+            "tinted"
+            "deuteranopia"
+            "tritanopia"
+          ]
+          ''
+            Variant to use for the `modus_vivendi` style.
+          '';
+    };
 
     transparent = defaultNullOpts.mkBool false ''
       Disable setting the background color.
@@ -93,7 +102,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsExample = {
     style = "auto";
-    variant = "default";
+    variants = {
+      modus_operandi = "default";
+      modus_vivendi = "default";
+    };
     transparent = false;
     dim_inactive = false;
     hide_inactive_statusline = false;
