@@ -44,8 +44,8 @@
           conceal = false;
           context = 0;
           implicit_extension.__raw = "nil";
-          transform_explicit = false;
-          transform_implicit = ''
+          transform_on_follow = false;
+          transform_on_create.__raw = ''
             function(text)
                 text = text:gsub(" ", "-")
                 text = text:lower()
@@ -55,14 +55,8 @@
           '';
         };
         to_do = {
-          symbols = [
-            " "
-            "-"
-            "X"
-          ];
-          statuses = [
-            {
-              name = "not_started";
+          statuses = {
+            not_started = {
               marker = " ";
               highlight = {
                 marker.link = "Conceal";
@@ -72,10 +66,8 @@
                 section = 2;
                 position = "top";
               };
-              skip_on_toggle = false;
-            }
-            {
-              name = "in_progress";
+            };
+            in_progress = {
               marker = "-";
               highlight = {
                 marker.link = "WarningMsg";
@@ -85,10 +77,8 @@
                 section = 1;
                 position = "bottom";
               };
-              skip_on_toggle = false;
-            }
-            {
-              name = "complete";
+            };
+            complete = {
               marker = [
                 "X"
                 "x"
@@ -101,8 +91,12 @@
                 section = 3;
                 position = "top";
               };
-              skip_on_toggle = false;
-            }
+            };
+          };
+          status_order = [
+            "not_started"
+            "in_progress"
+            "complete"
           ];
           status_propagation = {
             up = true;
