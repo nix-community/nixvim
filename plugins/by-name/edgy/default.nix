@@ -36,28 +36,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
           Defaults to the capitalized filetype.
         '';
 
-        size =
-          lib.nixvim.mkCompositeOption
-            ''
-              Size of the short edge of the edgebar.
-              `width` is the minimum width for edgebars.
-              `height` is the minimum height for panels.
-            ''
-            {
-              width = lib.nixvim.mkNullOrOption types.ints.unsigned ''
-                Minimum width of the view when it's in an edgebar.
-              '';
-              height = lib.nixvim.mkNullOrOption types.ints.unsigned ''
-                Minimum height of the view when it's in a panel.
-              '';
-            };
-
         pinned = lib.nixvim.mkNullOrOption types.bool ''
           If true, the view will always be shown in the edgebar even when it has no windows.
-        '';
-
-        collapsed = lib.nixvim.mkNullOrOption types.bool ''
-          When a view is pinned and collapsed, it will be shown closed on start.
         '';
 
         open = lib.nixvim.mkNullOrStr ''
