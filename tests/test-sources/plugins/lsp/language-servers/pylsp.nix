@@ -2,6 +2,9 @@
 # this should use raw values instead but cannot be implemented due to raw coercions
 {
   example = {
+    # TODO: Remove this once nixpkgs can build pyls-memestra under Python 3.13 again.
+    test.buildNixvim = false;
+
     plugins.lsp = {
       enable = true;
 

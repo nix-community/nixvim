@@ -10,12 +10,19 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   maintainers = [ lib.maintainers.khaneliman ];
 
-  dependencies = [
-    "claude-code"
-    "copilot"
-    "gemini"
-    "opencode"
-  ];
+  description = ''
+    A Neovim plugin for using AI coding CLIs from the editor.
+
+    Sidekick's NES feature requires the Copilot language server. Enable either
+    `plugins.copilot-lua.enable` or `lsp.servers.copilot.enable`, or disable
+    NES in `plugins.sidekick.settings.opts.nes.enabled`.
+
+    Sidekick supports several external CLI tools, but nixvim does not enable
+    them automatically. Enable the tools you use explicitly, for example with
+    `dependencies.claude-code.enable`, `dependencies.copilot.enable`,
+    `dependencies.gemini.enable`, or `dependencies.opencode.enable`, or add
+    the desired packages to your environment yourself.
+  '';
 
   extraConfig = cfg: {
     assertions = lib.nixvim.mkAssertions "plugins.sidekick" {

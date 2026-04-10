@@ -181,4 +181,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
       "ColorizerReloadAllBuffers"
     ];
   };
+
+  extraConfig = {
+    # Colorizer requires `termguicolors` to be enabled.
+    opts.termguicolors = lib.mkDefault true;
+  };
 }
