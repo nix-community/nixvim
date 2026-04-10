@@ -58,11 +58,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
     Customize which parsers to install:
 
     ```nix
+    { config, ... }:
     {
       plugins.treesitter = {
         enable = true;
 
-        grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+        grammarPackages = with config.plugins.treesitter.package.builtGrammars; [
           bash
           json
           lua
@@ -79,6 +80,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
       };
     }
     ```
+
+    > [!WARNING]
+    > Use `config.plugins.treesitter.package.*` to access the grammars for this module.
+    > In Home Manager or NixOS modules, use `config.programs.nixvim.plugins.treesitter.package.*`.
+    > Do not use `pkgs.vimPlugins.nvim-treesitter.*` unless you are intentionally bypassing
+    > `plugins.treesitter.package`; that can pull in parser packages with incompatible upstream
+    > query files instead of the queries bundled by the configured nvim-treesitter package.
 
     Verify installed parsers with `:checkhealth vim.treesitter`.
 
@@ -103,7 +111,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     Build and install your own grammar:
 
     ```nix
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     let
       treesitter-nu-grammar = pkgs.tree-sitter.buildGrammar {
         language = "nu";
@@ -120,7 +128,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     {
       programs.nixvim.plugins.treesitter = {
         enable = true;
-        grammarPackages = pkgs.vimPlugins.nvim-treesitter.allGrammars ++ [ treesitter-nu-grammar ];
+        grammarPackages = config.programs.nixvim.plugins.treesitter.package.allGrammars ++ [ treesitter-nu-grammar ];
 
         # Register the parser to filetype
         languageRegister.nu = "nu";
@@ -188,9 +196,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
     grammarPackages = mkOption {
       type = with types; listOf package;
       default = config.plugins.treesitter.package.allGrammars;
-      example = literalExpression "pkgs.vimPlugins.nvim-treesitter.allGrammars";
+      example = literalExpression "config.plugins.treesitter.package.allGrammars";
       defaultText = literalExpression "config.plugins.treesitter.package.allGrammars";
-      description = "Grammar packages to install";
+      description = ''
+        Grammar packages to install.
+
+        Use `config.plugins.treesitter.package.*` to access the grammars for the configured
+        nvim-treesitter package. Avoid `pkgs.vimPlugins.nvim-treesitter.*` here unless you are
+        intentionally bypassing `plugins.treesitter.package`, because that can pull in parser
+        packages with incompatible upstream query files.
+      '';
     };
 
     # TODO: Implement rawLua support to be passed into extraConfigLua.
