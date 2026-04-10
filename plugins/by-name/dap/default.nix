@@ -82,11 +82,41 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    configurations =
-      lib.nixvim.mkNullOrOption (with types; attrsOf (listOf dapHelpers.configurationType))
-        ''
-          Debugger configurations, see `:h dap-configuration` for more info.
-        '';
+    configurations = lib.nixvim.mkNullOrOption' {
+      type = with types; attrsOf (listOf dapHelpers.configurationType);
+      description = ''
+        Debugger configurations, keyed by filetype.
+
+        The `type` field must match an adapter configured under `plugins.dap.adapters`.
+
+        See `:h dap-configuration` for more info.
+      '';
+      example = lib.literalExpression ''
+        {
+          cpp = [
+            {
+              type = "codelldb";
+              request = "launch";
+              name = "Launch executable";
+              program.__raw = '''
+                function()
+                  return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                end
+              ''';
+              cwd = "\''${workspaceFolder}";
+              stopOnEntry = false;
+            }
+            {
+              type = "codelldb";
+              request = "attach";
+              name = "Attach to process";
+              pid.__raw = "require('dap.utils').pick_process";
+              cwd = "\''${workspaceFolder}";
+            }
+          ];
+        }
+      '';
+    };
 
     signs = lib.nixvim.mkCompositeOption "Signs for dap." {
       dapBreakpoint = mkSignOption "B" "Sign for breakpoints.";
