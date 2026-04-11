@@ -21,31 +21,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   settingsOptions =
     let
       viewOpts = {
-        ft = lib.nixvim.mkNullOrStr ''
-          File type of the view.
-        '';
-
         filter = lib.nixvim.mkNullOrLuaFn ''
           Optional function to filter buffers and windows.
 
           `fun(buf:buffer, win:window)`
-        '';
-
-        title = lib.nixvim.mkNullOrStr ''
-          Optional title of the view.
-          Defaults to the capitalized filetype.
-        '';
-
-        pinned = lib.nixvim.mkNullOrOption types.bool ''
-          If true, the view will always be shown in the edgebar even when it has no windows.
-        '';
-
-        open = lib.nixvim.mkNullOrStr ''
-          Function or command to open a pinned view.
-        '';
-
-        wo = lib.nixvim.mkNullOrOption (with types; attrsOf anything) ''
-          View-specific window options.
         '';
       };
 
