@@ -20,20 +20,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions =
     let
-      viewOpts = {
-        filter = lib.nixvim.mkNullOrLuaFn ''
-          Optional function to filter buffers and windows.
-
-          `fun(buf:buffer, win:window)`
-        '';
-      };
-
       mkViewOptsOption =
         name:
         lib.nixvim.defaultNullOpts.mkListOf (
           with types;
           either str (submodule {
-            options = viewOpts;
+            freeformType = attrsOf anything;
+            options.filter = lib.nixvim.mkNullOrLuaFn ''
+              Optional function to filter buffers and windows.
+
+              `fun(buf:buffer, win:window)`
+            '';
           })
         ) [ ] "List of the ${name} edgebar configurations.";
     in
