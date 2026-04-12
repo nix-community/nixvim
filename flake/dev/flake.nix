@@ -33,7 +33,8 @@
     };
 
     nuschtosSearch = {
-      url = "github:NuschtOS/search";
+      # TODO: newer versions fail with: TimeoutError: The operation was aborted due to timeout
+      url = "github:NuschtOS/search/b6f77b88e9009bfde28e2130e218e5123dc66796";
       inputs.nixpkgs.follows = "dev-nixpkgs";
     };
 
