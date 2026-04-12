@@ -5,14 +5,14 @@
   lspconfig-servers,
   conform-formatters,
   nixfmt,
-  nodePackages,
+  prettier,
 }:
 writeShellApplication {
   name = "generate";
 
   runtimeInputs = [
     nixfmt
-    nodePackages.prettier
+    prettier
   ];
 
   text = ''
