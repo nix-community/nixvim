@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   ...
 }:
 let
@@ -14,6 +15,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   dependencies = [ "nodejs" ];
+
+  extraConfig = {
+    plugins.gitlab.settings.code_suggestions.lsp_binary_path =
+      lib.mkIf config.dependencies.nodejs.enable (
+        lib.mkDefault (lib.getExe config.dependencies.nodejs.package)
+      );
+  };
 
   settingsOptions = {
     gitlab_url = defaultNullOpts.mkStr "https://gitlab.com" ''
@@ -84,7 +92,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
           The path where the `node` executable is available.
 
           By default, this option is set to `"node"` which will look for nodejs in your `$PATH`.
-          To ensure that `node` will always be in your `$PATH`, you may set the `nodePackage` option.
+          To ensure that `node` will always be in your `$PATH`, you may set the `dependencies.nodejs.enable` to `true`.
 
           Alternatively, you can set this option to `lib.getExe pkgs.nodejs` (or any other package).
         '';
