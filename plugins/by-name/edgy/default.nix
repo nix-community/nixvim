@@ -20,47 +20,17 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   settingsOptions =
     let
-      viewOpts = {
-        ft = lib.nixvim.mkNullOrStr ''
-          File type of the view.
-        '';
-
-        filter = lib.nixvim.mkNullOrLuaFn ''
-          Optional function to filter buffers and windows.
-
-          `fun(buf:buffer, win:window)`
-        '';
-
-        title = lib.nixvim.mkNullOrStr ''
-          Optional title of the view.
-          Defaults to the capitalized filetype.
-        '';
-
-        size = lib.nixvim.mkNullOrOption types.ints.unsigned ''
-          Size of the short edge of the edgebar.
-          For edgebars, this is the minimum width.
-          For panels, minimum height.
-        '';
-
-        pinned = lib.nixvim.mkNullOrOption types.bool ''
-          If true, the view will always be shown in the edgebar even when it has no windows.
-        '';
-
-        open = lib.nixvim.mkNullOrStr ''
-          Function or command to open a pinned view.
-        '';
-
-        wo = lib.nixvim.mkNullOrOption (with types; attrsOf anything) ''
-          View-specific window options.
-        '';
-      };
-
       mkViewOptsOption =
         name:
         lib.nixvim.defaultNullOpts.mkListOf (
           with types;
           either str (submodule {
-            options = viewOpts;
+            freeformType = attrsOf anything;
+            options.filter = lib.nixvim.mkNullOrLuaFn ''
+              Optional function to filter buffers and windows.
+
+              `fun(buf:buffer, win:window)`
+            '';
           })
         ) [ ] "List of the ${name} edgebar configurations.";
     in
@@ -276,7 +246,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     bottom = [
       {
         ft = "toggleterm";
-        size = 30;
+        size.width = 30;
         filter = ''
           function(buf, win)
             return vim.api.nvim_win_get_config(win).relative == ""
@@ -285,7 +255,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       }
       {
         ft = "help";
-        size = 20;
+        size.width = 20;
         filter = ''
           function(buf)
             return vim.bo[buf].buftype == "help"
@@ -297,7 +267,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       {
         title = "nvimtree";
         ft = "NvimTree";
-        size = 30;
+        size.height = 30;
       }
       {
         ft = "Outline";
