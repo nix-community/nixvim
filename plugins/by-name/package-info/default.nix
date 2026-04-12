@@ -23,17 +23,11 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraOptions = {
     enableTelescope = lib.mkEnableOption "the `package_info` telescope picker.";
 
-    packageManagerPackage =
-      lib.mkPackageOption pkgs
-        [
-          "nodePackages"
-          "npm"
-        ]
-        {
-          nullable = true;
-          default = null;
-          example = "pkgs.nodePackages.npm";
-        };
+    packageManagerPackage = lib.mkPackageOption pkgs [ "nodejs" ] {
+      nullable = true;
+      default = null;
+      example = "pkgs.nodejs";
+    };
   };
 
   extraConfig = cfg: {

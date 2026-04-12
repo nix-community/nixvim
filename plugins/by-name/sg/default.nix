@@ -45,9 +45,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     node_executable = defaultNullOpts.mkStr "node" ''
       Path to the node executable.
-
-      If you set `nodePackage` to a non-null package, this option will automatically default to its
-      path.
     '';
 
     skip_node_check = defaultNullOpts.mkBool false ''

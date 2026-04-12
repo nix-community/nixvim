@@ -79,7 +79,7 @@ in
     clang-format = clang-tools;
     clang_format = clang-tools;
     cmake_format = cmake-format;
-    css_beautify = nodePackages.js-beautify;
+    css_beautify = js-beautify;
     cue_fmt = cue;
     dart_format = dart;
     deno_fmt = deno;
@@ -98,10 +98,10 @@ in
     hcl = hclfmt;
     # FIXME: 2025-10-08 build failure (haskellPackages.hindent)
     hindent = states.broken haskellPackages.hindent;
-    html_beautify = nodePackages.js-beautify;
+    html_beautify = js-beautify;
     inherit (rubyPackages) htmlbeautifier;
     hurlfmt = hurl;
-    js_beautify = nodePackages.js-beautify;
+    js_beautify = js-beautify;
     jsonnetfmt = jsonnet;
     inherit (texlive.pkgs) latexindent;
     lua-format = luaformatter;
