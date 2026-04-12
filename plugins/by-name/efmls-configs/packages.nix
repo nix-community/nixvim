@@ -62,6 +62,7 @@ in
       "dmd"
       "dprint"
       "eslint"
+      "eslint_d"
       "fish"
       "flawfinder"
       "fnlfmt"
@@ -79,6 +80,7 @@ in
       "nixfmt"
       "php"
       "phpstan"
+      "prettier"
       "prettypst"
       "proselint"
       "protolint"
@@ -96,8 +98,10 @@ in
       "sqlfluff"
       "sqruff"
       "statix"
+      "stylelint"
       "stylua"
       "taplo"
+      "textlint"
       "typstyle"
       "uncrustify"
       "vale"
@@ -111,12 +115,6 @@ in
         "flake8"
         "mdformat"
         "vulture"
-      ];
-      nodePackages = [
-        "eslint_d"
-        "prettier"
-        "stylelint"
-        "textlint"
       ];
       phpPackages = [
         "phan"

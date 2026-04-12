@@ -112,8 +112,6 @@ in
     ]
     # Scoped packages
     // scoped {
-      nodePackages = [
-      ];
       phpPackages = [
         "phpmd"
         "phpstan"
@@ -206,10 +204,7 @@ in
       # FIXME: Can't have transition fallbacks anymore
       # TODO: replace after flake.lock update
       # prisma_format = "prisma";
-      prisma_format = [
-        "nodePackages"
-        "prisma"
-      ];
+      prisma_format = "prisma";
       ptop = "fpc";
       puppet_lint = "puppet-lint";
       qmlformat = [
