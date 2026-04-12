@@ -161,4 +161,50 @@
         end
       '';
     };
+
+  vimdiffAlias-enabled =
+    {
+      config,
+      pkgs,
+      ...
+    }:
+    {
+      vimdiffAlias = true;
+
+      test.extraInputs = [
+        (pkgs.runCommandLocal "vimdiff-enabled-integration-test" { } ''
+          # Verify vimdiff exists and is executable in final package
+          if [ ! -x "${config.build.package}/bin/vimdiff" ]; then
+            echo "vimdiff binary should exist and be executable in final package" >&2
+            exit 1
+          fi
+
+          # Verify proper invocation pattern (nvim followed by -d)
+          if ! grep -qE 'nvim.*-d' "${config.build.package}/bin/vimdiff"; then
+            echo "vimdiff should invoke nvim with -d flag" >&2
+            exit 1
+          fi
+
+          touch $out
+        '')
+      ];
+    };
+
+  vimdiffAlias-disabled =
+    { config, pkgs, ... }:
+    {
+      vimdiffAlias = false;
+
+      test.extraInputs = [
+        (pkgs.runCommandLocal "vimdiff-disabled-integration-test" { } ''
+          # Verify vimdiff does NOT exist in final package
+          if [ -e "${config.build.package}/bin/vimdiff" ]; then
+            echo "vimdiff binary should NOT exist when vimdiffAlias is disabled" >&2
+            exit 1
+          fi
+
+          touch $out
+        '')
+      ];
+    };
 }
