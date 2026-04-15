@@ -33,6 +33,7 @@
     "coq_lsp"
     "cspell_ls"
     "css_variables"
+    "csskit"
     "cssmodules_ls"
     "cucumber_language_server"
     "custom_elements_ls"
