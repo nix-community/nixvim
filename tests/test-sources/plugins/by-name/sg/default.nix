@@ -1,5 +1,9 @@
 {
   empty = {
+    # vim.schedule callback: ...-dir/pack/myNeovimPackages/start/sg.nvim/lua/sg/auth.lua:54:
+    # endpoint and token must be valid strings
+    test.runNvim = false;
+
     plugins.sg = {
       enable = true;
 
@@ -9,6 +13,10 @@
   };
 
   default = {
+    # vim.schedule callback: ...-dir/pack/myNeovimPackages/start/sg.nvim/lua/sg/auth.lua:54:
+    # endpoint and token must be valid strings
+    test.runNvim = false;
+
     plugins.sg = {
       enable = true;
 
@@ -36,6 +44,10 @@
   };
 
   example = {
+    # vim.schedule callback: ...-dir/pack/myNeovimPackages/start/sg.nvim/lua/sg/auth.lua:54:
+    # endpoint and token must be valid strings
+    test.runNvim = false;
+
     plugins.sg = {
       enable = true;
 
