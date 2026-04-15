@@ -1,5 +1,8 @@
 {
   empty = {
+    # ERROR: vim.lsp.start_client() is deprecated. Run ":checkhealth vim.deprecated
+    test.runNvim = false;
+
     plugins.llm.enable = true;
   };
 
@@ -15,6 +18,9 @@
   };
 
   defaults = {
+    # ERROR: vim.lsp.start_client() is deprecated. Run ":checkhealth vim.deprecated
+    test.runNvim = false;
+
     plugins.llm = {
       enable = true;
 
@@ -56,6 +62,9 @@
   };
 
   example = {
+    # ERROR: vim.lsp.start_client() is deprecated. Run ":checkhealth vim.deprecated
+    test.runNvim = false;
+
     plugins.llm = {
       enable = true;
 
