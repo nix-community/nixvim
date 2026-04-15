@@ -1,9 +1,15 @@
 {
   empty = {
+    # ERROR: vim.lsp.with() is deprecated. Run ":checkhealth vim.deprecated"
+    test.runNvim = false;
+
     colorschemes.palette.enable = true;
   };
 
   defaults = {
+    # ERROR: vim.lsp.with() is deprecated. Run ":checkhealth vim.deprecated"
+    test.runNvim = false;
+
     colorschemes.palette = {
       enable = true;
 
@@ -27,6 +33,9 @@
   };
 
   example-custom-palette = {
+    # ERROR: vim.lsp.with() is deprecated. Run ":checkhealth vim.deprecated"
+    test.runNvim = false;
+
     colorschemes.palette = {
       enable = true;
 
