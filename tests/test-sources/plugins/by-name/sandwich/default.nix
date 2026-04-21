@@ -16,7 +16,7 @@
 
     globals."sandwich#magicchar#f#patterns" = [
       {
-        header.__raw = "[[\<\%(\h\k*\.\)*\h\k*]]";
+        header.__raw = ''[[\<\%(\h\k*\.\)*\h\k*]]'';
         bra = "(";
         ket = ")";
         footer = "";

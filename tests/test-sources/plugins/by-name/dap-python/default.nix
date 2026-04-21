@@ -14,7 +14,7 @@
           type = "python";
           request = "launch";
           name = "My custom launch configuration";
-          program = "$\{file}";
+          program = "\${file}";
           # ... more options; see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings
         }
       ];
