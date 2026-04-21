@@ -7,7 +7,6 @@ on:
       - "**.svg"
       - ".gitignore"
       - "LICENSE"
-      - "flake.lock"
 
 defaults:
   run:
@@ -21,5 +20,7 @@ jobs:
         uses: actions/checkout@v6
       - name: Install Nix
         uses: cachix/install-nix-action@v31
+      - name: Run nix and Lix parse checks
+        run: nix build --show-trace --keep-going .#checks.x86_64-linux.parseNix .#checks.x86_64-linux.parseLix --accept-flake-config
       - name: Run treefmt check
         run: nix build .#checks.x86_64-linux.treefmt --accept-flake-config
