@@ -5,6 +5,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   description = "A fast fuzzy file finder.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
+  callSetup = "optional";
 
   settingsExample = {
     base_path = lib.nixvim.nestedLiteralLua "vim.fn.getcwd()";
