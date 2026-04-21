@@ -3,6 +3,7 @@
 {
   helpers,
   lib,
+  pkgs,
   runCommandLocal,
   writeText,
 }:
@@ -47,6 +48,38 @@ let
   };
 
   drv = writeText "example-derivation" "hello, world!";
+
+  optionalSetupInlinePlugin =
+    { lib, ... }:
+    lib.nixvim.plugins.mkNeovimPlugin {
+      name = "fake";
+      moduleName = "fake";
+      package = [
+        "vimPlugins"
+        "vim-repeat"
+      ];
+      maintainers = [ ];
+      callSetup = "optional";
+
+      settingsOptions = {
+        foo = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+        };
+      };
+    };
+
+  optionalSetupConfig =
+    module:
+    (lib.nixvim.modules.evalNixvim {
+      modules = [
+        {
+          _module.args.pkgs = lib.mkForce pkgs;
+        }
+        optionalSetupInlinePlugin
+        module
+      ];
+    }).config.content;
 
   results = lib.runTests {
     testToLuaObject = {
@@ -555,6 +588,49 @@ let
     testNixvimWith_hasExpectedArgs = {
       expr = lib.functionArgs lib.nixvim.modules.testNixvimWith;
       expected = lib.functionArgs lib.nixvim.modules.evalNixvim;
+    };
+
+    testMkNeovimPluginOptionalSetupSkipsImplicitDefaults = {
+      expr = lib.hasInfix "require('fake').setup(" (optionalSetupConfig {
+        plugins.fake.enable = true;
+      });
+      expected = false;
+    };
+
+    testMkNeovimPluginOptionalSetupRunsForExplicitEmptySettings = {
+      expr =
+        let
+          content = optionalSetupConfig {
+            plugins.fake.enable = true;
+            plugins.fake.settings = { };
+          };
+        in
+        {
+          hasSetup = lib.hasInfix "require('fake').setup(" content;
+          hasDefaults = lib.hasInfix "foo = false" content;
+        };
+      expected = {
+        hasSetup = true;
+        hasDefaults = true;
+      };
+    };
+
+    testMkNeovimPluginOptionalSetupRunsForExplicitSettingsValues = {
+      expr =
+        let
+          content = optionalSetupConfig {
+            plugins.fake.enable = true;
+            plugins.fake.settings.foo = true;
+          };
+        in
+        {
+          hasSetup = lib.hasInfix "require('fake').setup(" content;
+          hasValue = lib.hasInfix "foo = true" content;
+        };
+      expected = {
+        hasSetup = true;
+        hasValue = true;
+      };
     };
   };
 in
