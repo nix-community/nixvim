@@ -1,76 +1,103 @@
 { lib }:
 {
-  empty = {
-    plugins.blink-indent.enable = true;
-  };
+  empty =
+    { config, ... }:
+    {
+      plugins.blink-indent.enable = true;
 
-  defaults = {
-    plugins.blink-indent = {
-      enable = true;
+      assertions = [
+        {
+          assertion = !(lib.hasInfix "require('blink.indent').setup(" config.content);
+          message = "Empty blink-indent config should not emit a setup call.";
+        }
+      ];
+    };
 
-      settings = {
-        blocked = {
-          buftypes.include_defaults = true;
-          filetypes.include_defaults = true;
-        };
+  defaults =
+    { config, ... }:
+    {
+      plugins.blink-indent = {
+        enable = true;
 
-        mappings = {
-          border = "both";
-          object_scope = "ii";
-          object_scope_with_border = "ai";
-          goto_top = "[i";
-          goto_bottom = "]i";
-        };
+        settings = {
+          blocked = {
+            buftypes.include_defaults = true;
+            filetypes.include_defaults = true;
+          };
 
-        static = {
-          enabled = true;
-          char = "▎";
-          whitespace_char = lib.nixvim.mkRaw "nil";
-          priority = 1;
-          highlights = [ "BlinkIndent" ];
-        };
+          mappings = {
+            border = "both";
+            object_scope = "ii";
+            object_scope_with_border = "ai";
+            goto_top = "[i";
+            goto_bottom = "]i";
+          };
 
-        scope = {
-          enabled = true;
-          char = "▎";
-          priority = 1000;
+          static = {
+            enabled = true;
+            char = "▎";
+            whitespace_char = lib.nixvim.mkRaw "nil";
+            priority = 1;
+            highlights = [ "BlinkIndent" ];
+          };
 
-          highlights = [
-            "BlinkIndentOrange"
-            "BlinkIndentViolet"
-            "BlinkIndentBlue"
-          ];
-
-          underline = {
-            enabled = false;
+          scope = {
+            enabled = true;
+            char = "▎";
+            priority = 1000;
 
             highlights = [
-              "BlinkIndentOrangeUnderline"
-              "BlinkIndentVioletUnderline"
-              "BlinkIndentBlueUnderline"
+              "BlinkIndentOrange"
+              "BlinkIndentViolet"
+              "BlinkIndentBlue"
             ];
+
+            underline = {
+              enabled = false;
+
+              highlights = [
+                "BlinkIndentOrangeUnderline"
+                "BlinkIndentVioletUnderline"
+                "BlinkIndentBlueUnderline"
+              ];
+            };
           };
         };
       };
+
+      assertions = [
+        {
+          assertion = lib.hasInfix "require('blink.indent').setup(" config.content;
+          message = "Configured blink-indent defaults should emit a setup call.";
+        }
+      ];
     };
-  };
 
-  example = {
-    plugins.blink-indent = {
-      enable = true;
+  example =
+    { config, ... }:
+    {
+      plugins.blink-indent = {
+        enable = true;
 
-      settings = {
-        static.highlights = [
-          "BlinkIndentRed"
-          "BlinkIndentOrange"
-          "BlinkIndentYellow"
-          "BlinkIndentGreen"
-          "BlinkIndentViolet"
-          "BlinkIndentCyan"
-        ];
+        settings = {
+          static.highlights = [
+            "BlinkIndentRed"
+            "BlinkIndentOrange"
+            "BlinkIndentYellow"
+            "BlinkIndentGreen"
+            "BlinkIndentViolet"
+            "BlinkIndentCyan"
+          ];
 
-        scope.underline.enable = true;
+          scope.underline.enable = true;
+        };
       };
+
+      assertions = [
+        {
+          assertion = lib.hasInfix "require('blink.indent').setup(" config.content;
+          message = "Configured blink-indent should emit a setup call.";
+        }
+      ];
     };
-  };
 }
