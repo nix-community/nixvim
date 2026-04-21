@@ -226,7 +226,7 @@
               utf8 = "default";
             };
             fileEncoding = "utf8";
-            meta = "$\{version} $\{language} $\{encoding}";
+            meta = "\${version} \${language} \${encoding}";
             nonstandardSymbol.__empty = { };
             path = [
               "?.lua"

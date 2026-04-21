@@ -17,7 +17,7 @@
         debug.enable = true;
         cite_formats = {
           tex = {
-            start_str = "[[\cite{]]";
+            start_str = "[[\\cite{]]";
             end_str = "}";
             separator_str = ", ";
           };

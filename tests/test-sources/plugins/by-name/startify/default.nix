@@ -55,7 +55,7 @@
         change_to_vcs_root = false;
         change_cmd = "lcd";
         skiplist = [
-          "\.vimgolf"
+          "\\.vimgolf"
           "^/tmp"
           "/project/.*/documentation"
         ];

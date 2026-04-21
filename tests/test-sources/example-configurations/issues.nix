@@ -76,7 +76,7 @@
       number = true;
       shiftwidth = 2;
       tabstop = 2;
-      guifont = "FiraCode\ Nerd\ Font\ Mono:h14";
+      guifont = "FiraCode Nerd Font Mono:h14";
     };
 
     plugins = {

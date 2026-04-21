@@ -46,11 +46,11 @@
 
       assertions = [
         {
-          assertion = builtins.match ".*vim\.filetype\..*" config.content == null;
+          assertion = builtins.match ".*vim\\.filetype\\..*" config.content == null;
           message = "No vim.filetype definitions should be present in init.lua by default.";
         }
         {
-          assertion = builtins.match ".*vim\.filetype\..*" config.files.test.content == null;
+          assertion = builtins.match ".*vim\\.filetype\\..*" config.files.test.content == null;
           message = "No vim.filetype definitions should be present in files submodules by default.";
         }
       ];

@@ -91,7 +91,7 @@
             "gitcommit"
             "TelescopePrompt"
             "TelescopeResults"
-            "\'\'"
+            "''"
           ];
           buftypes = [
             "terminal"

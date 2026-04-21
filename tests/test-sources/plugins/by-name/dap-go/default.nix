@@ -22,7 +22,7 @@
         delve = {
           path = "dlv";
           initialize_timeout_sec = 20;
-          port = "$\{port}";
+          port = "\${port}";
           args.__empty = { };
           build_flags = "-tags=unit";
         };

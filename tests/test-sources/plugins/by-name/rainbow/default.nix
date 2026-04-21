@@ -47,7 +47,7 @@
               parentheses = [
                 "start=/(/ end=/)/ fold"
                 "start=/\\[/ end=/\\]/ fold"
-                "start=/\v\{\ze[^-]/ end=/}/ fold"
+                "start=/\\v\\{\\ze[^-]/ end=/}/ fold"
               ];
             };
             tex = {
@@ -101,7 +101,7 @@
             haskell = {
               parentheses = [
                 "start=/\\[/ end=/\\]/ fold"
-                "start=/\v\{\ze[^-]/ end=/}/ fold"
+                "start=/\\v\\{\\ze[^-]/ end=/}/ fold"
               ];
             };
           };

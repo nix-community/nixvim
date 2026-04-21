@@ -54,8 +54,8 @@
           view_mode = "list";
           indent_markers = true;
           icons = {
-            folder_closed = "\u{e5ff}";
-            folder_open = "\u{e5fe}";
+            folder_closed = "\\u{e5ff}";
+            folder_open = "\\u{e5fe}";
           };
           file_filter = {
             ignore = [ ];

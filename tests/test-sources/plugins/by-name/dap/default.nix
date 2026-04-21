@@ -81,7 +81,7 @@
             type = "python";
             request = "launch";
             name = "Launch file";
-            program = "$\{file}";
+            program = "\${file}";
           }
         ];
       };

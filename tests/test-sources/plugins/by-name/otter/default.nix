@@ -54,7 +54,7 @@
           strip_wrapping_quote_characters = [
             "'"
             "\""
-            "\`"
+            "`"
           ];
           handle_leading_whitespace = false;
         };

@@ -34,7 +34,7 @@
         markdown_css = "/Users/username/markdown.css";
         highlight_css.__raw = "vim.fn.expand('~/highlight.css')";
         port = "8080";
-        page_title = "「\$\{name}」";
+        page_title = "「\${name}」";
         images_path = "";
         filetypes = [ "markdown" ];
         theme = "dark";

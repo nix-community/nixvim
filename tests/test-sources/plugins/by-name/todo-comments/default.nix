@@ -202,7 +202,7 @@
 
       settings = {
         highlight = {
-          pattern = [ ".*<(KEYWORDS)\s*:" ];
+          pattern = [ ".*<(KEYWORDS)\\s*:" ];
         };
       };
     };

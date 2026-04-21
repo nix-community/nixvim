@@ -27,7 +27,7 @@
 
       settings = {
         ft_blocklist = [ "markdown" ];
-        patterns = [ "[[%s/\(\n\n\)\n\+/\1/]]" ];
+        patterns = [ "[[%s/\\(\\n\\n\\)\\n\\+/\\1/]]" ];
         trim_on_write = false;
         highlight = true;
       };

@@ -38,11 +38,11 @@
             summary_view = {
               header_length = 80;
               shell_palette = {
-                passed = "\27[32m";
-                skipped = "\27[33m";
-                failed = "\27[31m";
-                stop = "\27[0m";
-                bold = "\27[1m";
+                passed = "\\27[32m";
+                skipped = "\\27[33m";
+                failed = "\\27[31m";
+                stop = "\\27[0m";
+                bold = "\\27[1m";
               };
             };
             extra_args.__empty = { };

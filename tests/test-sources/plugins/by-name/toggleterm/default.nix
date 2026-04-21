@@ -8,7 +8,7 @@
       enable = true;
 
       settings = {
-        open_mapping = "[[<c-\>]]";
+        open_mapping = "[[<c-\\>]]";
         direction = "float";
         float_opts = {
           border = "curved";
@@ -33,7 +33,7 @@
             end
           end
         '';
-        open_mapping = "[[<c-\>]]";
+        open_mapping = "[[<c-\\>]]";
         on_create = "function() end";
         on_open = "function() end";
         on_close = "function() end";
