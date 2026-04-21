@@ -4,6 +4,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   moduleName = "blink.indent";
 
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
+  callSetup = "optional";
 
   settingsExample = {
     static.highlights = [
