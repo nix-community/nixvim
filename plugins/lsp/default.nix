@@ -111,6 +111,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
       type = types.lines;
       description = "Lua code that modifies inplace the `capabilities` table.";
       default = "";
+      example = lib.literalExpression ''
+        capabilities.textDocument.completion.completionItem.snippetSupport = true;
+      '';
     };
 
     setupWrappers = mkOption {
