@@ -300,6 +300,13 @@ The tests are located in the [tests/test-sources](tests/test-sources) directory,
 
 Tests can either be a simple attribute set, or a function taking `{pkgs}` as an input. The keys of the set are configuration names, and the values are a Nixvim configuration.
 
+These configuration names are just conventions, not special values interpreted by the test runner. Common ones include:
+
+- `defaults`: explicitly sets the plugin or module to the default values documented by Nixvim's settings options. This is mainly useful when those defaults are part of Nixvim's option interface; otherwise `empty` is usually enough.
+- `empty`: enables the feature with no additional configuration.
+- `example`: uses a configuration that differs from the defaults and reflects something a user might realistically want to do.
+- `no-packages`: checks that the feature still evaluates or configures correctly when package/dependency installation is disabled.
+
 You can specify the special `test` attribute in the configuration that will not be interpreted by Nixvim, but only the test runner. The following keys are available:
 
 - `test.runNvim`: Set to `false` to avoid launching Neovim with this configuration and simply build the configuration.
