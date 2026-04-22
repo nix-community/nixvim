@@ -36,7 +36,7 @@ in
       default = { };
       example = {
         "ftplugin/nix.lua" = {
-          opts = {
+          localOpts = {
             tabstop = 2;
             shiftwidth = 2;
             expandtab = true;
