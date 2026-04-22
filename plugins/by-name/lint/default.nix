@@ -1,4 +1,8 @@
-{ lib, ... }:
+{
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (lib) mkOption types;
   inherit (lib.nixvim) defaultNullOpts toLuaObject;
@@ -95,7 +99,7 @@ let
       freeformType = with types; attrsOf anything;
 
       options = builtins.mapAttrs (
-        optionName:
+        _:
         (
           {
             mandatory ? false,
@@ -136,6 +140,37 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.HeitorAugustoLN ];
 
   extraOptions = {
+    autoInstall = {
+      enable = lib.mkEnableOption ''
+        automatic installation of linters listed in `lintersByFt`
+      '';
+
+      enableWarnings = lib.mkOption {
+        default = true;
+        example = false;
+        description = "Whether to enable warnings.";
+        type = lib.types.bool;
+      };
+
+      overrides = lib.mkOption {
+        type = with types; attrsOf (nullOr package);
+        default = { };
+        example = lib.literalExpression ''
+          {
+            "jsonlint" = null;
+            "my-linter" = pkgs.writeShellApplication {
+              name = "my-linter";
+              text = "exec my-linter \"$@\"";
+            };
+          }
+        '';
+        description = ''
+          Attribute set of linter names to nix packages.
+          You can set a linter to `null` to disable auto-installing its package.
+        '';
+      };
+    };
+
     autoCmd =
       let
         defaultEvent = "BufWritePost";
@@ -212,40 +247,66 @@ lib.nixvim.plugins.mkNeovimPlugin {
         '';
   };
 
-  extraConfig = cfg: {
-    autoCmd = lib.optionals (cfg.autoCmd != null) [ cfg.autoCmd ];
-    plugins.lint.luaConfig.content = ''
-      local __lint = require('lint')
-    ''
-    + (lib.optionalString (cfg.lintersByFt != null) ''
-      __lint.linters_by_ft = ${toLuaObject cfg.lintersByFt}
-    '')
-    + (lib.optionalString (cfg.customLinters != null) (
-      lib.concatLines (
-        lib.mapAttrsToList (
-          customLinter: linterConfig:
-          let
-            linterConfig' =
-              if builtins.isString linterConfig then lib.nixvim.mkRaw linterConfig else linterConfig;
-          in
-          ''__lint.linters["${customLinter}"] = ${toLuaObject linterConfig'}''
-        ) cfg.customLinters
-      )
-    ))
-    + (lib.optionalString (cfg.linters != null) (
-      lib.concatLines (
-        lib.flatten (
+  extraConfig =
+    cfg: opts:
+    let
+      inherit (cfg.autoInstall) enable enableWarnings;
+      inherit (import ./auto-install.nix { inherit pkgs lib; })
+        collectLinters
+        getPackageOrStateByName
+        mkWarnsFromStates
+        ;
+      configuredLinters = if cfg.linters == null then { } else cfg.linters;
+      customLinters = if cfg.customLinters == null then { } else cfg.customLinters;
+      definedLinters = builtins.attrNames configuredLinters ++ builtins.attrNames customLinters;
+      getPackageOrStateByNameWith = getPackageOrStateByName {
+        inherit definedLinters;
+        inherit (cfg.autoInstall) overrides;
+      };
+      selectedLinters = lib.optionals (cfg.lintersByFt != null) (collectLinters cfg.lintersByFt);
+      packagesAndStates = lib.foldAttrs (item: acc: [ item ] ++ acc) [ ] (
+        map getPackageOrStateByNameWith selectedLinters
+      );
+    in
+    {
+      autoCmd = lib.optionals (cfg.autoCmd != null) [ cfg.autoCmd ];
+      warnings = lib.mkIf (enable && enableWarnings) (
+        mkWarnsFromStates opts (packagesAndStates.wrong or [ ])
+      );
+      extraPackages = lib.mkIf enable (packagesAndStates.right or [ ]);
+
+      plugins.lint.luaConfig.content = ''
+        local __lint = require('lint')
+      ''
+      + (lib.optionalString (cfg.lintersByFt != null) ''
+        __lint.linters_by_ft = ${toLuaObject cfg.lintersByFt}
+      '')
+      + (lib.optionalString (cfg.customLinters != null) (
+        lib.concatLines (
           lib.mapAttrsToList (
-            linter: linterConfig:
-            lib.mapAttrsToList (
-              propName: propValue:
-              lib.optionalString (
-                propValue != null
-              ) ''__lint.linters["${linter}"].${propName} = ${toLuaObject propValue}''
-            ) linterConfig
-          ) cfg.linters
+            customLinter: linterConfig:
+            let
+              linterConfig' =
+                if builtins.isString linterConfig then lib.nixvim.mkRaw linterConfig else linterConfig;
+            in
+            ''__lint.linters["${customLinter}"] = ${toLuaObject linterConfig'}''
+          ) cfg.customLinters
         )
-      )
-    ));
-  };
+      ))
+      + (lib.optionalString (cfg.linters != null) (
+        lib.concatLines (
+          lib.flatten (
+            lib.mapAttrsToList (
+              linter: linterConfig:
+              lib.mapAttrsToList (
+                propName: propValue:
+                lib.optionalString (
+                  propValue != null
+                ) ''__lint.linters["${linter}"].${propName} = ${toLuaObject propValue}''
+              ) linterConfig
+            ) cfg.linters
+          )
+        )
+      ));
+    };
 }
