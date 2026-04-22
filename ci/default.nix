@@ -19,5 +19,6 @@ lib.fix (self: {
   none-ls-builtins = pkgs.callPackage ./none-ls.nix { };
   lspconfig-servers = pkgs.callPackage ./nvim-lspconfig { };
   conform-formatters = pkgs.callPackage ./conform-nvim.nix { };
+  lint-linters = pkgs.callPackage ./nvim-lint.nix { };
   version-info = pkgs.callPackage ./version-info { };
 })

@@ -4,6 +4,7 @@
   none-ls-builtins,
   lspconfig-servers,
   conform-formatters,
+  lint-linters,
   nixfmt,
   prettier,
 }:
@@ -44,6 +45,7 @@ writeShellApplication {
     generate_json "${efmls-configs-sources}"
     generate_json "${none-ls-builtins}"
     generate_json "${conform-formatters}"
+    generate_json "${lint-linters}"
     generate_json "${lspconfig-servers}"
     generate_json "${lspconfig-servers.unsupported}"
 
