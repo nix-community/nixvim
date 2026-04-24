@@ -40,6 +40,36 @@
     };
   };
 
+  disable-highlighting =
+    { config, lib, ... }:
+    {
+      assertions = [
+        {
+          assertion = lib.hasInfix ''local disabled_highlight = { "latex", "html" }'' config.content;
+          message = "Treesitter highlight disable list should be present in generated lua.";
+        }
+        {
+          assertion = lib.hasInfix "if disabled == lang or disabled == filetype then" config.content;
+          message = "Treesitter highlight disable check should match language and filetype.";
+        }
+        {
+          assertion = lib.hasInfix "pcall(vim.treesitter.start, args.buf, lang)" config.content;
+          message = "Treesitter highlighting should start with the resolved language.";
+        }
+      ];
+
+      plugins.treesitter = {
+        enable = true;
+        highlight = {
+          enable = true;
+          disable = [
+            "latex"
+            "html"
+          ];
+        };
+      };
+    };
+
   no-nix-grammars = {
     plugins.treesitter = {
       enable = true;
@@ -66,6 +96,7 @@
   legacy-master = {
     plugins.treesitter = {
       enable = true;
+      package = pkgs.vimPlugins.nvim-treesitter-legacy;
 
       settings = {
         auto_install = false;
@@ -97,6 +128,26 @@
         indent = {
           enable = true;
         };
+      };
+    };
+  };
+
+  legacy-highlight-disable-warning = {
+    test.runNvim = false;
+    test.warnings = expect: [
+      (expect "count" 1)
+      (expect "any" "`plugins.treesitter.settings.highlight.disable` is an upstream legacy nvim-treesitter")
+      (expect "any" "use `plugins.treesitter.highlight.disable` instead.")
+    ];
+
+    plugins.treesitter = {
+      enable = true;
+      settings.highlight = {
+        enable = true;
+        disable = [
+          "latex"
+          "html"
+        ];
       };
     };
   };

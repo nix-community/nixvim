@@ -187,6 +187,23 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     highlight = {
       enable = lib.mkEnableOption "tree-sitter based syntax highlighting";
+
+      disable = mkOption {
+        type = with types; listOf str;
+        default = [ ];
+        example = [
+          "latex"
+          "html"
+        ];
+        description = ''
+          List of languages or filetypes for which tree-sitter based syntax highlighting should not
+          be started by Nixvim.
+
+          This option only applies to Nixvim's native tree-sitter highlighting setup for the modern
+          nvim-treesitter main branch. Legacy nvim-treesitter configuration should continue using
+          upstream settings under `plugins.treesitter.settings`.
+        '';
+      };
     };
 
     indent = {
@@ -294,14 +311,31 @@ lib.nixvim.plugins.mkNeovimPlugin {
           ''}
           ${optionalString (highlightEnabled || indentEnabled) ''
             -- Enable features via autocommands for modern nvim-treesitter
+            ${optionalString highlightEnabled ''
+              local disabled_highlight = ${lib.nixvim.toLuaObject cfg.highlight.disable}
+            ''}
+
             vim.api.nvim_create_autocmd('FileType', {
               group = augroup,
               pattern = '*',
-              callback = function()
+              callback = function(args)
                 ${optionalString highlightEnabled ''
-                  pcall(vim.treesitter.start)
+                  local filetype = vim.bo[args.buf].filetype
+                  local lang = vim.treesitter.language.get_lang(filetype) or filetype
+                  local start_highlight = true
+
+                  for _, disabled in ipairs(disabled_highlight) do
+                    if disabled == lang or disabled == filetype then
+                      start_highlight = false
+                      break
+                    end
+                  end
+
+                  if start_highlight then
+                    pcall(vim.treesitter.start, args.buf, lang)
+                  end
                 ''}${optionalString indentEnabled ''
-                  vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                  vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
                 ''}
               end,
             })
@@ -343,7 +377,19 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
 
     warnings = lib.nixvim.mkWarnings "plugins.treesitter" (
-      lib.map (packageName: {
+      [
+        {
+          when =
+            (cfg.settings.highlight.disable or null) != null
+            && !(lib.hasInfix "nvim-treesitter-legacy" (lib.getName cfg.package));
+          message = ''
+            `plugins.treesitter.settings.highlight.disable` is an upstream legacy nvim-treesitter
+            option. For Nixvim's native highlighting support with the modern nvim-treesitter main
+            branch, use `${opt.highlight.disable}` instead.
+          '';
+        }
+      ]
+      ++ lib.map (packageName: {
         when = !cfg.nixGrammars && !config.dependencies.${packageName}.enable;
         message = ''
           `${packageName}` is required to build grammars as you are not using `${opt.nixGrammars}`.
