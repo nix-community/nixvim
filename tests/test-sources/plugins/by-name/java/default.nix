@@ -2,6 +2,7 @@
   empty = {
     # Tries to write to a log file
     test.runNvim = false;
+    test.buildNixvim = false;
 
     plugins.java.enable = true;
 
@@ -15,6 +16,7 @@
   defaults = {
     # Tries to write to a log file
     test.runNvim = false;
+    test.buildNixvim = false;
 
     plugins.java = {
       enable = true;
@@ -72,6 +74,7 @@
   explicit-disable-spring-boot-tools = {
     # Tries to write to a log file
     test.runNvim = false;
+    test.buildNixvim = false;
 
     plugins.java = {
       enable = true;
@@ -86,6 +89,7 @@
   with-spring-boot-plugin = {
     # Tries to write to a log file
     test.runNvim = false;
+    test.buildNixvim = false;
 
     plugins = {
       java.enable = true;
