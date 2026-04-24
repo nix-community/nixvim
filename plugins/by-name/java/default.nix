@@ -40,5 +40,14 @@ lib.nixvim.plugins.mkNeovimPlugin {
         Please, disable `plugins.jdtls` if you wish to use this plugin.
       '';
     };
+
+    warnings = lib.nixvim.mkWarnings "plugins.java" {
+      when = !(cfg.settings ? spring_boot_tools) && !config.plugins.spring-boot.enable;
+      message = ''
+        `nvim-java` enables `spring_boot_tools` by default, but `plugins.spring-boot` is not enabled.
+        Enable `plugins.spring-boot` or explicitly configure `plugins.java.settings.spring_boot_tools`
+        to silence this warning.
+      '';
+    };
   };
 }
