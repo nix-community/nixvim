@@ -48,7 +48,26 @@ let
       force = lib.nixvim.defaultNullOpts.mkBool false "Overwrite an existing user command.";
       desc = lib.nixvim.defaultNullOpts.mkStr "" "A description of the command.";
 
-      # TODO: command-preview, need to grab a function here.
+      preview = lib.nixvim.mkNullOrLuaFn' {
+        description = ''
+          Preview handler for `'inccommand'`, see `:h command-preview`.
+
+          The function is called with `opts`, `ns`, and `buf` arguments. `opts` has the same form as
+          `nvim_create_user_command()` callbacks, `ns` is the preview highlight namespace, and `buf`
+          is the preview buffer for `inccommand=split` or `nil` for `inccommand=nosplit`.
+
+          Return `0` to show no preview, `1` to show a preview without opening the preview window, or
+          `2` to open the preview window when `inccommand=split`.
+        '';
+        example = ''
+          function(opts, ns, buf)
+            if buf then
+              vim.api.nvim_buf_set_lines(buf, 0, -1, false, { opts.args })
+            end
+            return 2
+          end
+        '';
+      };
     };
   };
 in
