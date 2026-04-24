@@ -436,7 +436,7 @@ rec {
       default = throw ''
         Nixvim (${optionName}): No package is known for ${packageName}, to resolve this either:
           - install externally and set this option to `null`
-          - or provide a derviation to install this package
+          - or provide a derivation to install this package
       '';
       defaultText = lib.literalMD "No package, throws when undefined";
     };
