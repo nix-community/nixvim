@@ -4,6 +4,12 @@
     test.runNvim = false;
 
     plugins.java.enable = true;
+
+    test.warnings = expect: [
+      (expect "count" 1)
+      (expect "any" "`nvim-java` enables `spring_boot_tools` by default")
+      (expect "any" "`plugins.spring-boot` is not enabled")
+    ];
   };
 
   defaults = {
@@ -15,7 +21,6 @@
 
       settings = {
         root_markers = [
-
           "settings.gradle"
           "settings.gradle.kts"
           "pom.xml"
@@ -58,5 +63,37 @@
         };
       };
     };
+
+    test.warnings = expect: [
+      (expect "count" 0)
+    ];
+  };
+
+  explicit-disable-spring-boot-tools = {
+    # Tries to write to a log file
+    test.runNvim = false;
+
+    plugins.java = {
+      enable = true;
+      settings.spring_boot_tools.enable = false;
+    };
+
+    test.warnings = expect: [
+      (expect "count" 0)
+    ];
+  };
+
+  with-spring-boot-plugin = {
+    # Tries to write to a log file
+    test.runNvim = false;
+
+    plugins = {
+      java.enable = true;
+      spring-boot.enable = true;
+    };
+
+    test.warnings = expect: [
+      (expect "count" 0)
+    ];
   };
 }
