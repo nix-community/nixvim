@@ -134,6 +134,7 @@
 
   legacy-highlight-disable-warning = {
     test.runNvim = false;
+    test.buildNixvim = false;
     test.warnings = expect: [
       (expect "count" 1)
       (expect "any" "`plugins.treesitter.settings.highlight.disable` is an upstream legacy nvim-treesitter")

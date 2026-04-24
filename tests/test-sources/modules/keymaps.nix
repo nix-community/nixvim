@@ -145,5 +145,6 @@
     ];
 
     test.runNvim = false;
+    test.buildNixvim = false;
   };
 }

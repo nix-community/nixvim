@@ -64,6 +64,7 @@
 
   warning-no-highlight = {
     test.runNvim = false;
+    test.buildNixvim = false;
     test.warnings = expect: [
       (expect "count" 1)
       (expect "any" "You have enabled otter, but treesitter syntax highlighting is not enabled.")
@@ -77,6 +78,7 @@
 
   warning-no-treesitter = {
     test.runNvim = false;
+    test.buildNixvim = false;
     test.warnings = expect: [
       (expect "count" 1)
       (expect "any" "You have enabled otter, but treesitter syntax highlighting is not enabled.")
