@@ -182,25 +182,45 @@ in
 
   warn-when-lazy-loading-without-provider = {
     test = {
+      buildNixvim = false;
       runNvim = false;
       warnings = expect: [
         (expect "count" 1)
-        (expect "any" "You have enabled lazy loading support")
+        (expect "anyExact" (
+          "Nixvim (lazy loading): You have enabled lazy loading support for the following plugins but have not enabled a lazy loading provider.\n"
+          + "  1. plugins.codesnap\n"
+          + "  2. plugins.neotest\n"
+          + "\n"
+          + "Currently supported lazy providers:\n"
+          + "  - lz-n"
+        ))
       ];
     };
 
-    plugins.neotest = {
-      enable = true;
-      lazyLoad = {
+    plugins = {
+      codesnap = {
         enable = true;
-        settings = {
-          keys = [
-            {
-              __unkeyed-1 = "<leader>nt";
-              __unkeyed-3 = "<CMD>Neotest summary<CR>";
-              desc = "Summary toggle";
-            }
+        lazyLoad = {
+          enable = true;
+          settings.cmd = [
+            "CodeSnap"
+            "CodeSnapSave"
           ];
+        };
+      };
+      neotest = {
+        enable = true;
+        lazyLoad = {
+          enable = true;
+          settings = {
+            keys = [
+              {
+                __unkeyed-1 = "<leader>nt";
+                __unkeyed-3 = "<CMD>Neotest summary<CR>";
+                desc = "Summary toggle";
+              }
+            ];
+          };
         };
       };
     };
