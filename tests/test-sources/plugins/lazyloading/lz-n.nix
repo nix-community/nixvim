@@ -180,6 +180,32 @@ in
       ];
     };
 
+  warn-when-lazy-loading-without-provider = {
+    test = {
+      runNvim = false;
+      warnings = expect: [
+        (expect "count" 1)
+        (expect "any" "You have enabled lazy loading support")
+      ];
+    };
+
+    plugins.neotest = {
+      enable = true;
+      lazyLoad = {
+        enable = true;
+        settings = {
+          keys = [
+            {
+              __unkeyed-1 = "<leader>nt";
+              __unkeyed-3 = "<CMD>Neotest summary<CR>";
+              desc = "Summary toggle";
+            }
+          ];
+        };
+      };
+    };
+  };
+
   lazy-load-colorscheme-properly =
     { config, lib, ... }:
     {

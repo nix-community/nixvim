@@ -38,8 +38,8 @@ in
 
         pluginsWithLazyLoad = builtins.filter (
           x:
-          lib.isOption (options.plugins.${x}.lazyload or null)
-          && isVisible options.plugins.${x}.lazyload
+          lib.isOption (options.plugins.${x}.lazyLoad or null)
+          && isVisible options.plugins.${x}.lazyLoad
           && config.plugins.${x}.lazyLoad.enable
         ) (builtins.attrNames config.plugins);
         count = builtins.length pluginsWithLazyLoad;
