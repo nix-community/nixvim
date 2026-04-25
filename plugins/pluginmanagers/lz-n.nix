@@ -144,6 +144,19 @@ lib.nixvim.plugins.mkNeovimPlugin {
       };
     in
     {
+      imports = mkOption {
+        type = types.listOf types.str;
+        default = [ ];
+        example = [ "plugins" ];
+        description = ''
+          Lua module names containing plugin specs to pass to `require('lz.n').load`.
+
+          Use `plugins.lz-n.plugins` for plugin specs declared in Nix. Use this option when
+          plugin specs are already defined in Lua modules available on Neovim's runtimepath.
+          This uses `lz.n`'s import support and lets upstream load those specs from Lua.
+        '';
+      };
+
       keymaps = mkOption {
         type = types.listOf (mkMapOptionSubmodule {
           extraOptions.plugin = mkOption {
@@ -242,6 +255,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
     globals.lz_n = lib.modules.mkAliasAndWrapDefsWithPriority id opts.settings;
     plugins.lz-n.luaConfig.content = mkMerge (
       optional (cfg.plugins != [ ]) "require('lz.n').load(${toLuaObject cfg.plugins})"
+      ++ map (import: "require('lz.n').load(${toLuaObject import})") cfg.imports
       ++ map (
         {
           plugin,
