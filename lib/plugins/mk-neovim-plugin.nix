@@ -47,6 +47,7 @@ let
     false
     "optional"
   ];
+  defaultCallSetup = callSetup;
   optionDefaultPriority = (lib.mkOptionDefault null).priority;
   namespace = if isColorscheme then "colorschemes" else "plugins";
   loc = [
@@ -59,20 +60,23 @@ let
     let
       cfg = lib.getAttrFromPath loc config;
       opts = lib.getAttrFromPath loc options;
+      userCallSetup = if opts ? callSetup then cfg.callSetup else null;
       settingsWereDefined =
         hasSettings && (opts.settings.highestPrio or optionDefaultPriority) < optionDefaultPriority;
+      effectiveCallSetup = if userCallSetup != null then userCallSetup else defaultCallSetup;
       setupCode = ''
         require('${moduleName}')${setup}(${
           lib.optionalString (cfg ? settings) (lib.nixvim.toLuaObject cfg.settings)
         })
       '';
-      setupContent =
-        if callSetup == true then
-          setupCode
-        else if callSetup == "optional" then
-          lib.optionalString settingsWereDefined setupCode
+      shouldCallSetup =
+        if effectiveCallSetup == true then
+          true
+        else if effectiveCallSetup == "optional" then
+          settingsWereDefined
         else
-          "";
+          false;
+      setupContent = lib.optionalString shouldCallSetup setupCode;
 
       luaConfigAtLocation = utils.mkConfigAt configLocation cfg.luaConfig.content;
     in
@@ -90,26 +94,41 @@ let
             example = settingsExample;
           };
         }
-        // lib.optionalAttrs hasLuaConfig {
-          luaConfig = lib.mkOption {
-            type = lib.types.pluginLuaConfig;
-            default = { };
-            description = "The plugin's lua configuration";
-          };
-        }
+        // lib.optionalAttrs hasLuaConfig (
+          lib.optionalAttrs (defaultCallSetup != false) {
+            callSetup = lib.mkOption {
+              type = with lib.types; nullOr bool;
+              default = null;
+              description = ''
+                Whether to generate the standard `require('${moduleName}')${setup}(...)` call for this plugin.
+
+                By default, this follows the plugin's built-in behavior. Set this to `false`
+                to disable the generated setup call, or to `true` to force it even when the
+                plugin would only call it conditionally.
+              '';
+            };
+          }
+          // {
+            luaConfig = lib.mkOption {
+              type = lib.types.pluginLuaConfig;
+              default = { };
+              description = "The plugin's lua configuration";
+            };
+          }
+        )
         // extraOptions
       );
 
       config =
-        assert lib.assertMsg (lib.elem callSetup validCallSetupModes) ''
+        assert lib.assertMsg (lib.elem defaultCallSetup validCallSetupModes) ''
           Unexpected `callSetup` value for `${lib.showOption loc}`.
           Expected one of: true, false, "optional"
         '';
         assert lib.assertMsg (
-          callSetup != false -> hasLuaConfig
+          defaultCallSetup != false -> hasLuaConfig
         ) "This plugin is supposed to call the `setup()` function but has `hasLuaConfig` set to false";
         assert lib.assertMsg (
-          callSetup != "optional" || hasSettings
+          defaultCallSetup != "optional" || hasSettings
         ) "This plugin uses `callSetup = \"optional\"` but has `hasSettings` set to false";
         lib.mkIf cfg.enable (
           lib.mkMerge (
@@ -166,9 +185,7 @@ let
             ++ lib.optionals hasLuaConfig [
 
               # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
-              (lib.optionalAttrs (callSetup != false) (
-                lib.setAttrByPath loc { luaConfig.content = setupContent; }
-              ))
+              (lib.setAttrByPath loc { luaConfig.content = lib.mkIf (effectiveCallSetup != false) setupContent; })
 
               # When NOT lazy loading, write `luaConfig.content` to `configLocation`
               (lib.mkIf (!cfg.lazyLoad.enable) luaConfigAtLocation)
