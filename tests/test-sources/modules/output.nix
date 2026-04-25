@@ -161,4 +161,57 @@
         end
       '';
     };
+
+  autowrapRuntimeDeps =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    let
+      plugin = pkgs.vimUtils.buildVimPlugin {
+        pname = "nixvim-runtime-deps-test";
+        version = "1";
+        src = pkgs.runCommandLocal "nixvim-runtime-deps-test-src" { } "mkdir -p $out";
+        runtimeDeps = [ pkgs.hello ];
+      };
+    in
+    {
+      extraPlugins = [ plugin ];
+
+      assertions = [
+        {
+          assertion = lib.elem pkgs.hello config.build.nvimPackage.runtimeDeps;
+          message = "`autowrapRuntimeDeps` should add plugin runtime dependencies by default.";
+        }
+      ];
+    };
+
+  autowrapRuntimeDeps-disabled =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    let
+      plugin = pkgs.vimUtils.buildVimPlugin {
+        pname = "nixvim-runtime-deps-disabled-test";
+        version = "1";
+        src = pkgs.runCommandLocal "nixvim-runtime-deps-disabled-test-src" { } "mkdir -p $out";
+        runtimeDeps = [ pkgs.hello ];
+      };
+    in
+    {
+      autowrapRuntimeDeps = false;
+      extraPlugins = [ plugin ];
+
+      assertions = [
+        {
+          assertion = !lib.elem pkgs.hello config.build.nvimPackage.runtimeDeps;
+          message = "`autowrapRuntimeDeps = false` should not add plugin runtime dependencies.";
+        }
+      ];
+    };
 }

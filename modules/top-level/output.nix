@@ -13,6 +13,14 @@ let
 in
 {
   options = {
+    autowrapRuntimeDeps = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to automatically add plugin runtime dependencies to the Neovim wrapper's `PATH`.
+      '';
+    };
+
     viAlias = mkOption {
       type = types.bool;
       default = false;
@@ -212,6 +220,7 @@ in
         (pkgs.wrapNeovimUnstable package {
           extraLuaPackages = luaPackagesForWrapper;
           inherit (config)
+            autowrapRuntimeDeps
             extraPython3Packages
             viAlias
             vimAlias
