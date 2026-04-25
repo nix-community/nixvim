@@ -219,4 +219,23 @@ in
         ];
       };
     };
+
+  imports =
+    { config, lib, ... }:
+    {
+      test.runNvim = false;
+
+      plugins.lz-n = {
+        enable = true;
+        imports = [ "nixvim.lazy.plugins" ];
+      };
+
+      assertions = [
+        {
+          assertion = lib.hasInfix ''require('lz.n').load("nixvim.lazy.plugins")'' config.plugins.lz-n.luaConfig.content;
+          message = "`plugins.lz-n.imports` should generate an lz.n module import.";
+        }
+      ];
+    };
+
 }
