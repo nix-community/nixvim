@@ -101,6 +101,7 @@ in
       build.extraFiles =
         pkgs.runCommandLocal "nvim-config"
           {
+            pname = "nvim-config";
             __structuredAttrs = true;
             nativeBuildInputs = [ pkgs.jq ];
             inherit targets;
