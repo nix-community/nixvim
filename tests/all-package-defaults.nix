@@ -99,6 +99,13 @@ let
     # 2025-11-16 dependency pyarrow is broken
     "vectorcode"
 
+    # 2026-04-28: bundled tree-sitter grammar build failure on Darwin
+    "kulala.nvim"
+
+    # 2026-04-28: long Darwin build timing out in all-package-defaults
+    "deno"
+    "ghc"
+
     # 2025-11-16 fish is broken
     "direnv"
     "direnv.vim"
@@ -129,6 +136,8 @@ let
     # Marked as broken
     "akku-scheme-langserver"
     "rubyfmt"
+    # 2026-04-28: d2 depends on mesa-libgbm -> libdrm, which fails on Darwin
+    "d2"
     "wl-clipboard" # wayland
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
