@@ -59,6 +59,7 @@ in
       buf_lint = pkgs.buf;
       clazy = states.linuxOnly pkgs.clazy;
       clangtidy = pkgs."clang-tools";
+      inherit (pkgs) clj-kondo;
       cmakelint = pkgs."cmake-format";
       dmypy = pkgs.mypy;
       inherit (pkgs.luaPackages) fennel;
