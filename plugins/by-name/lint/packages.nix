@@ -77,6 +77,6 @@ in
       rstlint = pkgs.python3Packages."restructuredtext-lint";
       systemd-analyze = states.linuxOnly pkgs.systemd;
       tofu = pkgs.opentofu;
-      vacuum = states.linuxOnly pkgs.vacuum;
+      vacuum = pkgs.vacuum-go;
     };
 }
