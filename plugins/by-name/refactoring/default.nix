@@ -11,7 +11,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.MattSturgeon ];
 
   extraOptions = {
-    enableTelescope = lib.mkEnableOption "telescope integration";
+    enableTelescope = lib.mkEnableOption "Telescope-backed selection via telescope-ui-select";
   };
 
   extraConfig = cfg: {
@@ -24,7 +24,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       '';
     };
 
-    plugins.telescope.enabledExtensions = lib.mkIf cfg.enableTelescope [ "refactoring" ];
+    plugins.telescope.extensions.ui-select.enable = lib.mkIf cfg.enableTelescope true;
   };
 
   settingsOptions = with lib.types; {
