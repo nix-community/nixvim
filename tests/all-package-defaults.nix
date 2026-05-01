@@ -75,10 +75,6 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
-    # 2026-04-16: nushell build failure
-    # Fixed in https://github.com/NixOS/nixpkgs/pull/510439
-    "nushell"
-
     # 2026-04-09: OCaml toolchain build failure on Darwin
     "flow"
     "fstar"
