@@ -75,6 +75,9 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2026-05-01: ghc is not cached on CNO and is too heavy to build for the nix-community builders
+    "elm-format"
+
     # 2026-04-09: OCaml toolchain build failure on Darwin
     "flow"
     "fstar"
