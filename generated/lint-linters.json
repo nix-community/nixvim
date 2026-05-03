@@ -12,6 +12,7 @@
   "buildifier",
   "cfn_lint",
   "cfn_nag",
+  "checkbashisms",
   "checkmake",
   "checkpatch",
   "checkstyle",
