@@ -61,13 +61,13 @@
           mkProperty = name: function: ''
             __editorconfig.properties.${name} = ${function}
           '';
-          propertiesString = lib.concatLines (lib.mapAttrsToList mkProperty cfg.properties);
+          propertyAssignments = lib.mapAttrsToList mkProperty cfg.properties;
         in
-        lib.mkIf (propertiesString != "" && cfg.enable) ''
+        lib.mkIf (propertyAssignments != [ ] && cfg.enable) ''
           do
             local __editorconfig = require('editorconfig')
 
-            ${propertiesString}
+            ${lib.concatStringsSep "\n" propertyAssignments}
           end
         '';
     };

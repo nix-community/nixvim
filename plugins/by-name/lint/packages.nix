@@ -59,6 +59,7 @@ in
       buf_lint = pkgs.buf;
       clazy = states.linuxOnly pkgs.clazy;
       clangtidy = pkgs."clang-tools";
+      inherit (pkgs) clj-kondo;
       cmakelint = pkgs."cmake-format";
       dmypy = pkgs.mypy;
       inherit (pkgs.luaPackages) fennel;
@@ -77,6 +78,6 @@ in
       rstlint = pkgs.python3Packages."restructuredtext-lint";
       systemd-analyze = states.linuxOnly pkgs.systemd;
       tofu = pkgs.opentofu;
-      vacuum = states.linuxOnly pkgs.vacuum;
+      vacuum = pkgs.vacuum-go;
     };
 }

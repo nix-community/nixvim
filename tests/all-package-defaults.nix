@@ -75,9 +75,13 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
-    # 2026-04-16: nushell build failure
-    # Fixed in https://github.com/NixOS/nixpkgs/pull/510439
-    "nushell"
+    # 2026-05-04: build failure (appstream)
+    "blueprint-compiler"
+    "openscad.nvim"
+    "zathura-with-plugins"
+
+    # 2026-05-01: ghc is not cached on CNO and is too heavy to build for the nix-community builders
+    "elm-format"
 
     # 2026-04-09: OCaml toolchain build failure on Darwin
     "flow"
@@ -98,6 +102,13 @@ let
 
     # 2025-11-16 dependency pyarrow is broken
     "vectorcode"
+
+    # 2026-04-28: bundled tree-sitter grammar build failure on Darwin
+    "kulala.nvim"
+
+    # 2026-04-28: long Darwin build timing out in all-package-defaults
+    "deno"
+    "ghc"
 
     # 2025-11-16 fish is broken
     "direnv"
@@ -129,6 +140,8 @@ let
     # Marked as broken
     "akku-scheme-langserver"
     "rubyfmt"
+    # 2026-04-28: d2 depends on mesa-libgbm -> libdrm, which fails on Darwin
+    "d2"
     "wl-clipboard" # wayland
   ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [

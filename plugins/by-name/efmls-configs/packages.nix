@@ -102,6 +102,7 @@ in
       "stylua"
       "taplo"
       "textlint"
+      "typos"
       "typstyle"
       "uncrustify"
       "vale"
