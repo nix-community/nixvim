@@ -75,6 +75,11 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2026-05-04: build failure (appstream)
+    "blueprint-compiler"
+    "openscad.nvim"
+    "zathura-with-plugins"
+
     # 2026-05-01: ghc is not cached on CNO and is too heavy to build for the nix-community builders
     "elm-format"
 
