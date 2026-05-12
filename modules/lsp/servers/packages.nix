@@ -225,6 +225,7 @@
     dagger = "cuelsp";
     dartls = "dart";
     denols = "deno";
+    dexter = "dexter";
     dhall_lsp_server = "dhall-lsp-server";
     diagnosticls = "diagnostic-languageserver";
     digestif = [
