@@ -52,10 +52,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
               options = {
                 dir = mkNullOrOption str "A directory pointing to a local plugin";
 
-                pkg = mkOption {
-                  type = package;
-                  description = "Vim plugin to install";
-                };
+                pkg = mkNullOrOption package "Vim plugin to install";
 
                 name = mkNullOrOption str "Name of the plugin to install";
 
@@ -158,11 +155,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
                   name = "${lib.getName p}";
                   path = p;
                 }
-              else
+              else if (p.pkg or null) != null then
                 {
-                  name = "${lib.getName p.pkg}";
+                  name = if (p.name or null) != null then p.name else lib.getName p.pkg;
                   path = p.pkg;
-                };
+                }
+              else
+                null;
             processDependencies =
               if plugin ? dependencies && plugin.dependencies != null then
                 builtins.concatMap processPlugin plugin.dependencies
@@ -171,37 +170,26 @@ lib.nixvim.plugins.mkNeovimPlugin {
           in
           [ (mkEntryFromDrv plugin) ] ++ processDependencies;
 
-        processedPlugins = builtins.concatLists (map processPlugin cfg.plugins);
+        processedPlugins = lib.remove null (builtins.concatMap processPlugin cfg.plugins);
         lazyPath = pkgs.linkFarm "lazy-plugins" processedPlugins;
 
         pluginToLua =
           plugin:
           if lib.isDerivation plugin then
-            { dir = "${lazyPath}/${lib.getName plugin}"; }
-          else
-            plugin
+            {
+              dir = "${plugin}";
+              name = "${lib.getName plugin}";
+            }
+          else if (plugin.pkg or null) != null then
+            let
+              name = if (plugin.name or null) != null then plugin.name else lib.getName plugin.pkg;
+            in
+            # Remove `pkg` from the plugin spec, since it's only used to
+            # determine the plugin directory and is not needed in the final
+            # spec.
+            removeAttrs plugin [ "pkg" ]
             // {
-              "__unkeyed" = plugin.name;
-
-              inherit (plugin)
-                cmd
-                cond
-                config
-                dev
-                enabled
-                event
-                ft
-                init
-                keys
-                lazy
-                main
-                module
-                name
-                optional
-                opts
-                priority
-                submodules
-                ;
+              "__unkeyed" = name;
 
               dependencies = lib.nixvim.ifNonNull' plugin.dependencies (
                 if lib.isList plugin.dependencies then
@@ -210,9 +198,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
                   plugin.dependencies
               );
 
-              dir =
-                if plugin ? dir && plugin.dir != null then plugin.dir else "${lazyPath}/${lib.getName plugin.pkg}";
-            };
+              dir = if (plugin.dir or null) != null then plugin.dir else "${lazyPath}/${name}";
+            }
+          else
+            plugin;
 
         pluginListToLua = map pluginToLua;
 
