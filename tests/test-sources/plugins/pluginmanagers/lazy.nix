@@ -24,6 +24,10 @@
           ];
         }
 
+        # Test freeform and case when `pkg` is null.
+        { pkg = LazyVim; }
+        { import = "lazyvim.plugins.extras"; }
+
         # Load on an autocommand event
         {
           pkg = vim-matchup;
