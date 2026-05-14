@@ -151,6 +151,10 @@ in
       extraPackages = lib.mkIf (packages.prefix or [ ] != [ ]) packages.prefix;
       extraPackagesAfter = lib.mkIf (packages.suffix or [ ] != [ ]) packages.suffix;
 
+      dependencies.inotify-tools = lib.mkIf (enabledServers != [ ] && pkgs.stdenv.hostPlatform.isLinux) {
+        enable = true;
+      };
+
       lsp.luaConfig.content =
         let
           mkServerConfig =
