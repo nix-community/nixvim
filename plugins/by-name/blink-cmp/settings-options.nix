@@ -75,7 +75,8 @@ in
         "snippet_backward"
         "fallback"
       ];
-
+      # Example using raw Lua:
+      "<C-a>" = lib.nixvim.mkRaw "require('some-module').custom_function()";
     };
     description = ''
       The keymap can be:
@@ -83,6 +84,9 @@ in
       - A table of `keys => command[]` (optionally with a "preset" key to merge with a preset)
       When specifying 'preset' in the keymap table, the custom key mappings are merged with the preset,
       and any conflicting keys will overwrite the preset mappings.
+
+      For advanced use cases, you can use raw Lua with `lib.nixvim.mkRaw` to define custom
+      keymap logic.
     '';
   };
 
