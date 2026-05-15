@@ -8,7 +8,10 @@
     dev-nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     # flake-compat is used by the root `default.nix` to allow non-flake users to import nixvim
-    flake-compat.url = "github:NixOS/flake-compat";
+    flake-compat = {
+      url = "github:NixOS/flake-compat";
+      flake = false;
+    };
 
     # keep-sorted start block=yes newline_separated=yes
     devshell = {
