@@ -82,11 +82,7 @@
       }
     },
     "home-manager": {
-      "inputs": {
-        "nixpkgs": [
-          "dev-nixpkgs"
-        ]
-      },
+      "flake": false,
       "locked": {
         "lastModified": 1778850834,
         "narHash": "sha256-JB+iK+5p0m3Jx9Zi9vQO2d3BR07dbW3UqpgOhUXix3s=",

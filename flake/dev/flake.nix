@@ -23,7 +23,7 @@
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "dev-nixpkgs";
+      flake = false;
     };
 
     nix-darwin = {

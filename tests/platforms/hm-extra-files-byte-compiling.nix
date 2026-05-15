@@ -1,11 +1,11 @@
 {
   self,
   pkgs,
+  lib,
 }:
 let
-  inherit (self.inputs.home-manager.lib)
-    homeManagerConfiguration
-    ;
+  hmLib = import (self.inputs.home-manager + "/lib") { inherit lib; };
+  inherit (hmLib) homeManagerConfiguration;
 
   config = {
     home = {

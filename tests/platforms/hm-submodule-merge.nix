@@ -1,6 +1,7 @@
 {
   self,
   pkgs,
+  lib,
 }:
 # This test covers a user-reported regression where nixvim's submodule-option (programs.nixvim)
 # cannot correctly merge options declared from the parent scope.
@@ -9,9 +10,8 @@
 #
 # To be clear, this is an upstream module system bug, this test validates our workaround.
 let
-  inherit (self.inputs.home-manager.lib)
-    homeManagerConfiguration
-    ;
+  hmLib = import (self.inputs.home-manager + "/lib") { inherit lib; };
+  inherit (hmLib) homeManagerConfiguration;
 
   # This test module declares a nixvim option from a Home Manager module
   # The module system will attempt an option-type merge on the `programs.nixvim` option,
