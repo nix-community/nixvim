@@ -1,13 +1,13 @@
 {
   empty = {
-    plugins.jj-nvim.enable = true;
+    plugins.jj.enable = true;
   };
 
   example = {
     plugins.snacks.enable = true;
     plugins.codediff.enable = true;
 
-    plugins.jj-nvim = {
+    plugins.jj = {
       enable = true;
 
       settings = {
@@ -20,7 +20,7 @@
   };
 
   no-packages = {
-    plugins.jj-nvim.enable = true;
+    plugins.jj.enable = true;
     dependencies.jujutsu.enable = false;
   };
 }

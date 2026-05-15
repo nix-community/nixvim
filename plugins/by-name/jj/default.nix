@@ -1,6 +1,6 @@
 { lib, ... }:
 lib.nixvim.plugins.mkNeovimPlugin {
-  name = "jj-nvim";
+  name = "jj";
   moduleName = "jj";
   package = "jj-nvim";
   description = "Drive Jujutsu (jj) VCS from Neovim like a pro";
