@@ -113,17 +113,18 @@
     "pasls"
     "pbls"
     "perlls"
+    "phpantom_lsp"
     "phptools"
     "pico8_ls"
     "please"
     "pli"
+    "pony_language_server"
     "poryscript_pls"
     "powershell_es"
     "prismals"
     "prolog_ls"
     "prosemd_lsp"
     "pug"
-    "pony_language_server"
     "puppet"
     "purescriptls"
     "pyre"
@@ -154,6 +155,7 @@
     "solidity_ls_nomicfoundation"
     "somesass_ls"
     "sorbet"
+    "spade_ls"
     "spyglassmc_language_server"
     "sqlls"
     "stan_ls"
@@ -220,6 +222,7 @@
     crystalline = "crystalline";
     csharp_ls = "csharp-ls";
     cssls = "vscode-langservers-extracted";
+    ctags_lsp = "ctags-lsp";
     cue = "cue";
     dafny = "dafny";
     dagger = "cuelsp";
@@ -335,6 +338,7 @@
     openscad_lsp = "openscad-lsp";
     oxfmt = "oxfmt";
     oxlint = "oxlint";
+    panache = "panache";
     perlnavigator = "perlnavigator";
     perlpls = [
       "perlPackages"
@@ -459,6 +463,7 @@
     vue_ls = "vue-language-server";
     wgsl_analyzer = "wgsl-analyzer";
     yamlls = "yaml-language-server"; # Not available in coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
+    zizmor = "zizmor";
     zk = "zk";
     zls = "zls";
     zuban = "zuban";
