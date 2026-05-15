@@ -18,8 +18,7 @@
 
     git-hooks = {
       url = "github:cachix/git-hooks.nix";
-      inputs.nixpkgs.follows = "dev-nixpkgs";
-      inputs.flake-compat.follows = "flake-compat";
+      flake = false;
     };
 
     home-manager = {
