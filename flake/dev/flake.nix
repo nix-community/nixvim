@@ -39,7 +39,7 @@
 
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "dev-nixpkgs";
+      flake = false;
     };
 
     # keep-sorted end
