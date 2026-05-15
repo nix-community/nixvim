@@ -1,6 +1,8 @@
 {
   description = "Private inputs for development purposes. These are used by the top level flake in the `dev` partition, but do not appear in consumers' lock files.";
 
+  # Avoid `flake = true` when we do not need to evaluate flake outputs or fetch flake inputs.
+  # e.g. when we only import loose files.
   inputs = {
     # Nix 2.26 improved support for relative path flake inputs.
     # This dev-flake is only evaluated by flake-parts' flake-compat,
