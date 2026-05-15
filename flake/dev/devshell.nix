@@ -1,7 +1,7 @@
 { lib, inputs, ... }:
 {
   imports = [
-    inputs.devshell.flakeModule
+    (inputs.devshell + "/flake-module.nix")
   ];
 
   perSystem =
