@@ -1,6 +1,8 @@
 {
   description = "Private inputs for development purposes. These are used by the top level flake in the `dev` partition, but do not appear in consumers' lock files.";
 
+  # Avoid `flake = true` when we do not need to evaluate flake outputs or fetch flake inputs.
+  # e.g. when we only import loose files.
   inputs = {
     # NOTE: Use a different name to the root flake's inputs.nixpkgs to avoid shadowing it.
     # NOTE: The only reason we specify a nixpkgs input at all here, is so the other inputs can follow it.
