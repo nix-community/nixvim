@@ -31,7 +31,7 @@
 
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin";
-      inputs.nixpkgs.follows = "nixvim/nixpkgs";
+      flake = false;
     };
 
     nuschtosSearch = {
