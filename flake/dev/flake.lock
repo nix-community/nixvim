@@ -124,11 +124,7 @@
       }
     },
     "nix-darwin": {
-      "inputs": {
-        "nixpkgs": [
-          "dev-nixpkgs"
-        ]
-      },
+      "flake": false,
       "locked": {
         "lastModified": 1777780666,
         "narHash": "sha256-8wURyQMdDkGUarSTKOGdCuFfYiwa3HbzwscUfn3STDE=",

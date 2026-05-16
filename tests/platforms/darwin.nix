@@ -1,18 +1,30 @@
 {
   self,
   system,
+  lib,
 }:
-self.inputs.nix-darwin.lib.darwinSystem {
+let
+  darwinSystem = import (self.inputs.nix-darwin + "/eval-config.nix");
+in
+darwinSystem {
+  inherit lib;
+
   modules = [
-    {
-      nixpkgs.hostPlatform = system;
+    (
+      { config, ... }:
+      {
+        nixpkgs = {
+          source = self.inputs.nixpkgs;
+          hostPlatform = system;
+        };
 
-      programs.nixvim = {
-        enable = true;
-      };
+        programs.nixvim = {
+          enable = true;
+        };
 
-      system.stateVersion = 5;
-    }
+        system.stateVersion = config.system.maxStateVersion;
+      }
+    )
     self.nixDarwinModules.nixvim
   ];
 }

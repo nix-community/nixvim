@@ -28,7 +28,7 @@
 
     nix-darwin = {
       url = "github:lnl7/nix-darwin";
-      inputs.nixpkgs.follows = "dev-nixpkgs";
+      flake = false;
     };
 
     nuschtosSearch = {
