@@ -1,7 +1,7 @@
 {
   lib,
   self,
-  flake,
+  flake ? null,
 }:
 let
   removed = {
@@ -34,10 +34,10 @@ in
     lib.evalModules {
       modules = modules ++ [
         ../modules/top-level
-        {
+        (lib.optionalAttrs (lib.isAttrs flake) {
           _file = "<nixvim-flake>";
           flake = lib.mkOptionDefault flake;
-        }
+        })
         (lib.optionalAttrs (system != null) {
           _file = "evalNixvim";
           nixpkgs.hostPlatform = lib.mkOptionDefault { inherit system; };

@@ -14,7 +14,7 @@
       # on pinning the flake-parts nixpkgs-lib to the nixpkgs pin
       inherit (inputs.nixpkgs) lib;
     };
-    overlay = import ../lib/overlay.nix {
+    overlay = import ../lib/overlay.internal.nix {
       flake = self;
     };
     # Top-top-level aliases

@@ -84,7 +84,8 @@ When Nixvim is built in standalone mode, it expects `lib` to have Nixvim's exten
 If you'd like to use a `lib` with your own extensions, you must supply it via `specialArgs`,
 however you must ensure Nixvim's extensions are also present.
 
-This can be achieved using the lib overlay, available via the `<nixvim>.lib.overlay` flake output.
+This can be achieved using the lib overlay, available via the `<nixvim>.lib.overlay` flake output
+or importing the `lib/overlay.nix` file.
 
 ```nix
 # Example flake

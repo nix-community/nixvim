@@ -16,7 +16,7 @@
 */
 {
   lib,
-  flake,
+  flake ? null,
 }:
 lib.makeExtensible (
   self:
