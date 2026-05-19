@@ -173,6 +173,83 @@
       '';
     };
 
+  on-attach-dynamic-registration = {
+    lsp.onAttach = ''
+      table.insert(_G.__nixvim_lsp_on_attach_calls, {
+        client = client.id,
+        bufnr = bufnr,
+      })
+    '';
+
+    extraConfigLuaPre = ''
+      _G.__nixvim_lsp_on_attach_calls = {}
+      vim.lsp.handlers["client/registerCapability"] = function()
+        return "registered"
+      end
+    '';
+
+    extraConfigLuaPost = ''
+      local get_client_by_id = vim.lsp.get_client_by_id
+      vim.lsp.get_client_by_id = function(client_id)
+        if client_id == "stub_id" then
+          return {
+            id = "stub_id",
+            attached_buffers = {
+              [1] = true,
+            },
+          }
+        end
+      end
+
+      local attach_buf = vim.api.nvim_create_buf(false, true)
+      vim.api.nvim_exec_autocmds("LspAttach", {
+        group = "nixvim_lsp_on_attach",
+        buffer = attach_buf,
+        modeline = false,
+        data = {
+          client_id = "stub_id",
+        },
+      })
+
+      local result = vim.lsp.handlers["client/registerCapability"](nil, nil, { client_id = "stub_id" })
+      vim.lsp.get_client_by_id = get_client_by_id
+
+      if result ~= "registered" then
+        print("Expected client/registerCapability handler to return original result, got", result)
+      end
+
+      local expected_calls = {
+        { client = "stub_id", bufnr = attach_buf },
+        { client = "stub_id", bufnr = 1 },
+      }
+
+      for index, expected in ipairs(expected_calls) do
+        local actual = _G.__nixvim_lsp_on_attach_calls[index]
+        if actual == nil then
+          print("Missing lsp.onAttach call", index)
+        elseif actual.client ~= expected.client or actual.bufnr ~= expected.bufnr then
+          print(
+            "Unexpected lsp.onAttach call",
+            index,
+            "expected",
+            vim.inspect(expected),
+            "got",
+            vim.inspect(actual)
+          )
+        end
+      end
+
+      if #_G.__nixvim_lsp_on_attach_calls ~= #expected_calls then
+        print(
+          "Expected",
+          #expected_calls,
+          "lsp.onAttach calls, got",
+          #_G.__nixvim_lsp_on_attach_calls
+        )
+      end
+    '';
+  };
+
   package-fallback =
     { lib, config, ... }:
     {

@@ -47,13 +47,38 @@ in
               -- client and bufnr are supplied to the builtin `on_attach` callback,
               -- so make them available in scope for our global `onAttach` impl
               local client = vim.lsp.get_client_by_id(event.data.client_id)
-              local bufnr = event.buf
-              ${cfg.onAttach}
+              if client == nil then
+                return
+              end
+
+              __nixvim_lsp_on_attach(client, event.buf)
             end
           end
         '';
         desc = "Run LSP onAttach";
       }
     ];
+
+    extraConfigLua = ''
+      local function __nixvim_lsp_on_attach(client, bufnr)
+        ${cfg.onAttach}
+      end
+
+      vim.lsp.handlers["client/registerCapability"] = (function(overridden)
+        return function(err, res, ctx, ...)
+          local result = overridden(err, res, ctx, ...)
+          local client = vim.lsp.get_client_by_id(ctx.client_id)
+          if client == nil then
+            return result
+          end
+
+          for bufnr, _ in pairs(client.attached_buffers) do
+            __nixvim_lsp_on_attach(client, bufnr)
+          end
+
+          return result
+        end
+      end)(vim.lsp.handlers["client/registerCapability"])
+    '';
   };
 }
