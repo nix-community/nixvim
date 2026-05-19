@@ -1,9 +1,11 @@
 {
   lib,
   extendModules,
-  config,
   ...
 }:
+let
+  importWrapper = lib.flip lib.modules.importApply { inherit extendModules; };
+in
 {
   options.build = {
     nixosModule = lib.mkOption {
@@ -23,18 +25,9 @@
     };
   };
 
-  config.build = {
-    nixosModule = lib.modules.importApply ../wrappers/nixos.nix {
-      self = config.flake;
-      inherit extendModules;
-    };
-    homeModule = lib.modules.importApply ../wrappers/hm.nix {
-      self = config.flake;
-      inherit extendModules;
-    };
-    nixDarwinModule = lib.modules.importApply ../wrappers/darwin.nix {
-      self = config.flake;
-      inherit extendModules;
-    };
+  config.build = lib.mapAttrs (_: importWrapper) {
+    nixosModule = ../wrappers/nixos.nix;
+    homeModule = ../wrappers/hm.nix;
+    nixDarwinModule = ../wrappers/darwin.nix;
   };
 }

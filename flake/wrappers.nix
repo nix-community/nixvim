@@ -34,7 +34,8 @@ in
     {
       legacyPackages = {
         makeNixvimWithModule = import ../wrappers/standalone.nix {
-          inherit lib self;
+          inherit lib;
+          inherit (self.lib) evalNixvim;
           defaultSystem = system;
         };
         makeNixvim = module: makeNixvimWithModule { inherit module; };
