@@ -49,6 +49,7 @@ let
     no-flake = callTest ./no-flake.nix { };
     lib-tests = callTest ./lib-tests.nix { };
     maintainers = callTest ./maintainers.nix { };
+    nixpkgs-fetch = callTest ./nixpkgs-fetch.nix { };
     nixpkgs-module = callTest ./nixpkgs-module.nix { };
     plugins-by-name = callTest ./plugins-by-name.nix { };
     generated = callTest ./generated.nix { };
