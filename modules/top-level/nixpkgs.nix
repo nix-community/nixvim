@@ -11,6 +11,8 @@ let
 
   pinned = import ../../nixpkgs.nix;
 
+  optionDefaultPrio = (lib.mkOptionDefault null).priority;
+
   isConfig = x: builtins.isAttrs x || lib.isFunction x;
 
   mergeConfig =
@@ -231,6 +233,16 @@ in
                 };
           in
           import cfg.source (args // systemArgs);
+
+      # Whether `pkgs` was constructed by this module.
+      # This is false when any of nixpkgs.pkgs or _module.args.pkgs is set.
+      constructedByMe =
+        # We set it with default priority and it can not be merged, so if the
+        # pkgs module argument has that priority, it's from us.
+        (lib.modules.mergeAttrDefinitionsWithPrio options._module.args).pkgs.highestPrio
+        == lib.modules.defaultOverridePriority
+        # Although, if nixpkgs.pkgs is set, we did forward it, but we did not construct it.
+        && !opt.pkgs.isDefined;
     in
     {
       # We explicitly set the default override priority, so that we do not need
@@ -256,5 +268,20 @@ in
           '';
         }
       ];
+
+      # TODO: consider `nixpkgs.source` always defaulting to `pinned`? That would bypass flake input following.
+      warnings =
+        lib.optional
+          (
+            constructedByMe
+            && opt.source.highestPrio == optionDefaultPrio
+            && pinned.narHash != cfg.source.narHash or null
+          )
+          ''
+            The `${opt.source}` default value has been affected by your flake input `follows`.
+            Nixvim's inputs pin Nixpkgs to `${pinned.rev}`.${
+              lib.optionalString (cfg.source ? rev) " Actual Nixpkgs is following `${cfg.source.rev}`."
+            }
+            Please remove your `inputs.nixvim.inputs.nixpkgs.follows` or explicitly define `${opt.source}` to suppress this warning.'';
     };
 }
