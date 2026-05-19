@@ -25,6 +25,10 @@
             excludes = [
               # sema-unused-def-lambda-noarg-formal
               "ci/rust-analyzer/default.nix"
+
+              # sema-primop-overridden
+              # sema-primop-removed-prefix
+              "nixpkgs.nix"
             ];
           };
           nixfmt = {
