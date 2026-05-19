@@ -351,7 +351,12 @@ in
           '';
         };
 
-        manDocsPackage = config.flake.packages.${system}.man-docs;
+        # TODO: make `build.manDocsPackage` available in non-flake evals.
+        # Also update `enableMan` default value.
+        manDocsPackage =
+          lib.throwIfNot options.flake.isDefined
+            "`${options.build.manDocsPackage}` currently requires `${options.flake}`, which is not defined."
+            config.flake.packages.${system}.man-docs;
       };
 
       # Set `wrapRc` and `impureRtp`s option defaults with even lower priority than `mkOptionDefault`
