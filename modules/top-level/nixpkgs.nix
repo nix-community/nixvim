@@ -9,6 +9,8 @@ let
   cfg = config.nixpkgs;
   opt = options.nixpkgs;
 
+  pinned = import ../../nixpkgs.nix;
+
   isConfig = x: builtins.isAttrs x || lib.isFunction x;
 
   mergeConfig =
@@ -188,7 +190,7 @@ in
     # NOTE: This is a nixvim-specific option; there's no equivalent in nixos
     source = lib.mkOption {
       type = lib.types.path;
-      default = config.flake.inputs.nixpkgs;
+      default = (lib.optionalAttrs options.flake.isDefined config.flake).inputs.nixpkgs or pinned;
       defaultText = lib.literalMD "Nixvim's flake `input.nixpkgs`";
       description = ''
         The path to import Nixpkgs from.
