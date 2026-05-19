@@ -16,11 +16,11 @@ lib.nixvim.plugins.mkVimPlugin {
   dependencies = [ "direnv" ];
 
   settingsOptions = {
-    direnv_auto = defaultNullOpts.mkFlagInt 1 ''
+    auto = defaultNullOpts.mkFlagInt 1 ''
       It will not execute `:DirenvExport` automatically if the value is `0`.
     '';
 
-    direnv_edit_mode =
+    edit_mode =
       defaultNullOpts.mkEnum
         [
           "edit"
@@ -33,7 +33,7 @@ lib.nixvim.plugins.mkVimPlugin {
           Select the command to open buffers to edit. Default: 'edit'.
         '';
 
-    direnv_silent_load = defaultNullOpts.mkFlagInt 1 ''
+    silent_load = defaultNullOpts.mkFlagInt 0 ''
       Stop echoing output from Direnv command.
     '';
   };
