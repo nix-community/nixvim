@@ -48,7 +48,7 @@
       settings = {
         cmd = [
           (lib.getExe pkgs.jdt-language-server)
-          { __raw = "'--jvm-arg='..vim.api.nvim_eval('g:NVIM_LOMBOK')"; }
+          { __raw = "'--jvm-arg='..(vim.g.NVIM_LOMBOK or '')"; }
         ];
       };
     };

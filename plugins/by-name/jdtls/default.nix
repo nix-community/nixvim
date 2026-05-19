@@ -16,22 +16,15 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  setup = ".start_or_attach"; # only used settingsDescription
+  settingsDescription = "LSP configuration passed to `vim.lsp.config('jdtls', ...)`.";
   callSetup = false;
-  extraConfig = cfg: {
+  extraConfig = cfg: opts: {
     extraPackages = [ cfg.jdtLanguageServerPackage ];
 
-    autoCmd = [
-      {
-        event = "FileType";
-        pattern = "java";
-        callback.__raw = ''
-          function ()
-            require('jdtls').start_or_attach(${lib.nixvim.toLuaObject cfg.settings})
-          end
-        '';
-      }
-    ];
+    lsp.servers.jdtls = {
+      enable = lib.mkDefault true;
+      config = lib.mkDerivedConfig opts.settings lib.id;
+    };
   };
 
   settingsOptions = import ./settings-options.nix lib;
@@ -39,7 +32,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
   settingsExample = {
     cmd = [
       "jdtls"
-      { __raw = "'--jvm-arg='..vim.api.nvim_eval('g:NVIM_LOMBOK')"; }
+      { __raw = "'--jvm-arg='..(vim.g.NVIM_LOMBOK or '')"; }
     ];
     root_dir.__raw = ''
       vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw'}, { upward = true })[1])
