@@ -1,5 +1,4 @@
 {
-  self,
   extendModules,
 }:
 {
@@ -18,7 +17,6 @@ in
 
   imports = [
     (import ./_shared.nix {
-      inherit self;
       inherit
         (extendModules {
           specialArgs.hmConfig = config;

@@ -1,5 +1,4 @@
 {
-  self,
   extendModules,
 }:
 {
@@ -21,7 +20,6 @@ in
 
   imports = [
     (importApply ./_shared.nix {
-      inherit self;
       inherit
         (extendModules {
           specialArgs.darwinConfig = config;

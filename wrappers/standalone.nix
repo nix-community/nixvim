@@ -1,7 +1,7 @@
 {
-  self,
   lib,
   defaultSystem,
+  evalNixvim,
 }:
 {
   # TODO: Deprecate this arg in favour of using module options
@@ -29,7 +29,7 @@ let
     mod:
     let
       modules = lib.toList mod;
-      nixvimConfig = self.lib.evalNixvim {
+      nixvimConfig = evalNixvim {
         modules = modules ++ [
           systemMod
         ];
