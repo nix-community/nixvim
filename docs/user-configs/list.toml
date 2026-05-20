@@ -202,3 +202,8 @@ url = "https://github.com/ar-at-localhost/np"
 owner = "Myxogastria0808"
 repo = "nix-flakes-nixvim"
 description = "Standalone NixVim config for x86_64-linux featuring 25 language servers, Copilot, conform.nvim format-on-save, and a complete UI stack with noice.nvim and bufferline."
+
+[[config]]
+owner = "allen-liaoo"
+repo = "nvimx"
+description = "Project based, modular Neovim. Contains language-specific presets."
