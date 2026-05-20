@@ -41,6 +41,9 @@ let
     # "tabnine"
     "cmp-tabnine"
 
+    # 2026-05-20: vectorcode is marked badPlatforms on aarch64-linux
+    "vectorcode.nvim"
+
     # luajitPackages.neotest is flaky: (temporarily?) disable tests that depend on it
     "compiler.nvim"
     "hardhat.nvim"
@@ -102,6 +105,7 @@ let
 
     # 2025-11-16 dependency pyarrow is broken
     "vectorcode"
+    "vectorcode.nvim"
 
     # 2026-04-28: bundled tree-sitter grammar build failure on Darwin
     "kulala.nvim"
