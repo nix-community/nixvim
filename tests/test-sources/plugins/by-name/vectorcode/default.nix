@@ -13,6 +13,56 @@
       ];
     };
 
+  codecompanion-integration =
+    let
+      extensionSettings = {
+        tool_group.enabled = true;
+        tool_opts.query.default_num = {
+          chunk = 50;
+          document = 10;
+        };
+      };
+    in
+    { config, ... }:
+    {
+      test.buildNixvim = false;
+
+      plugins.codecompanion.enable = true;
+
+      plugins.vectorcode = {
+        enable = true;
+        integrations.codecompanion = {
+          enable = true;
+          settings = extensionSettings;
+        };
+      };
+
+      assertions = [
+        {
+          assertion =
+            config.plugins.codecompanion.settings.extensions.vectorcode == {
+              enabled = true;
+              opts = extensionSettings;
+            };
+          message = "VectorCode CodeCompanion integration should configure the extension.";
+        }
+      ];
+    };
+
+  codecompanion-integration-missing-codecompanion = {
+    test = {
+      buildNixvim = false;
+      assertions = expect: [
+        (expect "any" "VectorCode's CodeCompanion integration requires `plugins.codecompanion.enable = true`.")
+      ];
+    };
+
+    plugins.vectorcode = {
+      enable = true;
+      integrations.codecompanion.enable = true;
+    };
+  };
+
   defaults = {
     plugins.vectorcode = {
       enable = true;
