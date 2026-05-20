@@ -159,6 +159,7 @@ in
         "python313Packages"
         "jupytext"
       ];
+      just.default = "just";
       lazygit.default = "lazygit";
       lean.default = "lean4";
       ledger.default = "ledger";
