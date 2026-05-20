@@ -130,6 +130,7 @@ in
       cornelis.default = "cornelis";
       ctags.default = "ctags";
       curl.default = "curl";
+      cspell.default = "cspell";
       direnv.default = "direnv";
       distant.default = "distant";
       efm-langserver.default = "efm-langserver";
