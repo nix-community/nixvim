@@ -122,6 +122,7 @@ in
       bat.default = "bat";
       claude-code.default = "claude-code";
       codeium.default = "codeium";
+      codex.default = "codex";
       copilot.default = "github-copilot-cli";
       coreutils = {
         default = "coreutils";
