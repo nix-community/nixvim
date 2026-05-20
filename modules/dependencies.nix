@@ -170,6 +170,7 @@ in
       };
       opencode.default = "opencode";
       plantuml.default = "plantuml";
+      python3.default = "python3";
       ripgrep.default = "ripgrep";
       roslyn_ls.default = "roslyn-ls";
       rust-analyzer.default = "rust-analyzer";
@@ -177,6 +178,8 @@ in
       sd.default = "sd";
       sed.default = "gnused";
       skim.default = "skim";
+      sioyek.default = "sioyek";
+      sqlite.default = "sqlite";
       television.default = "television";
       texpresso.default = "texpresso";
       tinymist.default = "tinymist";
