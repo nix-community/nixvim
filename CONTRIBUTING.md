@@ -304,7 +304,7 @@ In either case, you don't need to bother implementing this part. It is done auto
 
 Most of the tests of Nixvim consist of creating a Neovim derivation with the supplied Nixvim configuration, and then trying to execute Neovim to check for any output. All output is considered to be an error.
 
-The tests are located in the [tests/test-sources](tests/test-sources) directory, and should be added to a file in the same hierarchy than the repository. For example if a plugin is defined in `./plugins/ui/foo.nix` the test should be added in `./tests/test-sources/ui/foo.nix`.
+The tests are located in the [tests/test-sources](tests/test-sources) directory, and should be added to a file in the same hierarchy as the repository. For example, if a plugin is defined in `./plugins/ui/foo.nix`, the test should be added in `./tests/test-sources/plugins/ui/foo.nix`.
 
 Tests can either be a simple attribute set, or a function taking `{pkgs}` as an input. The keys of the set are configuration names, and the values are a Nixvim configuration.
 
