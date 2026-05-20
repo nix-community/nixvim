@@ -184,6 +184,7 @@ in
       typst.default = "typst";
       ueberzug.default = "ueberzugpp";
       util-linux.default = "util-linux";
+      vectorcode.default = "vectorcode";
       websocat.default = "websocat";
       wezterm.default = "wezterm";
       which.default = "which";
