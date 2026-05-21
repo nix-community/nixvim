@@ -113,7 +113,6 @@
     "pasls"
     "pbls"
     "perlls"
-    "phpantom_lsp"
     "phptools"
     "pico8_ls"
     "please"
@@ -350,6 +349,7 @@
       "phan"
     ];
     phpactor = "phpactor";
+    phpantom_lsp = "phpantom-lsp";
     pony_lsp = "ponyc";
     postgres_lsp = "postgres-language-server";
     protols = "protols";
