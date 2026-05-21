@@ -150,6 +150,127 @@
     '';
   };
 
+  wrapRc-uses-viminit-for-exrc =
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    let
+      wrapperArgs = config.build.nvimPackage.wrapperArgs;
+      exrcTest =
+        pkgs.runCommandLocal "wraprc-viminit-exrc-test"
+          {
+            nativeBuildInputs = [ config.build.nvimPackage ];
+          }
+          ''
+            mkdir -p project home xdg/nvim vim
+
+            cat > project/.nvim.lua <<'EOF'
+            vim.g.nixvim_exrc_loaded = true
+            EOF
+
+            cat > project/check.lua <<'EOF'
+            assert(vim.g.nixvim_exrc_loaded == true, ".nvim.lua was not sourced")
+            assert(vim.g.nixvim_xdg_sysinit_loaded == nil, "XDG sysinit.vim was sourced")
+            assert(vim.g.nixvim_vim_sysinit_loaded == nil, "VIM sysinit.vim was sourced")
+            assert(_G.__nixvim_impure_startup_env == nil, "saved startup env was not cleared")
+
+            if vim.env.NIXVIM_TEST_XDG_CONFIG_DIRS == "" then
+              assert(vim.env.XDG_CONFIG_DIRS == nil, "XDG_CONFIG_DIRS was not restored to unset")
+            else
+              assert(
+                vim.env.XDG_CONFIG_DIRS == vim.env.NIXVIM_TEST_XDG_CONFIG_DIRS,
+                "XDG_CONFIG_DIRS was not restored"
+              )
+            end
+
+            if vim.env.NIXVIM_TEST_VIM == "" then
+              assert(vim.env.VIM == nil, "VIM was not restored to unset")
+            else
+              assert(vim.env.VIM == vim.env.NIXVIM_TEST_VIM, "VIM was not restored")
+            end
+            EOF
+
+            cat > xdg/nvim/sysinit.vim <<'EOF'
+            let g:nixvim_xdg_sysinit_loaded = v:true
+            EOF
+
+            cat > vim/sysinit.vim <<'EOF'
+            let g:nixvim_vim_sysinit_loaded = v:true
+            EOF
+
+            cd project
+            run_nvim_with_impure_startup_env() {
+              env \
+                XDG_CONFIG_DIRS="$1" \
+                VIM="$2" \
+                NIXVIM_TEST_XDG_CONFIG_DIRS="$1" \
+                NIXVIM_TEST_VIM="$2" \
+                HOME="$(realpath ../home)" \
+                nvim --headless -S check.lua +qa
+            }
+
+            run_nvim_without_impure_startup_env() {
+              env \
+                -u XDG_CONFIG_DIRS \
+                -u VIM \
+                NIXVIM_TEST_XDG_CONFIG_DIRS= \
+                NIXVIM_TEST_VIM= \
+                HOME="$(realpath ../home)" \
+                nvim --headless -S check.lua +qa
+            }
+
+            xdg_config_dirs="$(realpath ../xdg)"
+            vim_dir="$(realpath ../vim)"
+            run_nvim_with_impure_startup_env "$xdg_config_dirs" "$vim_dir"
+            run_nvim_without_impure_startup_env
+
+            touch $out
+          '';
+    in
+    {
+      wrapRc = true;
+
+      opts = {
+        exrc = true;
+        secure = true;
+      };
+
+      extraConfigLuaPre = ''
+        vim.secure.trust({
+          action = "allow",
+          path = vim.fn.getcwd() .. "/.nvim.lua",
+        })
+      '';
+
+      test.extraInputs = [ exrcTest ];
+
+      assertions = [
+        {
+          assertion = lib.hasInfix "--set VIMINIT" wrapperArgs;
+          message = "`wrapRc` should pass the generated config through VIMINIT.";
+        }
+        {
+          assertion = !(lib.hasInfix "--add-flags -u" wrapperArgs);
+          message = "`wrapRc` should not pass the generated config through `-u`.";
+        }
+        {
+          assertion = lib.hasInfix "--add-flag --cmd" wrapperArgs;
+          message = "`wrapRc` should ignore system config dirs during startup when `impureRtp` is disabled.";
+        }
+        {
+          assertion = lib.hasInfix "__nixvim_impure_startup_env" wrapperArgs;
+          message = "`wrapRc` should restore `XDG_CONFIG_DIRS` after startup.";
+        }
+        {
+          assertion = lib.hasInfix "__nixvim_impure_startup_env" wrapperArgs;
+          message = "`wrapRc` should restore `VIM` after startup.";
+        }
+      ];
+    };
+
   extraPackagesAfter =
     { pkgs, ... }:
     {
