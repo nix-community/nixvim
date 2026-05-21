@@ -77,7 +77,7 @@ in
       description = ''
         Whether the config will be included in the wrapper script.
 
-        When enabled, the Nixvim config will be passed to `nvim` using the `-u` option.
+        When enabled, the Nixvim config will be passed to `nvim` using the `VIMINIT` environment variable.
       '';
       defaultText = lib.literalMD ''
         Configured by your installation method: `false` when using the Home Manager module, `true` otherwise.
@@ -90,6 +90,7 @@ in
         Whether to keep the (impure) nvim config directory in the runtimepath.
 
         If disabled, the XDG config dirs `nvim` and `nvim/after` will be removed from the runtimepath.
+        When `wrapRc` is enabled, the wrapper will also ignore system/XDG config dirs during startup.
       '';
       defaultText = lib.literalMD ''
         Configured by your installation method: `true` when using the Home Manager module, `false` otherwise.
@@ -276,6 +277,48 @@ in
         else
           initSource;
 
+      # `:help initialization` says sysinit is sourced before `VIMINIT` from
+      # `$XDG_CONFIG_DIRS/nvim/sysinit.vim` or, as fallback, `$VIM/sysinit.vim`.
+      impureStartupEnvVars = [
+        "XDG_CONFIG_DIRS"
+        "VIM"
+      ];
+
+      # Runs via `--cmd` before sysinit, so system/XDG config dirs are hidden
+      # before Nvim checks them without relying on makeWrapper-only `--run`.
+      saveAndClearImpureStartupEnvVars = ''
+        _G.__nixvim_impure_startup_env = {}
+        for _, name in ipairs(${lib.nixvim.toLuaObject impureStartupEnvVars}) do
+          local value = vim.env[name]
+          if value ~= nil then
+            _G.__nixvim_impure_startup_env[name] = {
+              set = true,
+              value = value,
+            }
+          else
+            _G.__nixvim_impure_startup_env[name] = {
+              set = false,
+            }
+          end
+          vim.env[name] = nil
+        end
+      '';
+
+      # Restore before loading the generated config so user code sees the original
+      # environment while sysinit remains skipped.
+      restoreImpureStartupEnvVars = ''
+        local saved_impure_startup_env = _G.__nixvim_impure_startup_env or {}
+        for _, name in ipairs(${lib.nixvim.toLuaObject impureStartupEnvVars}) do
+          local saved = saved_impure_startup_env[name]
+          if saved ~= nil and saved.set then
+            vim.env[name] = saved.value
+          else
+            vim.env[name] = nil
+          end
+        end
+        _G.__nixvim_impure_startup_env = nil
+      '';
+
       extraWrapperArgs = builtins.concatStringsSep " " (
         # Setting environment variables in the wrapper
         (lib.mapAttrsToList (
@@ -292,7 +335,21 @@ in
         ++ (optional (
           config.extraPackagesAfter != [ ]
         ) ''--suffix PATH : "${lib.makeBinPath config.extraPackagesAfter}"'')
-        ++ (optional config.wrapRc ''--add-flags -u --add-flags "${initFile}"'')
+        ++ (optional (config.wrapRc && !config.impureRtp) (
+          lib.escapeShellArgs [
+            "--add-flag"
+            "--cmd"
+            "--add-flag"
+            "lua ${saveAndClearImpureStartupEnvVars}"
+          ]
+        ))
+        ++ (optional config.wrapRc (
+          lib.escapeShellArgs [
+            "--set"
+            "VIMINIT"
+            "lua ${lib.optionalString (!config.impureRtp) restoreImpureStartupEnvVars} dofile('${initFile}')"
+          ]
+        ))
       );
 
       package =
