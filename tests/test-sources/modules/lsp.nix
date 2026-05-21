@@ -178,6 +178,8 @@
       table.insert(_G.__nixvim_lsp_on_attach_calls, {
         client = client.id,
         bufnr = bufnr,
+        event_buf = event.buf,
+        event_client = event.data.client_id,
       })
     '';
 
@@ -219,15 +221,19 @@
       end
 
       local expected_calls = {
-        { client = "stub_id", bufnr = attach_buf },
-        { client = "stub_id", bufnr = 1 },
+        { client = "stub_id", bufnr = attach_buf, event_buf = attach_buf, event_client = "stub_id" },
+        { client = "stub_id", bufnr = 1, event_buf = 1, event_client = "stub_id" },
       }
 
       for index, expected in ipairs(expected_calls) do
         local actual = _G.__nixvim_lsp_on_attach_calls[index]
         if actual == nil then
           print("Missing lsp.onAttach call", index)
-        elseif actual.client ~= expected.client or actual.bufnr ~= expected.bufnr then
+        elseif actual.client ~= expected.client
+          or actual.bufnr ~= expected.bufnr
+          or actual.event_buf ~= expected.event_buf
+          or actual.event_client ~= expected.event_client
+        then
           print(
             "Unexpected lsp.onAttach call",
             index,

@@ -51,7 +51,7 @@ in
                 return
               end
 
-              __nixvim_lsp_on_attach(client, event.buf)
+              __nixvim_lsp_on_attach(client, event.buf, event)
             end
           end
         '';
@@ -60,7 +60,7 @@ in
     ];
 
     extraConfigLua = ''
-      local function __nixvim_lsp_on_attach(client, bufnr)
+      local function __nixvim_lsp_on_attach(client, bufnr, event)
         ${cfg.onAttach}
       end
 
@@ -73,7 +73,12 @@ in
           end
 
           for bufnr, _ in pairs(client.attached_buffers) do
-            __nixvim_lsp_on_attach(client, bufnr)
+            __nixvim_lsp_on_attach(client, bufnr, {
+              buf = bufnr,
+              data = {
+                client_id = client.id,
+              },
+            })
           end
 
           return result
