@@ -508,7 +508,7 @@ in
         inherit (cfg.settings) plugins;
 
         nativePlugins =
-          (map
+          (lib.concatMap
             (
               pluginName:
               (lib.optionals (isEnabled plugins.${pluginName}) cfg.package.optional-dependencies.${pluginName})
