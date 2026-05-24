@@ -19,5 +19,6 @@ self.inputs.home-manager.lib.homeManagerConfiguration {
       programs.home-manager.enable = true;
     }
     self.homeModules.nixvim
+    ./inf-rec-lib.nix
   ];
 }

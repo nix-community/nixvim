@@ -19,5 +19,6 @@ self.inputs.nixpkgs.lib.nixosSystem {
       };
     }
     self.nixosModules.nixvim
+    ./inf-rec-lib.nix
   ];
 }
