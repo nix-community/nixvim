@@ -5,25 +5,6 @@ import os
 import re
 from argparse import ArgumentParser
 
-# Template for default.nix (plugin)
-# TODO: conditionally include parts of the template based on args
-default_nix_template = """{{ lib, ... }}:
-lib.nixvim.plugins.mkNeovimPlugin {{
-  name = "{name}";
-  moduleName = "LUA_MODULE_NAME"; # TODO replace (or remove entirely if it is the same as `name`)
-  package = "{package}";
-
-  {maintainer_todo}maintainers = [ lib.maintainers.{maintainer} ];
-
-  # TODO provide an example for the `settings` option (or remove entirely if there is no useful example)
-  # NOTE you can use `lib.literalExpression` or `lib.literalMD` if needed
-  settingsExample = {{
-    foo = 42;
-    bar.__raw = "function() print('hello') end";
-  }};
-}}
-"""
-
 # Template for default.nix (colorscheme)
 colorscheme_nix_template = """{{ lib, ... }}:
 lib.nixvim.plugins.mkNeovimPlugin {{
@@ -117,11 +98,50 @@ def strip_nvim(input_string):
     return input_string.strip("-")
 
 
+def load_template(root_dir, relative_path):
+    with open(os.path.join(root_dir, relative_path), encoding="utf-8") as f:
+        return f.read()
+
+
+def replace_once(template, old, new):
+    if old not in template:
+        raise ValueError(f"Template placeholder not found: {old}")
+    return template.replace(old, new, 1)
+
+
+def render_plugin_template(
+    template,
+    name,
+    package,
+    maintainer,
+    is_default_maintainer=False,
+):
+    maintainer_todo = (
+        "  # TODO replace with your name\n" if is_default_maintainer else ""
+    )
+
+    content = replace_once(template, 'name = "my-plugin";', f'name = "{name}";')
+    content = replace_once(
+        content,
+        'moduleName = "my-plugin";',
+        f'moduleName = "{name}";',
+    )
+    content = replace_once(
+        content,
+        'package = "my-plugin-nvim"; # TODO replace',
+        f'package = "{package}";',
+    )
+    return replace_once(
+        content,
+        "  # TODO replace with your name\n  maintainers = [ lib.maintainers.MyName ];",
+        f"{maintainer_todo}  maintainers = [ lib.maintainers.{maintainer} ];",
+    )
+
+
 def create_nix_file(
     file_path,
     template,
     name,
-    originalName,
     package,
     maintainer,
     is_default_maintainer=False,
@@ -134,7 +154,6 @@ def create_nix_file(
         file_path (str): The path to the file to create.
         template (str): The template string to use for the file content.
         name (str): The name of the plugin.
-        originalName (str): The original name of the plugin.
         package (str): The package name of the plugin.
         maintainer (str): The maintainer name from lib.maintainers.
         is_default_maintainer (bool): Whether the maintainer is the default value.
@@ -147,10 +166,31 @@ def create_nix_file(
 
     content = template.format(
         name=name,
-        originalName=originalName,
         package=package,
         maintainer=maintainer,
         maintainer_todo=maintainer_todo,
+    )
+    write_to_file(file_path, content, dry_run)
+
+
+def create_plugin_file(
+    file_path,
+    template,
+    name,
+    package,
+    maintainer,
+    is_default_maintainer=False,
+    dry_run=False,
+):
+    """
+    Create a plugin nix file from plugins/TEMPLATE.nix.
+    """
+    content = render_plugin_template(
+        template,
+        name,
+        package,
+        maintainer,
+        is_default_maintainer,
     )
     write_to_file(file_path, content, dry_run)
 
@@ -186,14 +226,17 @@ def write_to_file(file_path, content: str, dry_run=False):
         return
 
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    with open(file_path, "w") as f:
+    with open(file_path, "w", encoding="utf-8") as f:
         f.write(content)
 
 
-def find_project_root(root_identifier):
+def find_project_root(root_identifiers):
     current_path = os.getcwd()
     while True:
-        if root_identifier in os.listdir(current_path):
+        if all(
+            os.path.exists(os.path.join(current_path, root_identifier))
+            for root_identifier in root_identifiers
+        ):
             return current_path
         parent_path = os.path.dirname(current_path)
         if parent_path == current_path:
@@ -252,26 +295,27 @@ def main():
     is_default_maintainer = args.maintainer == DEFAULT_MAINTAINER
 
     # Define paths
-    root_identifier = "flake.nix"
-    root_dir = find_project_root(root_identifier)
+    root_identifiers = ["flake.nix", "plugins/TEMPLATE.nix"]
+    root_dir = find_project_root(root_identifiers)
 
     if args.colorscheme:
         plugin_template = colorscheme_nix_template
         test_template = colorscheme_test_nix_template
         plugin_path = f"{root_dir}/colorschemes/{name}/default.nix"
         test_path = f"{root_dir}/tests/test-sources/colorschemes/{name}/default.nix"
+        create_module_file = create_nix_file
     else:
-        plugin_template = default_nix_template
+        plugin_template = load_template(root_dir, "plugins/TEMPLATE.nix")
         test_template = test_nix_template
         plugin_path = f"{root_dir}/plugins/by-name/{name}/default.nix"
         test_path = f"{root_dir}/tests/test-sources/plugins/by-name/{name}/default.nix"
+        create_module_file = create_plugin_file
 
     # Create files
-    create_nix_file(
+    create_module_file(
         plugin_path,
         plugin_template,
         name,
-        args.originalName,
         package,
         args.maintainer,
         is_default_maintainer,
