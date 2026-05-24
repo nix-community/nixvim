@@ -14,5 +14,6 @@ self.inputs.nix-darwin.lib.darwinSystem {
       system.stateVersion = 5;
     }
     self.nixDarwinModules.nixvim
+    ./inf-rec-lib.nix
   ];
 }
