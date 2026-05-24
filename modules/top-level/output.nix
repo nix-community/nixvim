@@ -420,6 +420,13 @@ in
       wrapRc = lib.mkOverride 1501 true;
       impureRtp = lib.mkOverride 1501 false;
 
+      assertions = lib.nixvim.mkAssertions "output" [
+        {
+          assertion = config.impureRtp || config.wrapRc;
+          message = "`impureRtp = false` requires `wrapRc = true` so Nixvim can suppress system/XDG startup config.";
+        }
+      ];
+
       extraConfigLuaPre = lib.mkOrder 100 (
         lib.concatStringsSep "\n" (
           lib.optional (!config.impureRtp) ''

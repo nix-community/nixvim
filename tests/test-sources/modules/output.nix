@@ -271,6 +271,18 @@
       ];
     };
 
+  impureRtp-disabled-requires-wrapRc = {
+    wrapRc = false;
+    impureRtp = false;
+
+    test.assertions = expect: [
+      (expect "count" 1)
+      (expect "anyExact" "Nixvim (output): `impureRtp = false` requires `wrapRc = true` so Nixvim can suppress system/XDG startup config.")
+    ];
+
+    test.buildNixvim = false;
+  };
+
   extraPackagesAfter =
     { pkgs, ... }:
     {
