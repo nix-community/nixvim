@@ -4,7 +4,10 @@
   ...
 }:
 let
-  importWrapper = lib.flip lib.modules.importApply { inherit extendModules; };
+  importWrapper = lib.flip lib.modules.importApply {
+    inherit extendModules;
+    nixvimLib = lib.nixvim;
+  };
 in
 {
   options.build = {

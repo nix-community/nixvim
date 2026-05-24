@@ -1,4 +1,5 @@
 {
+  nixvimLib,
   extendModules,
 }:
 {
@@ -17,6 +18,7 @@ in
 
   imports = [
     (import ./_shared.nix {
+      inherit nixvimLib;
       inherit
         (extendModules {
           specialArgs.nixosConfig = config;

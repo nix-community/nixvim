@@ -1,4 +1,6 @@
 {
+  # A `lib.nixvim` instance
+  nixvimLib,
   # Function used to evaluate the `programs.nixvim` configuration
   extendModules,
   # Option path where extraFiles should go
@@ -86,7 +88,7 @@ in
       # NOTE: It is important that we use the flake-locked Nixpkgs lib,
       # so that we can safely use recently added lib features.
       # TODO: Consider deprecating `_module.args.nixvimLib`?
-      lib.nixvim = lib.mkDefault finalConfiguration._module.specialArgs.lib.nixvim;
+      lib.nixvim = lib.mkDefault nixvimLib;
       _module.args.nixvimLib = lib.mkDefault (lib.extend libOverlay);
     }
 
