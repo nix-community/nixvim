@@ -1,4 +1,5 @@
 {
+  nixvimLib,
   extendModules,
 }:
 {
@@ -20,6 +21,7 @@ in
 
   imports = [
     (importApply ./_shared.nix {
+      inherit nixvimLib;
       inherit
         (extendModules {
           specialArgs.darwinConfig = config;
