@@ -108,12 +108,8 @@ writeShellApplication {
     fi
 
     # Update the dev lockfile
-    root_nixpkgs=$(nix eval --raw --file . 'inputs.nixpkgs.rev')
     echo "Updating dev lockfile"
-    nix flake update \
-        --override-input 'dev-nixpkgs' "github:NixOS/nixpkgs/$root_nixpkgs" \
-        --flake './flake/dev' \
-        2> >(tee "$dev_update" >&2)
+    nix flake update --flake './flake/dev' 2> >(tee "$dev_update" >&2)
     cleanUpdateOutput "$dev_update" > "$dev_msg"
     if [ -s "$dev_msg" ]; then
       {
