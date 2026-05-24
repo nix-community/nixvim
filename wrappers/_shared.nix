@@ -72,11 +72,6 @@ in
     default = { };
   };
 
-  # TODO: Added 2024-07-24; remove after 24.11
-  imports = [
-    (lib.mkRenamedOptionModule [ "nixvim" "helpers" ] [ "lib" "nixvim" ])
-  ];
-
   config = mkMerge [
     {
       # Make Nixvim's extended lib available to the host modules

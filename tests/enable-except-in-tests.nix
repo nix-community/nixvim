@@ -11,17 +11,12 @@ let
     name = "enable-except-in-tests-test";
     inherit pkgs;
     module =
-      { lib, helpers, ... }:
+      { lib, ... }:
       {
         assertions = [
           {
             assertion = !lib.nixvim.enableExceptInTests;
             message = "Expected lib.nixvim.enableExceptInTests to be false";
-          }
-          {
-            # NOTE: evaluating `helpers` here prints an eval warning
-            assertion = !helpers.enableExceptInTests;
-            message = "Expected helpers.enableExceptInTests to be false";
           }
         ];
       };
@@ -32,17 +27,12 @@ let
       nvim = makeNixvimWithModule {
         inherit pkgs;
         module =
-          { lib, helpers, ... }:
+          { lib, ... }:
           {
             assertions = [
               {
                 assertion = lib.nixvim.enableExceptInTests;
                 message = "Expected lib.nixvim.enableExceptInTests to be true";
-              }
-              {
-                # NOTE: evaluating `helpers` here prints an eval warning
-                assertion = helpers.enableExceptInTests;
-                message = "Expected helpers.enableExceptInTests to be true";
               }
             ];
           };
