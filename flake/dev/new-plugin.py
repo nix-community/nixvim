@@ -4,6 +4,8 @@
 import os
 import re
 from argparse import ArgumentParser
+from collections.abc import Callable, Sequence
+from typing import cast
 
 # Template for default.nix (colorscheme)
 colorscheme_nix_template = """{{ lib, ... }}:
@@ -66,7 +68,10 @@ colorscheme_test_nix_template = """{{
 """
 
 
-def to_kebab_case(input_string):
+ModuleFileCreator = Callable[[str, str, str, str, str, bool, bool], None]
+
+
+def to_kebab_case(input_string: str) -> str:
     """
     Convert a string to kebab-case.
 
@@ -82,7 +87,7 @@ def to_kebab_case(input_string):
     return input_string.strip("-")
 
 
-def strip_nvim(input_string):
+def strip_nvim(input_string: str) -> str:
     """
     Remove 'nvim' prefix or suffix from a string.
 
@@ -98,24 +103,24 @@ def strip_nvim(input_string):
     return input_string.strip("-")
 
 
-def load_template(root_dir, relative_path):
+def load_template(root_dir: str, relative_path: str) -> str:
     with open(os.path.join(root_dir, relative_path), encoding="utf-8") as f:
         return f.read()
 
 
-def replace_once(template, old, new):
+def replace_once(template: str, old: str, new: str) -> str:
     if old not in template:
         raise ValueError(f"Template placeholder not found: {old}")
     return template.replace(old, new, 1)
 
 
 def render_plugin_template(
-    template,
-    name,
-    package,
-    maintainer,
-    is_default_maintainer=False,
-):
+    template: str,
+    name: str,
+    package: str,
+    maintainer: str,
+    is_default_maintainer: bool = False,
+) -> str:
     maintainer_todo = (
         "  # TODO replace with your name\n" if is_default_maintainer else ""
     )
@@ -139,14 +144,14 @@ def render_plugin_template(
 
 
 def create_nix_file(
-    file_path,
-    template,
-    name,
-    package,
-    maintainer,
-    is_default_maintainer=False,
-    dry_run=False,
-):
+    file_path: str,
+    template: str,
+    name: str,
+    package: str,
+    maintainer: str,
+    is_default_maintainer: bool = False,
+    dry_run: bool = False,
+) -> None:
     """
     Create a nix file from a template.
 
@@ -174,14 +179,14 @@ def create_nix_file(
 
 
 def create_plugin_file(
-    file_path,
-    template,
-    name,
-    package,
-    maintainer,
-    is_default_maintainer=False,
-    dry_run=False,
-):
+    file_path: str,
+    template: str,
+    name: str,
+    package: str,
+    maintainer: str,
+    is_default_maintainer: bool = False,
+    dry_run: bool = False,
+) -> None:
     """
     Create a plugin nix file from plugins/TEMPLATE.nix.
     """
@@ -195,7 +200,12 @@ def create_plugin_file(
     write_to_file(file_path, content, dry_run)
 
 
-def create_test_file(file_path, template, name, dry_run=False):
+def create_test_file(
+    file_path: str,
+    template: str,
+    name: str,
+    dry_run: bool = False,
+) -> None:
     """
     Create a test file from a template.
 
@@ -209,7 +219,7 @@ def create_test_file(file_path, template, name, dry_run=False):
     write_to_file(file_path, content, dry_run)
 
 
-def write_to_file(file_path, content: str, dry_run=False):
+def write_to_file(file_path: str, content: str, dry_run: bool = False) -> None:
     """
     Makes sure directories exist and write content to a file.
 
@@ -227,10 +237,10 @@ def write_to_file(file_path, content: str, dry_run=False):
 
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
     with open(file_path, "w", encoding="utf-8") as f:
-        f.write(content)
+        _ = f.write(content)
 
 
-def find_project_root(root_identifiers):
+def find_project_root(root_identifiers: Sequence[str]) -> str:
     current_path = os.getcwd()
     while True:
         if all(
@@ -240,13 +250,15 @@ def find_project_root(root_identifiers):
             return current_path
         parent_path = os.path.dirname(current_path)
         if parent_path == current_path:
-            return None
+            raise FileNotFoundError(
+                f"Could not find project root containing: {', '.join(root_identifiers)}"
+            )
         os.chdir("..")
         current_path = os.getcwd()
 
 
 # TODO: support interactive unmanaged args
-def main():
+def main() -> None:
     """
     Main function to generate default.nix and test files for a new plugin or colorscheme.
     """
@@ -255,55 +267,60 @@ def main():
     parser = ArgumentParser(
         description="Generate default.nix and test files for a new plugin or colorscheme"
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "originalName", type=str, help="Original name of the new plugin or colorscheme"
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--package",
         "-p",
         type=str,
         help="Package name of the new plugin (defaults to normalized version of originalName)",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--maintainer",
         "-m",
         type=str,
         help="Maintainer name (from lib.maintainers)",
         default=DEFAULT_MAINTAINER,
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--colorscheme",
         "-c",
         action="store_true",
         help="Create a colorscheme instead of a plugin",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--dry-run",
         "-d",
         action="store_true",
         help="Show what would be written without actually creating files",
     )
     args = parser.parse_args()
+    original_name = cast(str, args.originalName)
+    package_arg = cast(str | None, args.package)
+    maintainer = cast(str, args.maintainer)
+    is_colorscheme = cast(bool, args.colorscheme)
+    dry_run = cast(bool, args.dry_run)
 
     # Calculate name - convert to kebab case and strip nvim
-    name = strip_nvim(to_kebab_case(args.originalName))
+    name = strip_nvim(to_kebab_case(original_name))
 
     # Use provided package name or default to normalized original name
-    package = args.package if args.package else to_kebab_case(args.originalName)
+    package = package_arg if package_arg else to_kebab_case(original_name)
 
     # Check if user provided a maintainer or we're using the default
-    is_default_maintainer = args.maintainer == DEFAULT_MAINTAINER
+    is_default_maintainer = maintainer == DEFAULT_MAINTAINER
 
     # Define paths
     root_identifiers = ["flake.nix", "plugins/TEMPLATE.nix"]
     root_dir = find_project_root(root_identifiers)
 
-    if args.colorscheme:
+    if is_colorscheme:
         plugin_template = colorscheme_nix_template
         test_template = colorscheme_test_nix_template
         plugin_path = f"{root_dir}/colorschemes/{name}/default.nix"
         test_path = f"{root_dir}/tests/test-sources/colorschemes/{name}/default.nix"
-        create_module_file = create_nix_file
+        create_module_file: ModuleFileCreator = create_nix_file
     else:
         plugin_template = load_template(root_dir, "plugins/TEMPLATE.nix")
         test_template = test_nix_template
@@ -317,15 +334,15 @@ def main():
         plugin_template,
         name,
         package,
-        args.maintainer,
+        maintainer,
         is_default_maintainer,
-        args.dry_run,
+        dry_run,
     )
     create_test_file(
         test_path,
         test_template,
         name,
-        args.dry_run,
+        dry_run,
     )
 
 
