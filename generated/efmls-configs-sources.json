@@ -480,6 +480,7 @@
       "possible": [
         "markuplint",
         "djlint",
+        "htmlhint",
         "alex",
         "codespell",
         "cspell",
