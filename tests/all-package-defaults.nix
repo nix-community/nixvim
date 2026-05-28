@@ -78,6 +78,9 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2026-05-28: build failure (compiler-rt-libc)
+    "ols"
+
     # 2026-05-04: build failure (appstream)
     "blueprint-compiler"
     "openscad.nvim"
