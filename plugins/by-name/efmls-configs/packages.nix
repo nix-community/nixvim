@@ -72,6 +72,7 @@ in
       "golines"
       "golint"
       "hadolint"
+      "htmlhint"
       "isort"
       "joker"
       "jq"
