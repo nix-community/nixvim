@@ -2,6 +2,7 @@ name: lint
 
 on:
   pull_request:
+  merge_group:
 
 defaults:
   run:
