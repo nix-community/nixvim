@@ -2,11 +2,6 @@ name: lint
 
 on:
   pull_request:
-    paths-ignore:
-      - "**.md"
-      - "**.svg"
-      - ".gitignore"
-      - "LICENSE"
 
 defaults:
   run:
