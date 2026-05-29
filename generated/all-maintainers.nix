@@ -70,6 +70,13 @@
     name = "Fran Cirka";
     source = "nixpkgs";
   };
+  FilippoAiraldi = {
+    email = "filippo.airaldi@proton.me";
+    github = "FilippoAiraldi";
+    githubId = 48798518;
+    name = "Filippo Airaldi";
+    source = "nixpkgs";
+  };
   Fovir-GitHub = {
     email = "fovir@disroot.org";
     github = "Fovir-GitHub";
