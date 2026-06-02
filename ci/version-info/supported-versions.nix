@@ -30,7 +30,10 @@ let
     |> builtins.listToAttrs;
 
   newest_stable =
-    stable_versions |> builtins.attrNames |> builtins.sort (a: b: a > b) |> builtins.head;
+    stable_versions
+    |> builtins.attrNames
+    |> builtins.sort (a: b: a > b)
+    |> builtins.head;
 
   bumpYear = y: toString (lib.toIntBase10 y + 1);
   bumpMonth =
