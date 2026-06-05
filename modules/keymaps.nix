@@ -10,6 +10,30 @@ let
     removeDeprecatedMapAttrs
     deprecatedMapOptionSubmodule
     ;
+
+  # All keymap submodules that have historically supported the `lua` sub-option
+  legacyKeymapConfigurations =
+    lib.pipe
+      [
+        options.keymaps.valueMeta.list
+        (lib.concatMap (ev: ev.list) (lib.attrValues options.keymapsOnEvents.valueMeta.attrs))
+
+        # NOTE: lsp `diagnostic` and `lspBuf` don't use `mapOptionSubmodule` yet
+        # So we only need `lua` deprecation in lsp's `extra` option
+        options.plugins.lsp.keymaps.extra.valueMeta.list
+
+        # NOTE: tmux-navigator added `mapOptionSubmodule` support _after_ branching off 24.05
+        options.plugins.tmux-navigator.keymaps.valueMeta.list
+
+        # NOTE: barbar added `mapOptionSubmodule` support shortly _before_ branching off 24.05
+        (lib.mapAttrsToList (name: opt: opt.valueMeta) (
+          removeAttrs options.plugins.barbar.keymaps [ "silent" ]
+        ))
+      ]
+      [
+        lib.concatLists
+        (lib.catAttrs "configuration")
+      ];
 in
 {
   options = {
@@ -49,46 +73,9 @@ in
   };
 
   config = {
-    # Deprecate `lua` keymap option
-    # TODO upgrade to an assertion (removal notice) in 24.11
-    # TODO remove entirely in 25.05?
-    warnings =
-      let
-        keymapsUsingLua =
-          lib.pipe
-            # All keymap options that have historically supported the `lua` sub-option
-            [
-              options.keymaps.valueMeta.list
-              (lib.concatMap (ev: ev.list) (lib.attrValues options.keymapsOnEvents.valueMeta.attrs))
-
-              # NOTE: lsp `diagnostic` and `lspBuf` don't use `mapOptionSubmodule` yet
-              # So we only need `lua` deprecation in lsp's `extra` option
-              options.plugins.lsp.keymaps.extra.valueMeta.list
-
-              # NOTE: tmux-navigator added `mapOptionSubmodule` support _after_ branching off 24.05
-              options.plugins.tmux-navigator.keymaps.valueMeta.list
-
-              # NOTE: barbar added `mapOptionSubmodule` support shortly _before_ branching off 24.05
-              (lib.mapAttrsToList (name: opt: opt.valueMeta) (
-                removeAttrs options.plugins.barbar.keymaps [ "silent" ]
-              ))
-            ]
-            [
-              lib.concatLists
-              (lib.filter (meta: meta.configuration.options.lua.isDefined or false))
-              (map (meta: meta.configuration.options))
-            ];
-      in
-      lib.optional (keymapsUsingLua != [ ]) ''
-        The `lua` keymap option is deprecated and will be removed in 26.05.
-
-        You should use a "raw" `action` instead;
-        e.g. `action.__raw = "<lua code>"` or `action = lib.nixvim.mkRaw "<lua code>"`.
-
-        ${lib.concatMapStringsSep "\n" (
-          m: "- `${m.lua}' is defined in " + lib.options.showFiles m.lua.files
-        ) keymapsUsingLua}
-      '';
+    # Collect per-keymap warnings and assertions
+    assertions = lib.concatMap (c: c.config.assertions or [ ]) legacyKeymapConfigurations;
+    warnings = lib.concatMap (c: c.config.warnings or [ ]) legacyKeymapConfigurations;
 
     extraConfigLua = lib.mkIf (config.keymaps != [ ]) ''
       -- Set up keybinds {{{

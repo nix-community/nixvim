@@ -46,10 +46,12 @@ let
   };
 
   # As of 2025-11-21, `either` supports `valueMeta`, while `nullOr` does not.
-  # The `lua` deprecation warning in `modules/keymaps.nix` requires `valueMeta`,
+  # See https://github.com/NixOS/nixpkgs/pull/525519
+  #
+  # The `lua` removal assertions in `modules/keymaps.nix` require `valueMeta`,
   # so re-implement `nullOr` using `types.either` as a workaround.
   #
-  # TODO: Remove with the warning, or once `nullOr` supports v2 check and merge.
+  # TODO: Remove when assertions are dropped or `nullOr` supports v2 checkAndMerge.
   v2NullOr =
     type:
     let
