@@ -101,18 +101,21 @@ For more platform-specific options and information, see [Nixvim Platforms](../pl
 
 ### Standalone usage
 
-When using Nixvim as a standalone derivation you can use the following functions, located in `<nixvim>.legacyPackages.${system}`:
-- `makeNixvim`: A simplified version of `makeNixvimWithModule` for when you only need to specify `module` and the other options can be left as the defaults.
-  This function's only argument is a Nixvim module, e.g. `{ extraConfigLua = "print('hi')"; }`
-- `makeNixvimWithModule`: This function takes an attribute set of the form: `{pkgs, extraSpecialArgs, module}`.
-  The only required argument is `module`, being a Nixvim module. This gives access to the `imports`, `options`, `config` variables, and using functions like `{config, ...}: { ... }`.
+When using Nixvim standalone, start by evaluating a Nixvim configuration:
 
-There are also some helper functions in `<nixvim>.lib.${system}` like:
-- `check.mkTestDerivationFromNixvimModule`, taking the same arguments as `makeNixvimWithModule` and generates a check derivation.
-- `check.mkTestDerivationFromNvim`, taking an attribute set of the form `{name = "<derivation name>"; nvim = <nvim derivation>}`. The `nvim` is the standalone derivation provided by Nixvim.
+```nix
+configuration = nixvim.lib.evalNixvim {
+  inherit system;
+  modules = [ ./config ];
+};
+```
 
-The Nixvim derivation can then be used like any other package!
+The resulting configuration exposes several useful outputs:
+- `configuration.config.build.package`: builds the Neovim package.
+  The package output can be used like any other package.
+- `configuration.config.build.test`: builds a test derivation for the configuration.
+  The derivation will fail to build if the test fails.
 
-For an example, see the [nixvim standalone flake template](https://github.com/nix-community/nixvim/blob/main/templates/simple/flake.nix).
+For a complete example, see our [standalone flake template](https://github.com/nix-community/nixvim/tree/main/templates/simple).
 
-For more information see [Standalone Usage](../platforms/standalone.md).
+For more information, including extending configurations and accessing configuration values, see [Standalone Usage](../platforms/standalone.md).
