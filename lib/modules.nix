@@ -16,7 +16,51 @@ let
   };
 in
 {
-  # Evaluate nixvim modules, checking warnings and assertions
+  /**
+    Evaluate Nixvim modules into a module system configuration.
+
+    # Input
+
+    An attribute set with the following fields:
+    : `modules`
+      : An optional list of modules.
+        These are merged together to form the final configuration.
+
+      `extraSpecialArgs`
+      : An optional AttrSet, appended to `specialArgs`.
+
+        `specialArgs` is an attribute set of module arguments that can be used in `imports`.
+        In contrast to `config._module.args`, which is only available after imports have been resolved.
+
+        **Caution:** relying on special args can make your modules less portable.
+
+      `system`
+      : An optional string, used to define `nixpkgs.hostPlatform`.
+
+    # Output
+
+    Returns a Nixvim configuration, as produced by `lib.evalModules`.
+
+    Notable attributes include:
+    : `config`
+      : The nested attribute set of all merged option values.
+
+      `options`
+      : The nested attribute set of all option declarations.
+
+      `type`
+      : A module system type.
+        See: <https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-return-value-type>
+
+      `extendModules`
+      : Extends the current configuration with additional modules.
+        See: <https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-return-value-extendModules>
+
+    # See Also
+
+    - Module System: <https://nixos.org/manual/nixpkgs/unstable/#module-system>
+    - `lib.evalModules`: <https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules>
+  */
   evalNixvim =
     {
       modules ? [ ],
