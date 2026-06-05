@@ -13,10 +13,16 @@
         source = ./index.md;
       };
 
+      modules._page = {
+        title = "lib.nixvim.modules: module functions";
+        functions.file = ../../lib/modules.nix;
+      };
+
       utils._page = {
         title = "lib.nixvim.utils: utility functions";
         functions.file = ../../lib/utils.nix;
       };
+
       lua._page = {
         title = "lib.nixvim.lua: lua functions";
         functions.file = ../../lib/to-lua.nix;
