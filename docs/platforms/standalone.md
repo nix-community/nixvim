@@ -1,70 +1,163 @@
 # Standalone Usage
 
+Standalone usage refers to using Nixvim directly as a package,
+rather than through the [NixOS], [Home Manager], or [nix-darwin] modules.
+
+In this mode, Nixvim configurations are evaluated explicitly using [`evalNixvim`][evalNixvim].
+
+[NixOS]: ./nixos.md
+[Home Manager]: ./hm.md
+[nix-darwin]: ./darwin.md
+[evalNixvim]: ../lib/nixvim/modules/index.md#lib.nixvim.modules.evalNixvim
+
 ## Options
 
-When used standalone, nixvim's options are available directly, without any prefix/namespace.
+When used standalone, Nixvim's options are available directly, without any prefix/namespace.
 This is unlike the other modules which typically use a `programs.nixvim.*` prefix.
 
 There are **no** standalone-specific options available.
 
-## Using in another configuration
+## Evaluating a configuration
 
-Here is an example on how to integrate into a NixOS or Home Manager configuration when using flakes.
+When used standalone, Nixvim configurations are evaluated using `nixvim.lib.evalNixvim`.
 
-The example assumes your standalone config is the `default` package of a flake, and you've named the input "`nixvim-config`".
 ```nix
-{ inputs, system, ... }:
+configuration = nixvim.lib.evalNixvim {
+  inherit system;
+  modules = [ ./config ];
+};
+```
+
+The result is a Nix module-system configuration.
+
+```
+modules
+  ↓
+evalNixvim
+  ↓
+configuration
+```
+
+Notable attributes include:
+- `config`: The nested attribute set of all merged option values.
+- `options`: The nested attribute set of all option declarations.
+- `type`: A module system type.
+  See [upstream docs][evalModules-type].
+- `extendModules`: Extends the current configuration with additional modules.
+  See [upstream docs][extendModules].
+
+For more information, see Nixpkgs' [`evalModules` output][evalModules-output] docs. \
+See the [lib.nixvim.modules] reference for complete API documentation.
+
+## Building a package
+
+Nixvim exposes build outputs through the evaluated configuration.
+The wrapped Neovim package is available as `configuration.config.build.package`.
+
+For example:
+
+```nix
 {
-  # NixOS
-  environment.systemPackages = [ inputs.nixvim-config.packages.${system}.default ];
-  # Home Manager
-  home.packages = [ inputs.nixvim-config.packages.${system}.default ];
+  packages.${system}.default = configuration.config.build.package;
 }
 ```
 
-## Extending an existing configuration
+## Building tests
 
-Given a `<nixvim>` derivation obtained from `makeNixvim` or `makeNixvimWithModule` it is possible to create a new derivation with additional options.
+A test derivation is available as `configuration.config.build.test`.
+It can be used to smoke-test your Nixvim configuration.
 
-This is done through the `<nixvim>.extend` function. This function takes a Nixvim module that is merged with the options used to build `<nixvim>`.
-
-This function is recursive, meaning that it can be applied an arbitrary number of times.
-
-### Example
+For example, as a flake check:
 
 ```nix
-{makeNixvim}: let
-  first = makeNixvim { extraConfigLua = "-- first stage"; };
-  second = first.extend {extraConfigLua = "-- second stage";};
-  third = second.extend {extraConfigLua = "-- third stage";};
+{
+  checks.${system}.default = configuration.config.build.test;
+}
+```
+
+## Extending a configuration
+
+Configurations can be extended using `extendModules`.
+
+```nix
+let
+  base = nixvim.lib.evalNixvim {
+    inherit system;
+
+    modules = [
+      {
+        extraConfigLua = "-- first stage";
+      }
+    ];
+  };
+
+  extended = base.extendModules {
+    modules = [
+      {
+        extraConfigLua = "-- second stage";
+      }
+    ];
+  };
 in
-third
+extended.config.build.package
 ```
 
-This will generate a `init.lua` that will contain the comments from each stages:
+See the upstream [`lib.evalModules` → `extendModules`][extendModules] documentation.
 
-```lua
--- first stage
--- second stage
--- third stage
+## Accessing configuration values
+
+Evaluated option values are available through `config`.
+
+For example:
+
+```nix
+configuration.config.colorschemes.gruvbox.enable
+⇒ true
 ```
 
-## Accessing options used in an existing configuration
+This can be useful when other parts of your NixOS, Home Manager, or nix-darwin configuration need access to values defined by Nixvim.
 
-The `config` used to produce a standalone Nixvim derivation can be accessed as an attribute on the derivation, similar to `<nixvim>.extend`.
+## Accessing options
 
-This may be useful if you want unrelated parts of your NixOS, Home Manager or nix-darwin configuration to use the same value as something in your Nixvim configuration.
+Module options are available through `options`.
 
-## Accessing Nixvim options
-
-Given a Nixvim derivation it is possible to access the module options using `<derivation>.options`.
-This can be useful to configure `nixd` for example:
+This can be useful when configuring `nixd`:
 
 ```nix
 {
   plugins.lsp.servers.nixd = {
     enable = true;
-    settings.options.nixvim.expr = ''(builtins.getFlake "/path/to/flake").packages.${system}.neovimNixvim.options'';
+
+    settings.options.nixvim.expr =
+      ''(builtins.getFlake "/path/to/flake").packages.${system}.default.options'';
   };
 }
 ```
+
+Package outputs also expose `config` and `options` through passthru attributes.
+
+## Using in another configuration
+
+Here is an example of integrating a standalone configuration into a NixOS or Home Manager configuration.
+
+The example assumes the standalone configuration is exported as the `default` package of a flake named `nixvim-config`.
+
+```nix
+{ inputs, system, ... }:
+{
+  # NixOS
+  environment.systemPackages = [
+    inputs.nixvim-config.packages.${system}.default
+  ];
+
+  # Home Manager
+  home.packages = [
+    inputs.nixvim-config.packages.${system}.default
+  ];
+}
+```
+
+[lib.nixvim.modules]: ../lib/nixvim/modules/index.md
+[evalModules-output]: https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules
+[evalModules-type]: https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-return-value-type
+[extendModules]: https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-return-value-extendModules
