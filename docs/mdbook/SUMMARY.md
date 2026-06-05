@@ -16,6 +16,7 @@
 - [Nixvim Platforms](./platforms/index.md)
 @PLATFORM_OPTIONS@
 	- [Standalone](./platforms/standalone.md)
+	- [Standalone (legacy)](./platforms/standalone-legacy.md)
 
 # Options
 

@@ -119,3 +119,6 @@ The resulting configuration exposes several useful outputs:
 For a complete example, see our [standalone flake template](https://github.com/nix-community/nixvim/tree/main/templates/simple).
 
 For more information, including extending configurations and accessing configuration values, see [Standalone Usage](../platforms/standalone.md).
+
+> [!IMPORTANT]
+> If you are using the legacy standalone APIs (`makeNixvim`, `makeNixvimWithModule`, etc.), see [Legacy Standalone Functions](../platforms/standalone-legacy.md).
