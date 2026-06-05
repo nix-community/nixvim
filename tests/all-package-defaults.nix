@@ -151,70 +151,6 @@ let
     "d2"
     "wl-clipboard" # wayland
   ]
-  ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isx86_64) [
-    # 2026-02-05: dependency gdb is broken
-    "nimlangserver"
-    "nimlsp"
-    "x86_64-apple-darwin-nim-wrapper"
-
-    # 2026-01-23: dependency models-dev is broken
-    "opencode"
-    "opencode.nvim"
-
-    # 2025-12-24: build failure
-    # I (@GaetanLepage) am able to build this package on my system, but it is not cached on
-    # hydra.nixos.org and builbot fails at building it
-    "trivy"
-
-    # 2025-11-16 dependency libsigsegv is broken
-    "texlive"
-    "texlive-combined-medium"
-
-    # 2025-11-16 dependency prelude is broken
-    "idris2-lsp"
-
-    # 2025-10-20 build failure
-    # error: concurrency is only available in macOS 10.15.0 or newer
-    "sourcekit-lsp"
-
-    # As of 2024-07-31, dmd is broken on x86_64-darwin
-    # https://github.com/NixOS/nixpkgs/pull/331373
-    "dmd"
-
-    # 2025-10-02 zig-hook is marked as broken
-    "superhtml"
-
-    # 2025-09-16 marked as broken
-    # https://github.com/NixOS/nixpkgs/pull/440273/commits/e71ade9ba7c5feca1160acb68c643812e14e67f3
-    "fpc"
-
-    # Marked as broken
-    "mesonlsp"
-
-    # No hash for system
-    "verible"
-
-    # 2025-09-16 zig/zig-hook is marked as broken
-    # https://github.com/NixOS/nixpkgs/commit/bc725b12b2595951a3f4b112d59716d30b41001a
-    "zf"
-    "zls"
-
-    # 2026-01-23: build failures on x86_64-darwin
-    "arrow-cpp"
-    "azurite"
-    "basedpyright"
-    "ccls"
-    "dbee-bin"
-    "gemini-cli"
-    "github-copilot-cli"
-    "nvim-dbee"
-    "odin"
-    "ols"
-    "thrift"
-
-    # luau-lsp is marked as broken on x86_64-darwin
-    "luau-lsp.nvim"
-  ]
   ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
     # 2026-02-05: build failure
     "marksman"
@@ -240,7 +176,7 @@ let
     # https://github.com/NixOS/nixpkgs/pull/441058
     "verible"
 
-    # 2025-09-16 zig/zig-hook is marked as broken on x86_64-darwin; also fails on aarch64-darwin
+    # 2025-09-16 zig/zig-hook fails on aarch64-darwin
     "zf"
   ];
 
