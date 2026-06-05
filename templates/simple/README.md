@@ -1,6 +1,9 @@
 # Nixvim template
 
 This template gives you a good starting point for configuring Nixvim standalone.
+See [Standalone Usage] for more detail.
+
+[Standalone Usage]: https://nix-community.github.io/nixvim/platforms/standalone.html
 
 ## Configuring
 
