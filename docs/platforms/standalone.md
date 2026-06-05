@@ -157,6 +157,88 @@ The example assumes the standalone configuration is exported as the `default` pa
 }
 ```
 
+## Convenience functions
+
+For simple use cases, Nixvim provides helper functions that combine configuration evaluation and output selection.
+
+These are thin wrappers around `evalNixvim` selecting `config.build.package` or `config.build.test`.
+
+See the [reference docs][lib.nixvim.modules] for more detail.
+
+### buildNixvim
+
+Builds a Nixvim package from a module or list of modules.
+
+```nix
+buildNixvim {
+  imports = [ ./config ];
+  nixpkgs.hostPlatform = system;
+}
+```
+
+Equivalent to:
+
+```nix
+(evalNixvim {
+  inherit system;
+  modules = [ ./config ];
+}).config.build.package
+```
+
+### buildNixvimWith
+
+Like `buildNixvim`, but accepts the full set of arguments supported by `evalNixvim`.
+
+```nix
+buildNixvimWith {
+  inherit system;
+  modules = [ ./config ];
+}
+```
+
+Equivalent to:
+
+```nix
+(evalNixvim {
+  inherit system;
+  modules = [ ./config ];
+}).config.build.package
+```
+
+### testNixvim
+
+Produces a test derivation from an existing Nixvim package.
+
+```nix
+testNixvim myNvim
+```
+
+Equivalent to:
+
+```nix
+myNvim.config.build.test
+```
+
+### testNixvimWith
+
+Evaluates a configuration and returns its test derivation.
+
+```nix
+testNixvimWith {
+  inherit system;
+  modules = [ ./config ];
+}
+```
+
+Equivalent to:
+
+```nix
+(evalNixvim {
+  inherit system;
+  modules = [ ./config ];
+}).config.build.test
+```
+
 [lib.nixvim.modules]: ../lib/nixvim/modules/index.md
 [evalModules-output]: https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules
 [evalModules-type]: https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules-return-value-type
