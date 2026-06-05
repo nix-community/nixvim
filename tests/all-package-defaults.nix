@@ -89,6 +89,17 @@ let
     # 2026-05-01: ghc is not cached on CNO and is too heavy to build for the nix-community builders
     "elm-format"
 
+    # 2026-04-28: d2 depends on mesa-libgbm -> libdrm, which fails on Darwin
+    "d2"
+    "wl-clipboard" # wayland
+
+    # 2026-04-28: bundled tree-sitter grammar build failure on Darwin
+    "kulala.nvim"
+
+    # 2026-04-28: long Darwin build timing out in all-package-defaults
+    "deno"
+    "ghc"
+
     # 2026-04-09: OCaml toolchain build failure on Darwin
     "flow"
     "fstar"
@@ -96,9 +107,15 @@ let
     # 2026-04-09: build failure
     "fortitude"
 
+    # 2026-02-05: build failure
+    "marksman"
+
     # 2026-02-04 dependency llvmPackages_22.llvm is broken
     "ameba"
     "crystal"
+
+    # 2026-01-23: build failure on aarch64-darwin
+    "github-copilot-cli"
 
     # 2025-11-26 build failure
     "nvim-spectre"
@@ -109,13 +126,6 @@ let
     # 2025-11-16 dependency pyarrow is broken
     "vectorcode"
     "vectorcode.nvim"
-
-    # 2026-04-28: bundled tree-sitter grammar build failure on Darwin
-    "kulala.nvim"
-
-    # 2026-04-28: long Darwin build timing out in all-package-defaults
-    "deno"
-    "ghc"
 
     # 2025-11-16 fish is broken
     "direnv"
@@ -131,53 +141,43 @@ let
     "actionlint"
     "ruby3.3-solargraph"
 
-    # Transient dependency `kicad-base` is marked broken
-    # https://github.com/NixOS/nixpkgs/pull/403987
-    "atopile"
-
-    # xdotool is not available on darwin
-    "fontpreview"
-
-    # 2025-09-27 build failure
-    "open-policy-agent"
-
-    # 2025-09-08 build failure
-    "mint"
-
-    # Marked as broken
-    "akku-scheme-langserver"
-    "rubyfmt"
-    # 2026-04-28: d2 depends on mesa-libgbm -> libdrm, which fails on Darwin
-    "d2"
-    "wl-clipboard" # wayland
-  ]
-  ++ lib.optionals (hostPlatform.isDarwin && hostPlatform.isAarch64) [
-    # 2026-02-05: build failure
-    "marksman"
+    # 2025-10-27: dependency cargo-nextest build failure
+    # https://github.com/NixOS/nixpkgs/pull/455250#issuecomment-3451295118
+    "air-formatter"
 
     # 2025-10-20: build failure
     # error: 'to_chars' is unavailable: introduced in macOS 13.3 unknown
     "mesonlsp"
 
-    # 2025-10-27: dependency cargo-nextest build failure
-    # https://github.com/NixOS/nixpkgs/pull/455250#issuecomment-3451295118
-    "air-formatter"
-
     # 2025-10-20: dependency mlton build failure
     "smlfmt"
 
-    # 2026-01-23: build failure on aarch64-darwin
-    "github-copilot-cli"
+    # 2025-10-03: Transient dependency `kicad-base` is marked broken
+    # https://github.com/NixOS/nixpkgs/pull/403987
+    "atopile"
 
-    # As of 2025-07-25, zig-zlint is failing on aarch64-darwin
-    "zig-zlint"
+    # 2025-09-27 build failure
+    "open-policy-agent"
 
-    # 2025-09-08, build failure
+    # 2025-09-16: zig/zig-hook fails on aarch64-darwin
+    "zf"
+
+    # 2025-09-08 build failure
+    "mint"
+
+    # 2025-09-08: build failure
     # https://github.com/NixOS/nixpkgs/pull/441058
     "verible"
 
-    # 2025-09-16 zig/zig-hook fails on aarch64-darwin
-    "zf"
+    # 2025-07-25: zig-zlint is failing on aarch64-darwin
+    "zig-zlint"
+
+    # xdotool is not available on darwin
+    "fontpreview"
+
+    # Marked as broken
+    "akku-scheme-langserver"
+    "rubyfmt"
   ];
 
   isEnabled = p: !(builtins.elem (lib.getName p) disabledPackages);
