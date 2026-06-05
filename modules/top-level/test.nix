@@ -332,6 +332,16 @@ in
             message = v: l: "Expected length to be ${toString v} but found ${toString (builtins.length l)}.";
             valueType = lib.types.ints.unsigned;
           };
+          all = {
+            predicate = v: builtins.all (lib.hasInfix v);
+            message = v: "Expected all to contain ${builtins.toJSON v}.";
+            valueType = lib.types.str;
+          };
+          allExact = {
+            predicate = x: builtins.all (y: x == y);
+            message = v: "Expected all to match ${builtins.toJSON v}.";
+            valueType = lib.types.str;
+          };
           any = {
             predicate = v: builtins.any (lib.hasInfix v);
             message = v: "Expected ${builtins.toJSON v} infix to be present.";
