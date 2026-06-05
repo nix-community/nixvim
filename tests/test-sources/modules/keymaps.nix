@@ -93,7 +93,7 @@
     };
   };
 
-  luaWarning = {
+  luaError = {
     imports = [
       (lib.modules.setDefaultModuleLocation "test-module" {
         keymaps = [
@@ -132,16 +132,20 @@
       })
     ];
 
-    test.warnings = expect: [
-      (expect "count" 1)
-      (expect "any" "The `lua` keymap option is deprecated and will be removed")
-      (expect "any" "You should use a \"raw\" `action` instead;")
-      (expect "any" "e.g. `action.__raw = \"<lua code>\"` or `action = lib.nixvim.mkRaw \"<lua code>\"`.")
-      (expect "any" "- `keymaps.\"[definition 1-entry 1]\".lua' is defined in `test-module'")
-      (expect "any" "- `keymapsOnEvents.InsertEnter.\"[definition 1-entry 1]\".lua' is defined in `test-module'")
-      (expect "any" "- `plugins.lsp.keymaps.extra.\"[definition 1-entry 1]\".lua' is defined in `test-module'")
-      (expect "any" "- `plugins.tmux-navigator.keymaps.\"[definition 1-entry 1]\".lua' is defined in `test-module'")
-      (expect "any" "- `plugins.barbar.keymaps.first.lua' is defined in `test-module'")
+    test.assertions = expect: [
+      # Failed assertions:
+      #  - The option definition `lua' in `<unknown-file>' no longer has any effect; please remove it.
+      #  Use a "raw lua" `action` instead;
+      #  e.g. `action.__raw = "<lua code>"` or `action = lib.nixvim.mkRaw "<lua code>"`.
+      (expect "count" 5)
+      (expect "all" "The option definition `lua' in `test-module' no longer has any effect; please remove it.")
+      (expect "any" "Full option: `keymaps.\"[definition 1-entry 1]\".lua`")
+      (expect "any" "Full option: `keymapsOnEvents.InsertEnter.\"[definition 1-entry 1]\".lua`")
+      (expect "any" "Full option: `plugins.lsp.keymaps.extra.\"[definition 1-entry 1]\".lua`")
+      (expect "any" "Full option: `plugins.tmux-navigator.keymaps.\"[definition 1-entry 1]\".lua`")
+      (expect "any" "Full option: `plugins.barbar.keymaps.first.lua`")
+      (expect "all" "Use a \"raw lua\" `action` instead;")
+      (expect "all" "e.g. `action.__raw = \"<lua code>\"` or `action = lib.nixvim.mkRaw \"<lua code>\"`.")
     ];
 
     test.runNvim = false;

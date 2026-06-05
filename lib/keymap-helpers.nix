@@ -65,7 +65,11 @@ rec {
   # to ensure `lua` isn't evaluated when (e.g.) generating lua code.
   # Failure to do so will result in "option used but not defined" errors!
   deprecatedMapOptionSubmodule = mkMapOptionSubmodule { lua = true; };
-  removeDeprecatedMapAttrs = v: removeAttrs v [ "lua" ];
+  removeDeprecatedMapAttrs = lib.flip removeAttrs [
+    "lua"
+    "assertions"
+    "warnings"
+  ];
 
   mkModeOption =
     default:
@@ -101,57 +105,52 @@ rec {
       extraOptions ? { },
       extraModules ? [ ],
     }:
-    types.submodule (
-      { config, options, ... }:
-      {
-        imports = extraModules;
-
-        options =
-          (lib.optionalAttrs (isAttrs key || key) {
-            key = lib.mkOption (
-              {
-                type = types.str;
-                description = "The key to map.";
-                example = "<C-m>";
-              }
-              // (optionalAttrs (isAttrs key) key)
-              // (optionalAttrs (defaults ? key) { default = defaults.key; })
-            );
-          })
-          // (optionalAttrs (isAttrs action || action) {
-            action = lib.mkOption (
-              {
-                type = types.maybeRaw types.str;
-                description = "The action to execute.";
-                apply = v: if options.lua.isDefined or false && config.lua then lib.nixvim.mkRaw v else v;
-              }
-              // (optionalAttrs (isAttrs action) action)
-              // (optionalAttrs (defaults ? action) { default = defaults.action; })
-            );
-          })
-          // optionalAttrs (isAttrs lua || lua) {
-            lua = lib.mkOption (
-              {
-                type = types.bool;
-                description = ''
-                  If true, `action` is considered to be lua code.
-                  Thus, it will not be wrapped in `""`.
-
-                  This option is deprecated and will be removed in 24.11.
-                  You should use a "raw" action instead, e.g. `action.__raw = ""`.
-                '';
-                visible = false;
-              }
-              // optionalAttrs (isAttrs lua) lua
-            );
+    types.submodule {
+      imports =
+        extraModules
+        ++ lib.optional (isAttrs lua || lua) (
+          { options, ... }:
+          {
+            imports = [
+              ../modules/misc/assertions.nix
+              # NOTE: we embed the full ${options.lua}, as mkRemovedOptionModule does not.
+              (lib.mkRemovedOptionModule [ "lua" ] ''
+                Full option: `${options.lua}`
+                Use a "raw lua" `action` instead;
+                e.g. `action.__raw = "<lua code>"` or `action = lib.nixvim.mkRaw "<lua code>"`.
+              '')
+            ];
           }
-          // {
-            mode = mkModeOption defaults.mode or "";
-            options = mapConfigOptions;
-          }
-          // extraOptions;
-      }
-    );
+        );
+
+      options =
+        (lib.optionalAttrs (isAttrs key || key) {
+          key = lib.mkOption (
+            {
+              type = types.str;
+              description = "The key to map.";
+              example = "<C-m>";
+            }
+            // (optionalAttrs (isAttrs key) key)
+            // (optionalAttrs (defaults ? key) { default = defaults.key; })
+          );
+        })
+        // (optionalAttrs (isAttrs action || action) {
+          action = lib.mkOption (
+            {
+              type = types.maybeRaw types.str;
+              description = "The action to execute.";
+            }
+            // (optionalAttrs (isAttrs action) action)
+            // (optionalAttrs (defaults ? action) { default = defaults.action; })
+          );
+        })
+        // {
+          mode = mkModeOption defaults.mode or "";
+          options = mapConfigOptions;
+        }
+        // extraOptions;
+    };
 
   # Correctly merge two attrs (partially) representing a mapping.
   mergeKeymap =
