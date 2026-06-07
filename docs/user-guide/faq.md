@@ -88,7 +88,7 @@ When using Nixvim, it is possible to encounter errors about something not being 
 
 This usually means one of few things:
 - You are using `follows` on `inputs.nixvim` causing Nixvim to have an unexpected version of Nixpkgs.
-- The nixpkgs version is not in line with Nixvim (for example nixpkgs nixos-25.11 is used with Nixvim master)
+- The nixpkgs version is not in line with Nixvim (for example nixpkgs nixos-26.05 is used with Nixvim master)
 - The nixpkgs unstable version used with Nixvim is not recent enough.
 
 When building Nixvim using flakes, we usually recommend _not_ declaring a `follows` for `inputs.nixvim`.
