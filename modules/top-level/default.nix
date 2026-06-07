@@ -10,7 +10,6 @@
     ./nixpkgs.nix
     ./output.nix
     ./plugins
-    ./readonly-renames.nix
     ./test.nix
   ];
 
