@@ -19,7 +19,7 @@ defaults:
 jobs:
   prepare:
     name: Version info
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-slim
 
     outputs:
       matrix: ${{ steps.matrix.outputs.result }}
@@ -34,10 +34,10 @@ jobs:
 
       - name: Produce build matrix
         id: matrix
-        uses: mikefarah/yq@master
-        with:
-          cmd: |
-            yq --no-colors --output-format=json '
+        run: |
+          {
+            echo -n "result="
+            yq --no-colors --output-format=json --indent=0 '
               [
                 .versions
                 | to_entries
@@ -52,13 +52,14 @@ jobs:
                 | select(.ref != "main").base-href = "\(.base-href)\(.name)/"
               ]
             ' version-info.toml
+          } >> "$GITHUB_OUTPUT"
 
       - name: Produce "other versions" array
         id: versions
-        uses: mikefarah/yq@master
-        with:
-          cmd: |
-            yq --no-colors --output-format=json '
+        run: |
+          {
+            echo -n "result="
+            yq --no-colors --output-format=json --indent=0 '
               [
                 .versions
                 | to_entries
@@ -73,6 +74,7 @@ jobs:
                 | select(.branch == "main").baseHref = "/nixvim/"
               ]
             ' version-info.toml
+          } >> "$GITHUB_OUTPUT"
 
   build:
     name: Build ${{ matrix.name }}
