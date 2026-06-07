@@ -96,19 +96,23 @@ jobs:
           name: nix-community
           authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          ref: ${{ matrix.ref }}
-
-        # Uses the build-docs action from the checked-out nixvim branch
+      # Build the `docs` flake output from the corresponding branch
+      # Uses --impure to enable `getEnv`
       - name: Build docs
-        uses: ./.github/actions/build-docs
+        env:
+          ref: ${{ matrix.ref }}
+          outLink: build/${{ matrix.sub-path }}
+          NIXVIM_DOCS_BASE_HREF: ${{ matrix.base-href }}
+          NIXVIM_DOCS_AVAILABLE_VERSIONS: ${{ needs.prepare.outputs.versions }}
+        run: |
+          nix build "github:$GITHUB_REPOSITORY/$ref#docs" --impure --out-link "$outLink"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
         with:
-          artifact-name: ${{ matrix.name }}-docs
-          sub-path: ${{ matrix.sub-path }}
-          base-href: ${{ matrix.base-href }}
-          versions: ${{ needs.prepare.outputs.versions }}
+          path: build
+          name: ${{ matrix.name }}-docs
+          retention-days: 1
 
   combine:
     name: Combine builds
