@@ -71,7 +71,7 @@ runs:
     - name: Upload artifact
       id: upload
       if: inputs.artifact-name
-      uses: actions/upload-pages-artifact@v3
+      uses: actions/upload-pages-artifact@v5
       with:
         path: ${{ steps.out-dir.outputs.out }}
         name: ${{ inputs.artifact-name }}
