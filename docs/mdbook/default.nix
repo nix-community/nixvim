@@ -1,4 +1,5 @@
 # NOTE: to use defaults from the environment, you must build with --impure
+# This is used in CI to inject impure baseHref and availableVersions values
 {
   pkgs,
   callPackage,
