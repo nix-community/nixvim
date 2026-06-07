@@ -91,7 +91,7 @@ If you have any question, please use the [discussions page](https://github.com/n
 > Nixvim needs to be installed with a compatible nixpkgs version.
 > This means that the `main` branch of Nixvim requires to be installed with `nixpkgs-unstable`.
 >
-> If you want to use Nixvim with nixpkgs 25.11 you should use the `nixos-25.11` branch.
+> If you want to use Nixvim with nixpkgs 26.05 you should use the `nixos-26.05` branch.
 
 For more detail, see the [Installation](https://nix-community.github.io/nixvim) section of our documentation.
 
@@ -108,7 +108,7 @@ let
   nixvim = import (builtins.fetchGit {
     url = "https://github.com/nix-community/nixvim";
     # If you are not running an unstable channel of nixpkgs, select the corresponding branch of Nixvim.
-    # ref = "nixos-25.11";
+    # ref = "nixos-26.05";
   });
 in
 {
@@ -151,7 +151,7 @@ flakes, just add the `nixvim` input:
   inputs.nixvim = {
     url = "github:nix-community/nixvim";
     # If you are not running an unstable channel of nixpkgs, select the corresponding branch of Nixvim.
-    # url = "github:nix-community/nixvim/nixos-25.11";
+    # url = "github:nix-community/nixvim/nixos-26.05";
 
     inputs.nixpkgs.follows = "nixpkgs";
   };
@@ -261,7 +261,7 @@ For more information, see the [Standalone Usage](https://nix-community.github.io
 Documentation is available on this project's GitHub Pages page:
 [https://nix-community.github.io/nixvim](https://nix-community.github.io/nixvim)
 
-The stable documentation is also available at [https://nix-community.github.io/nixvim/25.11](https://nix-community.github.io/nixvim/25.11).
+The stable documentation is also available at [https://nix-community.github.io/nixvim/26.05](https://nix-community.github.io/nixvim/26.05).
 
 If the option `enableMan` is set to `true` (by default it is), man pages will also
 be installed containing the same information, they can be viewed with `man nixvim`.
