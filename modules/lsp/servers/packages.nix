@@ -120,7 +120,6 @@
     "pony_language_server"
     "poryscript_pls"
     "powershell_es"
-    "prismals"
     "prolog_ls"
     "prosemd_lsp"
     "pug"
@@ -352,6 +351,7 @@
     phpantom_lsp = "phpantom-lsp";
     pony_lsp = "ponyc";
     postgres_lsp = "postgres-language-server";
+    prismals = "prisma-language-server";
     protols = "protols";
     psalm = [
       "phpPackages"
