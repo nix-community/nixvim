@@ -1,11 +1,9 @@
 {
   empty = {
-    plugins.web-devicons.enable = true;
     plugins.nvim-tree.enable = true;
   };
 
   defaults = {
-    plugins.web-devicons.enable = true;
     plugins.nvim-tree = {
       openOnSetup = true;
       openOnSetupFile = true;
@@ -259,10 +257,14 @@
 
   no-packages = {
     plugins = {
-      web-devicons.enable = true;
       nvim-tree.enable = true;
     };
 
     dependencies.git.enable = false;
+  };
+
+  with-icon = {
+    plugins.web-devicons.enable = true;
+    plugins.nvim-tree.enable = true;
   };
 }

@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ lib, ... }:
 let
   inherit (lib) mkOption types;
   inherit (lib.nixvim)
@@ -89,18 +89,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
   };
 
   extraConfig = cfg: {
-    # TODO: added 2024-09-20 remove after 24.11
-    plugins.web-devicons = lib.mkIf (
-      !(
-        (
-          config.plugins.mini.enable
-          && config.plugins.mini.modules ? icons
-          && config.plugins.mini.mockDevIcons
-        )
-        || (config.plugins.mini-icons.enable && config.plugins.mini-icons.mockDevIcons)
-      )
-    ) { enable = lib.mkOverride 1490 true; };
-
     keymaps = lib.filter (keymap: keymap != null) (
       # TODO: switch to `attrValues cfg.keymaps` when removing the deprecation warnings above:
       lib.attrValues (lib.filterAttrs (n: v: n != "silent") cfg.keymaps)

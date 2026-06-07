@@ -79,18 +79,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   callSetup = false;
   extraConfig = cfg: {
-    # TODO: added 2024-09-20 remove after 24.11
-    plugins.web-devicons = lib.mkIf (
-      !(
-        (
-          config.plugins.mini.enable
-          && config.plugins.mini.modules ? icons
-          && config.plugins.mini.mockDevIcons
-        )
-        || (config.plugins.mini-icons.enable && config.plugins.mini-icons.mockDevIcons)
-      )
-    ) { enable = lib.mkOverride 1490 true; };
-
     extraConfigVim = lib.mkIf (cfg.highlightTheme != null) ''
       let $BAT_THEME = '${cfg.highlightTheme}'
     '';

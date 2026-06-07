@@ -1,11 +1,9 @@
 {
   empty = {
-    plugins.web-devicons.enable = true;
     plugins.trouble.enable = true;
   };
 
   lsp = {
-    plugins.web-devicons.enable = true;
     plugins.lsp = {
       enable = true;
       servers.clangd.enable = true;
@@ -15,7 +13,6 @@
   };
 
   defaults = {
-    plugins.web-devicons.enable = true;
     plugins.trouble = {
       enable = true;
 
@@ -203,7 +200,6 @@
   };
 
   split-right-preview = {
-    plugins.web-devicons.enable = true;
     plugins.trouble = {
       enable = true;
 
@@ -224,7 +220,6 @@
   };
 
   top-right-preview = {
-    plugins.web-devicons.enable = true;
     plugins.trouble = {
       enable = true;
 
@@ -254,8 +249,8 @@
     };
   };
 
-  no-icons = {
-    plugins.web-devicons.enable = false;
+  with-icons = {
+    plugins.web-devicons.enable = true;
     plugins.trouble = {
       enable = true;
     };
