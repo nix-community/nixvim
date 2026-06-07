@@ -5,7 +5,7 @@ You must use a `nixpkgs` version compatible with the Nixvim version you choose.
 The `main` branch requires to use a _very recent_ version of nixpkgs unstable.
 In order to guarantee the compatibility between Nixvim & nixpkgs it is recommended to always update both at the same time.
 
-When using a `stable` version you must use the corresponding Nixvim branch, for example `nixos-25.11` when using NixOS 25.11.
+When using a `stable` version you must use the corresponding Nixvim branch, for example `nixos-26.05` when using NixOS 26.05.
 
 Failure to use the correct branch, or an old revision of nixpkgs will likely result in errors of the form `vimPlugins.<name> attribute not found`.
 
