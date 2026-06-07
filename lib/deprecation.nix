@@ -1,8 +1,16 @@
 { lib }:
+let
+  getOptionRecursiveWarning = lib.warn (toString [
+    "Nixvim's getOptionRecursive can find an option's documentation-stub,"
+    "but it will not return a 'live' option with accurate 'definitions', 'value', etc."
+    "This function will be removed or reworked."
+  ]) null;
+in
 rec {
-  # Get a (sub)option by walking the path,
-  # checking for submodules along the way
-  getOptionRecursive =
+  # Get a (sub)option by walking the path, checking for submodules along the way
+  # FIXME: this can return a docs-stub option, instead of a 'live' option.
+  # Warning added 2026-06-08
+  getOptionRecursive = lib.seq getOptionRecursiveWarning (
     opt: prefix: optionPath:
     if optionPath == [ ] then
       opt
@@ -15,37 +23,14 @@ rec {
         prefix' = prefix ++ [ name ];
         optionPath' = lib.drop 1 optionPath;
       in
-      getOptionRecursive opt' prefix' optionPath';
+      getOptionRecursive opt' prefix' optionPath'
+  );
 
-  # Like mkRemovedOptionModule, but has support for nested sub-options
-  # and uses warnings instead of assertions.
-  mkDeprecatedSubOptionModule =
-    optionPath: replacementInstructions:
-    { options, ... }:
-    {
-      options = lib.setAttrByPath optionPath (
-        lib.mkOption {
-          # When (e.g.) `mkAttrs` is used on a submodule, this option will be evaluated.
-          # Therefore we have to apply _something_ (null) when there's no definition.
-          apply =
-            v:
-            let
-              # Avoid "option used but not defined" errors
-              res = builtins.tryEval v;
-            in
-            if res.success then res.value else null;
-          visible = false;
-        }
-      );
-      config.warnings =
-        let
-          opt = getOptionRecursive options [ ] optionPath;
-        in
-        lib.optional opt.isDefined ''
-          The option definition `${lib.showOption optionPath}' in ${lib.showFiles opt.files} is deprecated.
-          ${replacementInstructions}
-        '';
-    };
+  # TODO: Removed 2026-06-08
+  mkDeprecatedSubOptionModule = throw (toString [
+    "Nixvim's mkDeprecatedSubOptionModule has been removed."
+    "It never functioned as intended."
+  ]);
 
   /*
     Returns a function that maps
