@@ -46,21 +46,6 @@ let
     # Added 2026-01-24
     vscode-diff = "codediff";
   };
-  # Added 2024-09-21; remove after 24.11
-  # `iconsPackage` options were briefly available in the following plugins for ~3 weeks
-  iconsPackagePlugins = [
-    "telescope"
-    "lspsaga"
-    "nvim-tree"
-    "neo-tree"
-    "trouble"
-    "alpha"
-    "diffview"
-    "fzf-lua"
-    "bufferline"
-    "barbar"
-    "chadtree"
-  ];
 in
 {
 
@@ -84,43 +69,21 @@ in
       acc: scope: renamed':
       acc ++ lib.mapAttrsToList (old: new: lib.mkRenamedOptionModule [ scope old ] [ scope new ]) renamed'
     ) [ ] renamed
-    ++ map (
-      name:
-      lib.mkRemovedOptionModule [ "plugins" name "iconsPackage" ] ''
-        Please use `plugins.web-devicons` or `plugins.mini.modules.icons` with `plugins.mini.mockDevIcons`, or `plugins.mini-icons` with `plugins.mini-icons.mockDevIcons` instead.
-      ''
-    ) iconsPackagePlugins
     ++ [
       (
-        { config, options, ... }:
+        { config, ... }:
         {
-          config = {
-            warnings =
-              (lib.nixvim.mkWarnings "plugins.web-devicons" {
-                when = options.plugins.web-devicons.enable.highestPrio == 1490;
-
-                message = ''
-                  This plugin was enabled automatically because the following plugins are enabled.
-                  This behaviour is deprecated. Please explicitly define `plugins.web-devicons.enable` or alternatively
-                  enable `plugins.mini.enable` with `plugins.mini.modules.icons` and `plugins.mini.mockDevIcons`, or
-                  `plugins.mini-icons.enable` with `plugins.mini-icons.mockDevIcons`.
-                  ${lib.concatMapStringsSep "\n" (name: "plugins.${name}") (
-                    builtins.filter (name: config.plugins.${name}.enable) iconsPackagePlugins
-                  )}
-                '';
-              })
-              ++ lib.foldlAttrs (
-                warnings: plugin: msg:
-                warnings
-                ++ (lib.nixvim.mkWarnings "plugins.${plugin}" {
-                  when = config.plugins.${plugin}.enable;
-                  message = ''
-                    This plugin has been deprecated.
-                    ${msg}
-                  '';
-                })
-              ) [ ] deprecated;
-          };
+          warnings = lib.foldlAttrs (
+            warnings: plugin: msg:
+            warnings
+            ++ lib.nixvim.mkWarnings "plugins.${plugin}" {
+              when = config.plugins.${plugin}.enable;
+              message = ''
+                This plugin has been deprecated.
+                ${msg}
+              '';
+            }
+          ) [ ] deprecated;
         }
       )
     ];

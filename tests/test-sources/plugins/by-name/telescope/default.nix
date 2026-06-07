@@ -1,6 +1,5 @@
 {
   empty = {
-    plugins.web-devicons.enable = true;
     plugins.telescope.enable = true;
   };
 
@@ -21,7 +20,6 @@
   };
 
   combine-plugins = {
-    plugins.web-devicons.enable = true;
     plugins.telescope.enable = true;
 
     performance.combinePlugins.enable = true;
@@ -36,7 +34,6 @@
 
   no-packages = {
     plugins = {
-      web-devicons.enable = false;
       telescope.enable = true;
     };
     dependencies.bat.enable = false;

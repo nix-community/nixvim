@@ -1,11 +1,9 @@
 {
   empty = {
-    plugins.web-devicons.enable = true;
     plugins.lspsaga.enable = true;
   };
 
   defaults = {
-    plugins.web-devicons.enable = true;
     plugins.lspsaga = {
       enable = true;
       settings = {
@@ -187,8 +185,8 @@
     };
   };
 
-  no-icons = {
-    plugins.web-devicons.enable = false;
+  with-icons = {
+    plugins.web-devicons.enable = true;
     plugins.lspsaga = {
       enable = true;
     };

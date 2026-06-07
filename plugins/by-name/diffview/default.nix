@@ -1,8 +1,4 @@
-{
-  lib,
-  config,
-  ...
-}:
+{ lib, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts;
   inherit (lib) types;
@@ -97,22 +93,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
           );
       };
   };
-
-  extraConfig =
-    cfg:
-    lib.mkIf cfg.enable {
-      # TODO: added 2024-09-20 remove after 24.11
-      plugins.web-devicons = lib.mkIf (
-        !(
-          (
-            config.plugins.mini.enable
-            && config.plugins.mini.modules ? icons
-            && config.plugins.mini.mockDevIcons
-          )
-          || (config.plugins.mini-icons.enable && config.plugins.mini-icons.mockDevIcons)
-        )
-      ) { enable = lib.mkOverride 1490 true; };
-    };
 
   # TODO: Deprecated 2025-10-04
   inherit (import ./deprecations.nix { inherit lib; })

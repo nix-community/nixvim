@@ -1,11 +1,9 @@
 {
   empty = {
-    plugins.web-devicons.enable = true;
     plugins.bufferline.enable = true;
   };
 
   example = {
-    plugins.web-devicons.enable = true;
     plugins.bufferline = {
       enable = true;
       settings = {
@@ -60,7 +58,6 @@
   };
 
   defaults = {
-    plugins.web-devicons.enable = true;
     plugins.bufferline = {
       enable = true;
       settings = {
@@ -127,8 +124,8 @@
     };
   };
 
-  no-icons = {
-    plugins.web-devicons.enable = false;
+  with-icons = {
+    plugins.web-devicons.enable = true;
     plugins.bufferline = {
       enable = true;
     };

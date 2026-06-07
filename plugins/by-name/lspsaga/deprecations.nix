@@ -26,33 +26,6 @@ lib: {
           lib.nixvim.ifNonNull' oldFilter (lib.mapAttrs (_: lib.nixvim.mkRaw) oldFilter)
         )
     )
-
-    # TODO: added 2024-09-20 remove after 24.11
-    (
-      { config, ... }:
-      let
-        cfg = config.plugins.lspsaga;
-      in
-      {
-        plugins.web-devicons =
-          lib.mkIf
-            (
-              cfg.enable
-              && (cfg.settings.ui.devicon or true)
-              && !(
-                (
-                  config.plugins.mini.enable
-                  && config.plugins.mini.modules ? icons
-                  && config.plugins.mini.mockDevIcons
-                )
-                || (config.plugins.mini-icons.enable && config.plugins.mini-icons.mockDevIcons)
-              )
-            )
-            {
-              enable = lib.mkOverride 1490 true;
-            };
-      }
-    )
   ];
 
   # TODO: introduced 2025-08-20: remove after 25.11

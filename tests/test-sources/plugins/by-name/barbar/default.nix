@@ -1,13 +1,17 @@
 {
   empty = {
-    plugins.web-devicons.enable = true;
     plugins.barbar.enable = true;
+
+    # Defaults rely on icons
+    plugins.web-devicons.enable = true;
   };
 
   keymappings = {
-    plugins.web-devicons.enable = true;
     plugins.barbar = {
       enable = true;
+
+      # Disable icons
+      settings.icons.filetype.enabled = false;
 
       keymaps = {
         next.key = "<TAB>";
@@ -22,7 +26,9 @@
   };
 
   defaults = {
+    # Defaults rely on icons
     plugins.web-devicons.enable = true;
+
     plugins.barbar = {
       enable = true;
 
@@ -224,8 +230,7 @@
     };
   };
 
-  no-icons = {
-    plugins.web-devicons.enable = false;
+  no-icon = {
     plugins.barbar = {
       enable = true;
       settings.icons.filetype.enabled = false;
