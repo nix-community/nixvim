@@ -41,13 +41,6 @@ in
     }
   ) optionsAttrs;
 
-  # Added 2024-03-29 (do not remove)
-  imports = lib.mapAttrsToList (old: new: lib.mkRenamedOptionModule [ old ] [ new ]) {
-    options = "opts";
-    globalOptions = "globalOpts";
-    localOptions = "localOpts";
-  };
-
   config = {
     extraConfigLuaPre =
       let
