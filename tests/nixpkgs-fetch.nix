@@ -35,6 +35,7 @@
 #     nix-instantiate --eval nixpkgs.nix --attr outPath --option experimental-features ''
 
 let
+  version-info = lib.importTOML ../version-info.toml;
   flake-input = self.inputs.nixpkgs.sourceInfo;
   pinned-input = import ../nixpkgs.nix;
 in
@@ -47,6 +48,8 @@ linkFarmFromDrvs "nixpkgs-fetch-test" [
       strictDeps = true;
 
       hasPrimop = builtins ? fetchTree;
+      versionInfo = version-info;
+
       expected = flake-input;
       actual = pinned-input;
 
@@ -72,6 +75,13 @@ linkFarmFromDrvs "nixpkgs-fetch-test" [
         echo "Expected '$actual' to be '$expected'" >&2
         exit 1
       fi
+
+      expectedRev=$(jq --raw-output .expectedAttrs.rev "$NIX_ATTRS_JSON_FILE")
+      versionInfoRev=$(jq --raw-output .versionInfo.nixpkgs_rev "$NIX_ATTRS_JSON_FILE")
+      [ "$expectedRev" = "$versionInfoRev" ] || {
+        echo "Expected version-info nixpkgs_rev '$versionInfoRev' to be '$expectedRev'" >&2
+        exit 1
+      }
 
       mkdir "$out"
       jq --sort-keys .expectedAttrs "$NIX_ATTRS_JSON_FILE" > "$out/expected.json"
