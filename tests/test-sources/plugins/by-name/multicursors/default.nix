@@ -40,10 +40,7 @@
 
   example = {
     plugins.multicursors = {
-      # ERROR: [Hydra.nvim] Option "hint.border" has been deprecated and will be removed on 2024-02-01 -- See hint.float_opts
-      # Will be fixed by:
-      # https://github.com/smoka7/multicursors.nvim/pull/91
-      enable = false;
+      enable = true;
 
       settings = {
         DEBUG_MODE = false;
@@ -85,7 +82,7 @@
           type = "window";
           position = "bottom";
           offset = 0;
-          border = "none";
+          float_opts.border = "none";
           show_name = true;
           funcs.__raw = "nil";
         };
