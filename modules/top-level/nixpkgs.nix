@@ -10,6 +10,9 @@ let
   opt = options.nixpkgs;
 
   pinned = import ../../nixpkgs.nix;
+  # NOTE: `pinned.rev` is the same as `versionInfo.nixpkgs_rev`, but the latter is cheaper to eval.
+  # Evaluating `pinned` may cause some `fetchTree` implementations to fetch eagerly (unverified).
+  versionInfo = lib.importTOML ../../version-info.toml;
 
   optionDefaultPrio = (lib.mkOptionDefault null).priority;
 
@@ -277,11 +280,11 @@ in
           (
             constructedByMe
             && opt.source.highestPrio == optionDefaultPrio
-            && pinned.narHash != cfg.source.narHash or null
+            && versionInfo.nixpkgs_rev != cfg.source.rev or null
           )
           ''
             The `${opt.source}` default value has been affected by your flake input `follows`.
-            Nixvim's inputs pin Nixpkgs to `${pinned.rev}`.${
+            Nixvim's inputs pin Nixpkgs to `${versionInfo.nixpkgs_rev}`.${
               lib.optionalString (cfg.source ? rev) " Actual Nixpkgs is following `${cfg.source.rev}`."
             }
             Please remove your `inputs.nixvim.inputs.nixpkgs.follows` or explicitly define `${opt.source}` to suppress this warning.'';
