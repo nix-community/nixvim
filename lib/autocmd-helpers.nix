@@ -32,12 +32,6 @@ rec {
       Cannot be used with `pattern`.
     '';
 
-    # Introduced early October 2023.
-    # TODO remove in early December 2023.
-    description = lib.nixvim.mkNullOrOption types.str ''
-      DEPRECATED, please use `desc`.
-    '';
-
     desc = lib.nixvim.mkNullOrOption types.str ''
       A textual description of this autocommand.
     '';

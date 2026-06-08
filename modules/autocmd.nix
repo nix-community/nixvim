@@ -41,18 +41,6 @@
       inherit (config) autoGroups autoCmd;
     in
     lib.mkIf (autoGroups != { } || autoCmd != [ ]) {
-      # Introduced early October 2023.
-      # TODO remove in early December 2023.
-      assertions = [
-        {
-          assertion = lib.all (x: x.description == null) autoCmd;
-          message = ''
-            RENAMED OPTION: `autoCmd[].description` has been renamed `autoCmd[].desc`.
-            Please update your configuration.
-          '';
-        }
-      ];
-
       extraConfigLuaPost =
         (lib.optionalString (autoGroups != { }) ''
           -- Set up autogroups {{
