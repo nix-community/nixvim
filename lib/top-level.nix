@@ -53,14 +53,6 @@ lib.makeExtensible (
     # Top-level helper aliases:
     # TODO: deprecate some aliases
 
-    inherit (self.builders)
-      writeLua
-      writeByteCompiledLua
-      byteCompileLuaFile
-      byteCompileLuaHook
-      byteCompileLuaDrv
-      ;
-
     inherit (self.deprecation)
       getOptionRecursive
       mkDeprecatedSubOptionModule
