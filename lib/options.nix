@@ -2,12 +2,6 @@
 let
   inherit (lib) types;
 
-  removed = lib.mapAttrs (name: msg: throw "${name} is removed. ${msg}") {
-    # Removed 2024-09-05
-    mkPackageOption = "Use `lib.mkPackageOption` instead.";
-    mkPluginPackageOption = "Use `lib.mkPackageOption` instead.";
-  };
-
   # Render a plugin default string
   pluginDefaultText =
     {
@@ -458,4 +452,3 @@ rec {
     else
       mkUnpackagedOption optionName packageName;
 }
-// removed

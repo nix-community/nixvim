@@ -92,8 +92,6 @@ lib.makeExtensible (
       mkNullOrStrLuaFnOr'
       mkNullOrStrLuaOr
       mkNullOrStrLuaOr'
-      mkPackageOption
-      mkPluginPackageOption
       mkSettingsOption
       mkUnpackagedOption
       pluginDefaultText
