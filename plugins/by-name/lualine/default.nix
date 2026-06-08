@@ -36,59 +36,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
         };
 
       # NOTE: This option is used for the shared component section definitions.
-      # We used to transform several options for the user to handle unkeying inside an attribute set and
-      # merging in undefined options into the final option. Now that we have freeformType support the user can
-      # manage this configuration exactly as the plugin expects without us transforming the values for them.
       mkComponentOptions =
         description:
         lib.nixvim.mkNullOrOption' {
           type =
             with types;
             let
-              # TODO: added 2024-09-05 remove after 24.11
-              oldAttrs = [
-                [ "name" ]
-                [
-                  "icon"
-                  "icon"
-                ]
-                [ "extraConfig" ]
-              ];
-              isOldType = x: lib.any (loc: lib.hasAttrByPath loc x) oldAttrs;
-              oldType = addCheck (attrsOf anything) isOldType // {
-                description = "attribute set containing ${lib.concatMapStringsSep ", " lib.showOption oldAttrs}";
-              };
-              coerceFn =
-                attrs:
-                lib.pipe attrs [
-                  # Transform old `name` attr to `__unkeyed`
-                  (
-                    x:
-                    if x ? name then
-                      lib.removeAttrs x [ "name" ]
-                      // {
-                        __unkeyed-1 = x.name;
-                      }
-                    else
-                      x
-                  )
-                  # Transform old `icon.icon` attr to `__unkeyed`
-                  (
-                    x:
-                    if x.icon or null ? icon then
-                      x
-                      // {
-                        icon = removeAttrs x.icon [ "icon" ] // {
-                          __unkeyed-1 = x.icon.icon;
-                        };
-                      }
-                    else
-                      x
-                  )
-                  # Merge in old `extraConfig` attr
-                  (x: removeAttrs x [ "extraConfig" ] // x.extraConfig or { })
-                ];
-              newType = submodule {
+              sectionType = submodule {
                 freeformType = attrsOf anything;
 
                 options = {
@@ -139,7 +93,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
                 };
               };
             in
-            maybeRaw (listOf (either str (lib.nixvim.transitionType oldType coerceFn (maybeRaw newType))));
+            maybeRaw (listOf (either str (maybeRaw sectionType)));
           inherit description;
         };
 
