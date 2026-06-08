@@ -3,18 +3,6 @@
   self,
   flake ? null,
 }:
-let
-  removed = {
-    # Removed 2024-09-24
-    getAssertionMessages = "";
-    # Removed 2024-09-27
-    specialArgs = "It has been integrated into `evalNixvim`";
-    specialArgsWith = "It has been integrated into `evalNixvim`";
-    # Removed 2024-12-18
-    applyExtraConfig = "It has been moved to `lib.plugins.utils`";
-    mkConfigAt = "It has been moved to `lib.plugins.utils`";
-  };
-in
 {
   /**
     Evaluate Nixvim modules into a module system configuration.
@@ -178,7 +166,3 @@ in
     args: (self.modules.evalNixvim args).config.build.test
   );
 }
-// lib.mapAttrs (
-  name: msg:
-  throw ("`modules.${name}` has been removed." + lib.optionalString (msg != "") (" " + msg))
-) removed
