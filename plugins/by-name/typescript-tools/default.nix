@@ -1,7 +1,4 @@
-{
-  lib,
-  ...
-}:
+{ lib, ... }:
 let
   inherit (lib.nixvim) defaultNullOpts;
 in
@@ -185,87 +182,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
     };
   };
 
-  # NOTE: call setup manually
-  callSetup = false;
   # Set up after lspconfig
   configLocation = "extraConfigLuaPost";
-  extraConfig =
-    cfg:
-    let
-      definedOpts = lib.filter (opt: lib.hasAttrByPath opt cfg.settings) [
-        [ "separateDiagnosticServer" ]
-        [ "publishDiagnosticOn" ]
-        [ "exposeAsCodeAction" ]
-        [ "tsserverPath" ]
-        [ "tsserverPlugins" ]
-        [ "tsserverMaxMemory" ]
-        [ "tsserverFormatOptions" ]
-        [ "tsserverFilePreferences" ]
-        [ "tsserverLocale" ]
-        [ "completeFunctionCalls" ]
-        [ "includeCompletionsWithInsertText" ]
-        [ "codeLens" ]
-        [ "disableMemberCodeLens" ]
-        [
-          "jsxCloseTag"
-          "enable"
-        ]
-        [
-          "jsxCloseTag"
-          "filetypes"
-        ]
-      ];
-    in
-    {
-      plugins.typescript-tools.luaConfig.content =
-        let
-          # TODO:: introduced 10-22-2024: remove after 24.11
-          renamedSettings = lib.foldl' (
-            acc: optPath:
-            let
-              snakeCasePath = map lib.nixvim.toSnakeCase optPath;
-              optValue = lib.getAttrFromPath optPath cfg.settings;
-            in
-            lib.recursiveUpdate acc (lib.setAttrByPath snakeCasePath optValue)
-          ) { } definedOpts;
-
-          # Based on lib.filterAttrsRecursive
-          # TODO: Maybe move to nixvim's or upstream's lib?
-          filterAttrsRecursivePath =
-            predicate: set: path:
-            lib.listToAttrs (
-              lib.concatMap (
-                name:
-                let
-                  path' = path ++ [ name ];
-                  v = set.${name};
-                in
-                lib.optional (predicate path' v) {
-                  inherit name;
-                  value = if lib.isAttrs v then filterAttrsRecursivePath predicate v path' else v;
-                }
-              ) (lib.attrNames set)
-            );
-
-          setupOptions =
-            filterAttrsRecursivePath (path: _: !builtins.elem path definedOpts) cfg.settings [ ]
-            // {
-              settings = lib.recursiveUpdate cfg.settings.settings renamedSettings;
-            };
-        in
-        ''
-          require('typescript-tools').setup(${lib.nixvim.toLuaObject setupOptions})
-        '';
-
-      # TODO:: introduced 10-22-2024: remove after 24.11
-      # Nested settings can't have normal mkRenamedOptionModule functionality so we can only
-      # alert the user that they are using the old values
-      warnings = lib.nixvim.mkWarnings "plugins.typescript-tools" {
-        when = definedOpts != [ ];
-        message = ''
-          The following settings have moved under `plugins.typescript-tools.settings.settings` with snake_case:
-          ${lib.concatMapStringsSep "\n" (opt: "  - ${lib.showOption (lib.toList opt)}") definedOpts}
-        '';
-      };
-    };
 }
