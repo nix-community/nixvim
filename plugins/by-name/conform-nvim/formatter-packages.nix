@@ -125,7 +125,7 @@ in
     prolog = swi-prolog;
     pyproject-fmt = python313Packages.pyproject-parser;
     inherit (python313Packages) python-ly;
-    qmlformat = libsForQt5.qt5.qtdeclarative;
+    qmlformat = qt6Packages.qtdeclarative;
     # TODO: added 2026-02-08 marked unsupported on darwin
     racketfmt = states.linuxOnly racket;
     inherit (python313Packages) reorder-python-imports;
