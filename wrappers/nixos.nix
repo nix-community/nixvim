@@ -3,8 +3,9 @@
   extendModules,
 }:
 {
-  config,
   lib,
+  config,
+  options,
   ...
 }:
 let
@@ -46,5 +47,12 @@ in
     };
 
     programs.neovim.defaultEditor = cfg.defaultEditor;
+
+    assertions = [
+      {
+        assertion = !config.programs.neovim.enable;
+        message = "`${options.programs.nixvim}.enable` and `${options.programs.neovim.enable}` are incompatible.";
+      }
+    ];
   };
 }
