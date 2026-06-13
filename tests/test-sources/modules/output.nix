@@ -301,7 +301,7 @@
       plugin = pkgs.vimUtils.buildVimPlugin {
         pname = "nixvim-extra-packages-vim-plugin-test";
         version = "1";
-        src = pkgs.runCommandLocal "nixvim-extra-packages-vim-plugin-test-src" { } "mkdir -p $out";
+        src = pkgs.emptyDirectory;
       };
     in
     {
@@ -331,7 +331,7 @@
       plugin = pkgs.vimUtils.buildVimPlugin {
         pname = "nixvim-runtime-deps-test";
         version = "1";
-        src = pkgs.runCommandLocal "nixvim-runtime-deps-test-src" { } "mkdir -p $out";
+        src = pkgs.emptyDirectory;
         runtimeDeps = [ pkgs.hello ];
       };
     in
@@ -357,7 +357,7 @@
       plugin = pkgs.vimUtils.buildVimPlugin {
         pname = "nixvim-runtime-deps-disabled-test";
         version = "1";
-        src = pkgs.runCommandLocal "nixvim-runtime-deps-disabled-test-src" { } "mkdir -p $out";
+        src = pkgs.emptyDirectory;
         runtimeDeps = [ pkgs.hello ];
       };
     in
