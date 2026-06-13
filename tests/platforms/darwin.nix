@@ -9,6 +9,9 @@ self.inputs.nix-darwin.lib.darwinSystem {
 
       programs.nixvim = {
         enable = true;
+        imports = [
+          ./module-check-enabled.nix
+        ];
       };
 
       system.stateVersion = 5;
