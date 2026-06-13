@@ -315,7 +315,7 @@
           (expect "any" "`extraPackages` is for executable packages added to Neovim's PATH")
           (expect "any" "`extraPackagesAfter` is for executable packages added to Neovim's PATH")
           (expect "all" "Use `extraPlugins` for Vim plugin packages:")
-          (expect "all" "nixvim-extra-packages-vim-plugin-test")
+          (expect "all" "- nixvim-extra-packages-vim-plugin-test defined in `${toString __curPos.file}'")
         ];
       };
     };
