@@ -19,6 +19,7 @@ let
   configuration = self.lib.evalNixvim {
     modules = [
       {
+        _file = __curPos.file;
         key = "<internal:nixvim-nocheck-base-eval>";
         config._module.check = false;
       }

@@ -52,7 +52,7 @@ let
   baseConfiguration = extendModules {
     modules = [
       nixpkgsModule
-      { disabledModules = [ "<internal:nixvim-nocheck-base-eval>" ]; }
+      { disabledModules = [ { key = "<internal:nixvim-nocheck-base-eval>"; } ]; }
     ];
   };
 

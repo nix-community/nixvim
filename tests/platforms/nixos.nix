@@ -16,6 +16,9 @@ self.inputs.nixpkgs.lib.nixosSystem {
 
       programs.nixvim = {
         enable = true;
+        imports = [
+          ./module-check-enabled.nix
+        ];
       };
     }
     self.nixosModules.nixvim
