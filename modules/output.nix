@@ -1,4 +1,9 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  options,
+  ...
+}:
 let
   inherit (lib) types mkOption;
 
@@ -20,6 +25,24 @@ let
       };
     };
   };
+
+  isVimPluginPackage = package: package.vimPlugin or false;
+
+  mkVimPluginPackageAssertion =
+    opt:
+    let
+      vimPlugins = builtins.filter isVimPluginPackage opt.value;
+    in
+    {
+      assertion = vimPlugins == [ ];
+      message = ''
+        `${opt}` is for executable packages added to Neovim's PATH, but it contains Vim plugin package(s):
+        ${lib.concatMapStringsSep "\n" (package: "  - ${lib.getName package}") vimPlugins}
+
+        Use `${options.extraPlugins}` for Vim plugin packages:
+          ${options.extraPlugins} = [ pkgs.vimPlugins.<plugin> ];
+      '';
+    };
 in
 {
   options = {
@@ -132,6 +155,11 @@ in
   };
 
   config = {
+    assertions = lib.nixvim.mkAssertions "output" [
+      (mkVimPluginPackageAssertion options.extraPackages)
+      (mkVimPluginPackageAssertion options.extraPackagesAfter)
+    ];
+
     content =
       if config.type == "lua" then
         # Lua
