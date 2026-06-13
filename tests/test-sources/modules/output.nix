@@ -295,6 +295,31 @@
       '';
     };
 
+  extraPackages-rejects-vim-plugins =
+    { pkgs, ... }:
+    let
+      plugin = pkgs.vimUtils.buildVimPlugin {
+        pname = "nixvim-extra-packages-vim-plugin-test";
+        version = "1";
+        src = pkgs.runCommandLocal "nixvim-extra-packages-vim-plugin-test-src" { } "mkdir -p $out";
+      };
+    in
+    {
+      extraPackages = [ plugin ];
+      extraPackagesAfter = [ plugin ];
+
+      test = {
+        buildNixvim = false;
+        assertions = expect: [
+          (expect "count" 2)
+          (expect "any" "`extraPackages` is for executable packages added to Neovim's PATH")
+          (expect "any" "`extraPackagesAfter` is for executable packages added to Neovim's PATH")
+          (expect "all" "Use `extraPlugins` for Vim plugin packages:")
+          (expect "all" "nixvim-extra-packages-vim-plugin-test")
+        ];
+      };
+    };
+
   autowrapRuntimeDeps =
     {
       config,
