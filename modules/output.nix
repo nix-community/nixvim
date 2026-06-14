@@ -40,6 +40,7 @@ let
           # Group definition files by plugin name
           (lib.groupBy (def: lib.getName def.package))
           (lib.mapAttrs (_: map (def: def.file)))
+          (lib.mapAttrs (_: lib.uniqueStrings))
         ];
       in
       ''
