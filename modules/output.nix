@@ -28,22 +28,21 @@ let
 
   isVimPluginPackage = package: package.vimPlugin or false;
 
-  mkVimPluginPackageAssertion =
-    opt:
-    let
-      vimPluginDefs = lib.pipe opt.definitionsWithLocations [
-        # Flatten to [{file, package}]
-        (lib.concatMap ({ file, value }: map (package: { inherit file package; }) value))
-        # Select vimPlugins
-        (lib.filter (def: isVimPluginPackage def.package))
-        # Group definition files by plugin name
-        (lib.groupBy (def: lib.getName def.package))
-        (lib.mapAttrs (_: map (def: def.file)))
-      ];
-    in
-    {
-      assertion = vimPluginDefs == { };
-      message = ''
+  mkVimPluginPackageAssertion = opt: {
+    assertion = !(lib.any isVimPluginPackage opt.value);
+    message =
+      let
+        vimPluginDefs = lib.pipe opt.definitionsWithLocations [
+          # Flatten to [{file, package}]
+          (lib.concatMap ({ file, value }: map (package: { inherit file package; }) value))
+          # Select offending definitions
+          (lib.filter (def: isVimPluginPackage def.package))
+          # Group definition files by plugin name
+          (lib.groupBy (def: lib.getName def.package))
+          (lib.mapAttrs (_: map (def: def.file)))
+        ];
+      in
+      ''
         `${opt}` is for executable packages added to Neovim's PATH, but it contains Vim plugin package(s):
         ${lib.concatMapAttrsStringSep "\n" (
           name: files: "  - ${name} defined in ${lib.options.showFiles files}"
@@ -52,7 +51,7 @@ let
         Use `${options.extraPlugins}` for Vim plugin packages:
           ${options.extraPlugins} = [ pkgs.vimPlugins.<plugin> ];
       '';
-    };
+  };
 in
 {
   options = {
