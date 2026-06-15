@@ -31,6 +31,7 @@
     "contextive"
     # coqPackages.coq-lsp is unavailable since the bump to coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
     "coq_lsp"
+    "cqlls"
     "cspell_ls"
     "css_variables"
     "csskit"
@@ -41,6 +42,7 @@
     "daedalus_ls"
     "dcmls"
     "debputy"
+    "dexter"
     "djls"
     "djlsp"
     "ds_pinyin_lsp"
@@ -69,6 +71,7 @@
     "graphql" # nodePackages.graphql-language-service-cli was removed in https://github.com/NixOS/nixpkgs/pull/382557
     "groovyls"
     "guile_ls"
+    "hare_lsp"
     "hdl_checker"
     "herb_ls"
     "hhvm"
@@ -81,6 +84,7 @@
     "intelephense"
     "janet_lsp"
     "jinja_lsp"
+    "jls"
     "julials"
     "kakehashi"
     "kcl"
@@ -141,7 +145,9 @@
     "salt_ls"
     "scry" # deprecated and removed from nixpkgs
     "selene3p_ls"
+    "shuck"
     "sixtyfps"
+    "slang_server"
     "slangd"
     "smarty_ls"
     "smithy_ls"
