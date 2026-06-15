@@ -16,7 +16,7 @@
     # keep-sorted start block=yes newline_separated=yes
     devshell = {
       url = "github:numtide/devshell";
-      inputs.nixpkgs.follows = "nixvim/nixpkgs";
+      flake = false;
     };
 
     git-hooks = {
