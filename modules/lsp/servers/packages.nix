@@ -42,7 +42,6 @@
     "daedalus_ls"
     "dcmls"
     "debputy"
-    "dexter"
     "djls"
     "djlsp"
     "ds_pinyin_lsp"
@@ -232,6 +231,7 @@
     dagger = "cuelsp";
     dartls = "dart";
     denols = "deno";
+    dexter = "dexter";
     dhall_lsp_server = "dhall-lsp-server";
     diagnosticls = "diagnostic-languageserver";
     digestif = [
