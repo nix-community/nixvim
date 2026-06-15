@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   imports = [
-    inputs.treefmt-nix.flakeModule
+    "${inputs.treefmt-nix}/flake-module.nix"
   ];
 
   perSystem =
