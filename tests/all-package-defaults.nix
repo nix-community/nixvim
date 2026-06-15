@@ -38,6 +38,9 @@ let
     "skim"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+    # 2026-06-15: semgrep fails its installCheckPhase
+    "semgrep"
+
     # "tabnine"
     "cmp-tabnine"
 
