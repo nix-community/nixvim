@@ -8,7 +8,6 @@
       enable = true;
 
       settings = {
-        xdg = true;
         auto_start = true;
         keymap.recommended = true;
         completion.always = true;

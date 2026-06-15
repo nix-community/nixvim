@@ -35,16 +35,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
       with types; maybeRaw (either bool (enum [ "shut-up" ]))
     ) "Auto-start or shut up";
 
-    xdg = lib.mkOption {
-      type = types.bool;
-      default = true;
-      description = "Use XDG paths. May be required when installing coq with Nix.";
-    };
-
     keymap.recommended = defaultNullOpts.mkBool true "Use the recommended keymaps";
 
     completion.always = defaultNullOpts.mkBool true "Always trigger completion on keystroke";
   };
+
+  imports = [ ./deprecation.nix ];
 
   extraConfig = cfg: {
     extraPlugins = lib.mkIf cfg.installArtifacts [ cfg.artifactsPackage ];
