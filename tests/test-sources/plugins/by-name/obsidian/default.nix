@@ -48,6 +48,9 @@
       obsidian = {
         enable = true;
         settings = {
+          # TODO 2025-07-25 explicitly disable legacy commands to suppress deprecation warning
+          legacy_commands = false;
+
           workspaces = [
             {
               name = "foo";
@@ -67,6 +70,9 @@
         enable = false;
 
         settings = {
+          # TODO 2025-07-25 explicitly disable legacy commands to suppress deprecation warning
+          legacy_commands = false;
+
           dir.__raw = "nil";
           workspaces = [
             {
@@ -206,37 +212,37 @@
             checkboxes = {
               " " = {
                 char = "󰄱";
-                hl_group = "ObsidianTodo";
+                hl_group = "Obsidian todo";
               };
               "x" = {
                 char = "";
-                hl_group = "ObsidianDone";
+                hl_group = "Obsidian done";
               };
               ">" = {
                 char = "";
-                hl_group = "ObsidianRightArrow";
+                hl_group = "Obsidian right_arrow";
               };
               "~" = {
                 char = "󰰱";
-                hl_group = "ObsidianTilde";
+                hl_group = "Obsidian tilde";
               };
             };
             bullets = {
               char = "•";
-              hl_group = "ObsidianBullet";
+              hl_group = "Obsidian bullet";
             };
             external_link_icon = {
               char = "";
-              hl_group = "ObsidianExtLinkIcon";
+              hl_group = "Obsidian ext_link_icon";
             };
             reference_text = {
-              hl_group = "ObsidianRefText";
+              hl_group = "Obsidian ref_text";
             };
             highlight_text = {
-              hl_group = "ObsidianHighlightText";
+              hl_group = "Obsidian highlight_text";
             };
             tags = {
-              hl_group = "ObsidianTag";
+              hl_group = "Obsidian tag";
             };
             hl_groups = {
               ObsidianTodo = {
