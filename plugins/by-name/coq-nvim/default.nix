@@ -4,7 +4,6 @@
   ...
 }:
 let
-  inherit (lib) types;
   inherit (lib.nixvim) defaultNullOpts;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
@@ -31,10 +30,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
   callSetup = false;
   settingsOptions = {
-    auto_start = lib.nixvim.mkNullOrOption (
-      with types; maybeRaw (either bool (enum [ "shut-up" ]))
-    ) "Auto-start or shut up";
-
     keymap.recommended = defaultNullOpts.mkBool true "Use the recommended keymaps";
 
     completion.always = defaultNullOpts.mkBool true "Always trigger completion on keystroke";
