@@ -308,6 +308,12 @@
     name = "Jalil David Salamé Messina";
     source = "nixvim";
   };
+  jaredmontoya = {
+    github = "jaredmontoya";
+    githubId = 49511278;
+    name = "Jared Montoya";
+    source = "nixpkgs";
+  };
   jolars = {
     email = "johan@jolars.co";
     github = "jolars";
