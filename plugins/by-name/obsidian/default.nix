@@ -25,11 +25,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
       }
     ];
     new_notes_location = "current_dir";
-    completion = {
-      nvim_cmp = true;
-      min_chars = 2;
-    };
   };
+
+  imports = [ ./deprecations.nix ];
 
   extraConfig = cfg: {
     warnings = lib.nixvim.mkWarnings "plugins.obsidian" [
