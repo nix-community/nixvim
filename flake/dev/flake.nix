@@ -36,8 +36,7 @@
     };
 
     nuschtosSearch = {
-      # TODO: newer versions fail with: TimeoutError: The operation was aborted due to timeout
-      url = "github:NuschtOS/search/b6f77b88e9009bfde28e2130e218e5123dc66796";
+      url = "github:NuschtOS/search";
       inputs.nixpkgs.follows = "nixvim/nixpkgs";
       inputs.flake-utils.inputs.systems.follows = "nixvim/systems";
     };
