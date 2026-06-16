@@ -1,11 +1,12 @@
 {
   unpackaged = [
+    # keep-sorted start block=yes newline_separated=no
     "ada_ls"
     "agda_ls"
     "alloy_ls"
     "anakin_language_server"
-    "antlersls"
     "ansiblels"
+    "antlersls"
     "apex_ls"
     "autohotkey_lsp"
     "awk_ls"
@@ -20,7 +21,6 @@
     "bsl_ls"
     "buddy_ls"
     "bzl"
-    "c3_lsp"
     "cairo_ls"
     "cds_lsp"
     "cir_lsp_server"
@@ -45,7 +45,6 @@
     "djls"
     "djlsp"
     "ds_pinyin_lsp"
-    "dts_lsp"
     "ecsact"
     "ember"
     "esbonio"
@@ -63,8 +62,8 @@
     "gitlab_duo"
     "glasgow"
     "glint"
-    "gnls"
     "gn_language_server"
+    "gnls"
     "gradle_ls"
     "grammarly"
     "graphql" # nodePackages.graphql-language-service-cli was removed in https://github.com/NixOS/nixpkgs/pull/382557
@@ -80,9 +79,7 @@
     "hoon_ls"
     "hydra_lsp"
     "hylo_ls"
-    "intelephense"
     "janet_lsp"
-    "jinja_lsp"
     "jls"
     "julials"
     "kakehashi"
@@ -97,7 +94,6 @@
     "m68k"
     "marko-js"
     "mdx_analyzer"
-    "millet"
     "mm0_ls"
     "mojo"
     "motoko_lsp"
@@ -168,35 +164,34 @@
     "svlangserver"
     "tabby_ml"
     "termux_language_server"
-    "textlsp"
     "theme_check"
     "tsp_server"
     "turbo_ls"
     "turtle_ls"
-    # typst-lsp has been removed from nixpkgs as the project is archived
-    "typst_lsp"
     "tvm_ffi_navigator"
     "twiggy_language_server"
+    # typst-lsp has been removed from nixpkgs as the project is archived
+    "typst_lsp"
     "ungrammar_languageserver"
     "unison" # Unison is packaged, but the lsp is not managed by neovim
     "unocss"
     "uvls"
     "v_analyzer"
-    "veridian"
     "vespa_ls"
-    "visualforce_ls"
     "vimdoc_ls"
+    "visualforce_ls"
     # coqPackages.vscoq-language-server is unavailable since the bump to coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
     "vscoqtop"
-    "wasm_language_tools"
     "wc_language_server"
     "yang_lsp"
     "yls"
     "ziggy"
     "ziggy_schema"
+    # keep-sorted end
   ];
 
   packages = {
+    # keep-sorted start block=yes newline_separated=no
     aiken = "aiken";
     air = "air-formatter";
     angularls = "angular-language-server";
@@ -216,6 +211,7 @@
     blueprint_ls = "blueprint-compiler";
     buck2 = "buck2";
     buf_ls = "buf";
+    c3_lsp = "c3-lsp";
     ccls = "ccls";
     clangd = "clang-tools";
     clojure_lsp = "clojure-lsp";
@@ -247,13 +243,14 @@
     ];
     dotls = "dot-language-server";
     dprint = "dprint";
+    dts_lsp = "dts-lsp";
     earthlyls = "earthlyls";
     efm = "efm-langserver";
+    elixirls = "elixir-ls";
     elmls = [
       "elmPackages"
       "elm-language-server"
     ];
-    elixirls = "elixir-ls";
     elp = "erlang-language-platform";
     emmet_language_server = "emmet-language-server";
     emmet_ls = "emmet-ls";
@@ -289,12 +286,14 @@
       "idris2Packages"
       "idris2Lsp"
     ];
+    intelephense = "intelephense";
     java_language_server = "java-language-server";
     jdtls = "jdt-language-server";
     jedi_language_server = [
       "python3Packages"
       "jedi-language-server"
     ];
+    jinja_lsp = "jinja-lsp";
     jqls = "jq-lsp";
     jsonls = "vscode-langservers-extracted";
     jsonnet_ls = "jsonnet-language-server";
@@ -313,8 +312,8 @@
     matlab_ls = "matlab-language-server";
     mesonlsp = "mesonlsp";
     metals = "metals";
+    millet = "millet";
     mint = "mint";
-    mpls = "mpls";
     mlir_lsp_server = [
       "llvmPackages"
       "mlir"
@@ -323,6 +322,7 @@
       "llvmPackages"
       "mlir"
     ];
+    mpls = "mpls";
     muon = "muon";
     neocmake = "neocmakelsp";
     nextls = "next-ls";
@@ -437,6 +437,7 @@
     terraform_lsp = "terraform-lsp";
     terraformls = "terraform-ls";
     texlab = "texlab";
+    textlsp = "textlsp";
     tflint = "tflint";
     thriftls = "thrift-ls";
     tilt_ls = "tilt";
@@ -456,6 +457,7 @@
     vale_ls = "vale-ls";
     vectorcode_server = "vectorcode";
     verible = "verible";
+    veridian = "veridian";
     veryl_ls = "veryl";
     vhdl_ls = "vhdl-ls";
     vimls = "vim-language-server";
@@ -467,11 +469,13 @@
     ];
     vtsls = "vtsls";
     vue_ls = "vue-language-server";
+    wasm_language_tools = "wasm-language-tools";
     wgsl_analyzer = "wgsl-analyzer";
     yamlls = "yaml-language-server"; # Not available in coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
     zizmor = "zizmor";
     zk = "zk";
     zls = "zls";
     zuban = "zuban";
+    # keep-sorted end
   };
 }

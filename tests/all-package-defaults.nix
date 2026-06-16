@@ -130,6 +130,9 @@ let
     "vectorcode"
     "vectorcode.nvim"
 
+    # 2026-06-16: veridian depends on sv-lang-9.1 which is broken on Darwin
+    "veridian"
+
     # 2025-11-16 fish is broken
     "direnv"
     "direnv.vim"
