@@ -14,12 +14,15 @@ in
 {
   inherit states;
   formatter-packages = {
+    # keep-sorted start block=yes newline_separated=no
     format-queries = null; # Uses neovim itself
     init = null; # Internal thingamajig
     injected = null; # Internal formatter
     trim_newlines = null; # Conform native formatter
     trim_whitespace = null; # Conform native formatter
+    # keep-sorted end
 
+    # keep-sorted start block=yes newline_separated=no
     auto_optional = states.unpackaged;
     bake = states.unpackaged;
     blue = states.unpackaged;
@@ -31,17 +34,13 @@ in
     dcm_fix = states.unpackaged;
     dcm_format = states.unpackaged;
     easy-coding-standard = states.unpackaged;
-    findent = states.unpackaged;
     ghokin = states.unpackaged;
     gluon_fmt = states.unpackaged;
     grain_format = states.unpackaged;
-    hledger-fmt = states.unpackaged;
     imba_fmt = states.unpackaged;
     janet-format = states.unpackaged;
-    json_repair = states.unpackaged;
     liquidsoap-prettier = states.unpackaged;
     llf = states.unpackaged;
-    markdown-toc = states.unpackaged;
     markdownfmt = states.unpackaged;
     mdslw = states.unpackaged;
     mojo_format = states.unpackaged;
@@ -69,8 +68,9 @@ in
     vsg = states.unpackaged;
     ziggy = states.unpackaged;
     ziggy_schema = states.unpackaged;
+    # keep-sorted end
 
-    inherit (python313Packages) autopep8;
+    # keep-sorted start block=yes newline_separated=no
     awk = gawk;
     bean-format = beancount;
     biome-check = biome;
@@ -84,7 +84,6 @@ in
     dart_format = dart;
     deno_fmt = deno;
     dioxus = dioxus-cli;
-    inherit (python313Packages) docformatter;
     # FIXME: 2026-01-23 docstrfmt test failure in nixpkgs
     docstrfmt = states.broken python313Packages.docstrfmt;
     elm_format = elmPackages.elm-format;
@@ -99,11 +98,30 @@ in
     # FIXME: 2025-10-08 build failure (haskellPackages.hindent)
     hindent = states.broken haskellPackages.hindent;
     html_beautify = js-beautify;
-    inherit (rubyPackages) htmlbeautifier;
     hurlfmt = hurl;
-    js_beautify = js-beautify;
-    jsonnetfmt = jsonnet;
+    inherit (ocamlPackages) ocp-indent;
+    inherit (php84Packages) phpinsights;
+    inherit (python313Packages)
+      autopep8
+      docformatter
+      python-ly
+      reorder-python-imports
+      sqlfmt
+      pyproject-parser
+      ;
+    inherit (rubyPackages)
+      htmlbeautifier
+      syntax_tree
+      ;
     inherit (texlive.pkgs) latexindent;
+    inherit
+      findent
+      hledger-fmt
+      markdown-toc
+      ;
+    js_beautify = js-beautify;
+    json_repair = json-repair;
+    jsonnetfmt = jsonnet;
     lua-format = luaformatter;
     mago_format = mago;
     mago_lint = mago;
@@ -113,36 +131,30 @@ in
     nginxfmt = nginx-config-formatter;
     nimpretty = nim;
     nixpkgs_fmt = nixpkgs-fmt;
-    inherit (ocamlPackages) ocp-indent;
     odinfmt = ols;
     # TODO: added 2026-02-08 broken on darwin
     opa_fmt = states.linuxOnly open-policy-agent;
     perltidy = perlPackages.PerlTidy;
     pg_format = pgformatter;
-    phpcbf = php84Packages.php-codesniffer;
     php_cs_fixer = php83Packages.php-cs-fixer;
-    inherit (php84Packages) phpinsights;
+    phpcbf = php84Packages.php-codesniffer;
     prolog = swi-prolog;
     pyproject-fmt = python313Packages.pyproject-parser;
-    inherit (python313Packages) python-ly;
     qmlformat = qt6Packages.qtdeclarative;
     # TODO: added 2026-02-08 marked unsupported on darwin
     racketfmt = states.linuxOnly racket;
-    inherit (python313Packages) reorder-python-imports;
     roc = states.linuxOnly roc;
     ruff_fix = ruff;
     ruff_format = ruff;
     ruff_organize_imports = ruff;
     sql_formatter = sql-formatter;
-    inherit (python313Packages) sqlfmt;
     squeeze_blanks = coreutils;
     standardrb = rubyPackages.standard;
     styler = R;
     swift = states.darwinOnly swift;
-    swiftformat = states.darwinOnly swiftformat;
     swift_format = states.darwinOnly swift-format;
+    swiftformat = states.darwinOnly swiftformat;
     swiftlint = states.darwinOnly swiftlint;
-    inherit (rubyPackages) syntax_tree;
     tclfmt = tclint;
     terraform_fmt = tenv;
     terragrunt_hclfmt = terragrunt;
@@ -151,5 +163,6 @@ in
     xmlformatter = xmlformat;
     xmllint = libxml2;
     zigfmt = zig;
+    # keep-sorted end
   };
 }
