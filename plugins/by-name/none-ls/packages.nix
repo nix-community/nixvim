@@ -5,6 +5,7 @@ in
 {
   # builtin sources that don't require a package
   noPackage = [
+    # keep-sorted start block=yes newline_separated=no
     "alex" # was removed from nixpkgs as it is unmaintained
     "gitrebase"
     # TODO: Requires the go tree-sitter parser
@@ -23,12 +24,14 @@ in
     "trail_space"
     "ts_node_action"
     "vsnip"
+    # keep-sorted end
   ];
 
   # nixpkgs packages for a given source
   packaged =
     # Top-level packages
     topLevel [
+      # keep-sorted start block=yes newline_separated=no
       "actionlint"
       "alejandra"
       "asmfmt"
@@ -55,8 +58,8 @@ in
       "fnlfmt"
       "fprettify"
       "gersemi"
-      "gitlint"
       "gitleaks"
+      "gitlint"
       "gofumpt"
       "golines"
       "hadolint"
@@ -109,18 +112,20 @@ in
       "yapf"
       "zprint"
       "zsh"
+      # keep-sorted end
     ]
     # Scoped packages
     // scoped {
+      ocamlPackages = "ocamlformat";
       phpPackages = [
         "phpmd"
         "phpstan"
       ];
       rubyPackages = "htmlbeautifier";
-      ocamlPackages = "ocamlformat";
     }
     # Packages where the name is different
     // {
+      # keep-sorted start block=yes newline_separated=no
       ansiblelint = "ansible-lint";
       atlas_fmt = "atlas";
       bean_check = "beancount";
@@ -131,6 +136,7 @@ in
         "black"
       ];
       blackd = "black";
+      blade_formatter = "blade-formatter";
       buildifier = "bazel-buildtools";
       cfn_lint = [
         "python3"
@@ -139,6 +145,7 @@ in
       ];
       clang_format = "clang-tools";
       clj_kondo = "clj-kondo";
+      cljstyle = "cljstyle";
       cmake_format = "cmake-format";
       cmake_lint = "cmake-format";
       credo = "elixir";
@@ -160,6 +167,7 @@ in
         "rubyPackages"
         "erb-formatter"
       ];
+      findent = "findent";
       fish_indent = "fish";
       format_r = "R";
       # FIXME: Can't have transition fallbacks anymore
@@ -179,8 +187,8 @@ in
       isortd = "isort";
       kube_linter = "kube-linter";
       ltrs = "languagetool-rust";
-      markdownlint_cli2 = "markdownlint-cli2";
       markdownlint = "markdownlint-cli";
+      markdownlint_cli2 = "markdownlint-cli2";
       meson_format = "meson";
       mix = "elixir";
       nimpretty = "nim";
@@ -188,8 +196,13 @@ in
       opacheck = "open-policy-agent";
       opentofu_fmt = "opentofu";
       opentofu_validate = "opentofu";
+      packer = "packer";
       pg_format = "pgformatter";
       phpcbf = [
+        "phpPackages"
+        "php-codesniffer"
+      ];
+      phpcs = [
         "phpPackages"
         "php-codesniffer"
       ];
@@ -197,10 +210,7 @@ in
         "phpPackages"
         "php-cs-fixer"
       ];
-      phpcs = [
-        "phpPackages"
-        "php-codesniffer"
-      ];
+      pretty_php = "pretty-php";
       # FIXME: Can't have transition fallbacks anymore
       # TODO: replace after flake.lock update
       # prisma_format = "prisma";
@@ -217,8 +227,10 @@ in
       ];
       racket_fixw = "racket";
       raco_fmt = "racket";
+      regal = "regal";
       rego = "open-policy-agent";
       rpmspec = "rpm";
+      sql_formatter = "sql-formatter";
       sqlformat = [
         "python3"
         "pkgs"
@@ -227,6 +239,8 @@ in
       staticcheck = "go-tools";
       surface = "elixir";
       swift_format = "swift-format";
+      swiftformat = "swiftformat";
+      swiftlint = "swiftlint";
       teal = [
         "luaPackages"
         "tl"
@@ -235,22 +249,23 @@ in
       terraform_validate = "terraform";
       terragrunt_fmt = "terragrunt";
       terragrunt_validate = "terragrunt";
+      textidote = "textidote";
+      textlint = "textlint";
       tidy = "html-tidy";
       verible_verilog_format = "verible";
       vint = "vim-vint";
       write_good = "write-good";
       xmllint = "libxml2";
+      # keep-sorted end
     }
     # builtin sources that are not packaged in nixpkgs
     // nullAttrs [
-      "blade_formatter"
+      # keep-sorted start block=yes newline_separated=no
       "bsfmt"
       "bslint"
-      "cljstyle"
       "cueimports"
       "duster"
       "erb_lint"
-      "findent"
       "forge_fmt"
       "gccdiag"
       "markuplint"
@@ -258,28 +273,21 @@ in
       "nginx_beautifier"
       "npm_groovy_lint"
       "ocdc"
-      "packer"
       "perlimports"
       "pint"
-      "pretty_php"
       "purs_tidy"
       "pyink"
       "reek"
-      "regal"
       "remark"
       "rescript"
       "saltlint"
       "solhint"
       "spectral"
       "sqlfmt"
-      "sql_formatter"
       "styler"
       "stylint"
-      "swiftformat"
-      "swiftlint"
-      "textidote"
-      "textlint"
       "twigcs"
       "vacuum"
+      # keep-sorted end
     ];
 }
