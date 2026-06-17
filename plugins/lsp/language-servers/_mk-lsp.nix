@@ -31,6 +31,16 @@ let
 
   enabled = config.plugins.lsp.enable && cfg.enable;
 
+  # Note: getSubOptions returns docs-eval options, not fully-realized options with user-definitions.
+  getSubOptions = opt: opt.type.getSubOptions opt.loc;
+  documentedServers = getSubOptions options.lsp.servers;
+  hasBespokeDocOptions = documentedServers ? ${serverName};
+  newOptionDocs =
+    if hasBespokeDocOptions then
+      getSubOptions documentedServers.${serverName}
+    else
+      documentedServers._freeformOptions;
+
   inherit (lib) mkOption types;
 in
 {
@@ -50,20 +60,29 @@ in
     plugins.lsp.servers.${name} = {
       enable = lib.mkEnableOption description;
 
+      # alias to lsp.servers.${name}.activate
+      autostart =
+        let
+          opt = newOptionDocs.activate;
+        in
+        lib.mkOption {
+          inherit (opt)
+            type
+            description
+            default
+            example
+            ;
+          apply = v: if enabled then config.lsp.servers.${serverName}.activate else v;
+        };
+
       # alias to lsp.servers.${name}.package
       package =
         let
-          getSubOptions = opt: opt.type.getSubOptions opt.loc;
-          serverOpts = getSubOptions options.lsp.servers;
-          opt = lib.pipe serverOpts [
-            (lib.getAttr serverName)
-            getSubOptions
-            (lib.getAttr "package")
-          ];
+          opt = newOptionDocs.package;
           pkg = config.lsp.servers.${serverName}.package;
           self = options.plugins.lsp.servers.${name}.package;
         in
-        if serverOpts ? ${serverName} then
+        if hasBespokeDocOptions then
           lib.mkOption (
             {
               inherit (opt) type default description;
@@ -142,12 +161,6 @@ in
         May be empty, or server may specify a default value.
       '';
 
-      autostart = lib.nixvim.defaultNullOpts.mkBool true ''
-        Controls if the `FileType` autocommand that launches a language server is created.
-        If `false`, allows for deferring language servers until manually launched with
-        `:LspStart` (|lspconfig-commands|).
-      '';
-
       rootMarkers = lib.nixvim.defaultNullOpts.mkListOf types.str null ''
         A list of files that mark the root of the project/workspace.
 
@@ -219,6 +232,7 @@ in
       # Propagate definitions to the new lsp module
       config = {
         enable = true;
+        activate = lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.autostart;
         package = lib.mkIf (opts.package.highestPrio < 1500) (
           lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.package
         );
@@ -226,7 +240,6 @@ in
         __configWrapper =
           luaCfg: "__wrapConfig(${lib.foldr lib.id luaCfg config.plugins.lsp.setupWrappers})";
         config = {
-          autostart = lib.mkIf (cfg.autostart != null) cfg.autostart;
           cmd = lib.mkIf (cfg.cmd != null) cfg.cmd;
           filetypes = lib.mkIf (cfg.filetypes != null) cfg.filetypes;
           root_markers = lib.mkIf (cfg.rootMarkers != null) cfg.rootMarkers;
