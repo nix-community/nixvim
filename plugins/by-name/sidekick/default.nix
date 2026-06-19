@@ -27,7 +27,8 @@ lib.nixvim.plugins.mkNeovimPlugin {
   extraConfig = cfg: {
     assertions = lib.nixvim.mkAssertions "plugins.sidekick" {
       assertion =
-        (cfg.settings.nes.enabled or true)
+        # Compare with false to handle settings.nes.enabled being a Lua function.
+        (cfg.settings.nes.enabled or true != false)
         -> (config.plugins.copilot-lua.enable || config.lsp.servers.copilot.enable);
       message = "sidekick requires either copilot-lua (${options.plugins.copilot-lua.enable}) or copilot LSP (${options.lsp.servers}.copilot.enable) to be enabled when NES is enabled";
     };
