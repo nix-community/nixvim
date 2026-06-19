@@ -15,7 +15,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
     Sidekick's NES feature requires the Copilot language server. Enable either
     `plugins.copilot-lua.enable` or `lsp.servers.copilot.enable`, or disable
-    NES in `plugins.sidekick.settings.opts.nes.enabled`.
+    NES in `plugins.sidekick.settings.nes.enabled`.
 
     Sidekick supports several external CLI tools, but nixvim does not enable
     them automatically. Enable the tools you use explicitly, for example with
