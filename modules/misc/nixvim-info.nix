@@ -21,22 +21,17 @@
       # }
       merge =
         _: defs:
-        lib.foldl'
-          (
-            acc: def:
-            lib.recursiveUpdate acc (
-              lib.setAttrByPath def.value.path {
-                inherit (def) file;
-                url = def.value.url or null;
-                description = def.value.description or null;
-              }
-            )
-          )
-          {
-            plugins = { };
-            colorschemes = { };
-          }
-          defs;
+        builtins.listToAttrs (
+          map ({ file, value }: {
+            name = lib.showOption value.path;
+            value = {
+              inherit file;
+              inherit (value) path;
+              url = value.url or null;
+              description = value.description or null;
+            };
+          }) defs
+        );
     };
     internal = true;
     default = null;
