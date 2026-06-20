@@ -96,7 +96,8 @@ let
       path = removeWhitespace (lib.concatStringsSep "/" path);
       docSummaryMD =
         let
-          info = lib.attrByPath path { } nixvimInfo;
+          pathstr = lib.showOption path;
+          info = nixvimInfo.${pathstr} or { };
           maintainers = lib.unique (configuration.config.meta.maintainers.${info.file} or [ ]);
           maintainersNames = map maintToMD maintainers;
           maintToMD = m: if m ? github then "[${m.name}](https://github.com/${m.github})" else m.name;
