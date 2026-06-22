@@ -10,22 +10,30 @@
     lib.nixvim = {
       _page = {
         title = "lib.nixvim: Nixvim's functions";
-        source = ./index.md;
+        content = [
+          ./index.md
+        ];
       };
 
       modules._page = {
         title = "lib.nixvim.modules: module functions";
-        functions.file = ../../lib/modules.nix;
+        content = [
+          { functions.file = ../../lib/modules.nix; }
+        ];
       };
 
       utils._page = {
         title = "lib.nixvim.utils: utility functions";
-        functions.file = ../../lib/utils.nix;
+        content = [
+          { functions.file = ../../lib/utils.nix; }
+        ];
       };
 
       lua._page = {
         title = "lib.nixvim.lua: lua functions";
-        functions.file = ../../lib/to-lua.nix;
+        content = [
+          { functions.file = ../../lib/to-lua.nix; }
+        ];
       };
     };
   };

@@ -8,7 +8,52 @@
 }:
 let
   cfg = config._page;
-  opts = options._page;
+
+  contentType = lib.types.coercedTo lib.types.path (file: { inherit file; }) (
+    lib.types.attrTag {
+      file = lib.mkOption {
+        description = "A markdown file.";
+        type = lib.types.path;
+      };
+      text = lib.mkOption {
+        description = "Lines of markdown.";
+        type = lib.types.lines;
+      };
+      functions = lib.mkOption {
+        description = "Nix file to scan for RFC145 doc comments.";
+        type = lib.types.submodule {
+          options.file = lib.mkOption {
+            type = lib.types.path;
+            description = "Nix file.";
+          };
+          options.loc = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = if lib.lists.hasPrefix [ "lib" ] cfg.loc then builtins.tail cfg.loc else cfg.loc;
+            defaultText = lib.literalMD ''
+              `loc`'s attrpath, without any leading "lib"
+            '';
+            description = ''
+              Optional attrpath where functions are defined.
+              Provided to `nixdoc` as `--category`.
+
+              Will scan `lib` for attribute locations in the functions set at this attrpath.
+
+              Used in conjunction with `nix`.
+            '';
+          };
+        };
+      };
+      options = lib.mkOption {
+        description = ''
+          Set of options or list of option docs-templates.
+
+          If an attrset is provided, it will be coerced using `lib.options.optionAttrSetToDocList`.
+        '';
+        type = lib.types.raw;
+        apply = opts: if builtins.isAttrs opts then lib.options.optionAttrSetToDocList opts else opts;
+      };
+    }
+  );
 in
 {
   options._page = {
@@ -21,7 +66,9 @@ in
     };
     target = lib.mkOption {
       type = lib.types.str;
-      default = lib.optionalString cfg.hasContent (lib.concatStringsSep "/" (cfg.loc ++ [ "index.md" ]));
+      default = lib.optionalString (cfg.content != [ ]) (
+        lib.concatStringsSep "/" (cfg.loc ++ [ "index.md" ])
+      );
       defaultText = lib.literalMD ''
         `""` if page has no content, otherwise a filepath derived from the page's `loc`.
       '';
@@ -32,45 +79,10 @@ in
       default = null;
       description = "Page's heading title.";
     };
-    text = lib.mkOption {
-      type = lib.types.nullOr lib.types.lines;
-      default = null;
-      description = "Optional markdown text to include after the title.";
-    };
-    source = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
-      default = null;
-      description = "Optional markdown file to include after the title.";
-    };
-    functions.file = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
-      default = null;
-      description = "Optional nix file to scan for RFC145 doc comments.";
-    };
-    functions.loc = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = if lib.lists.hasPrefix [ "lib" ] cfg.loc then builtins.tail cfg.loc else cfg.loc;
-      defaultText = lib.literalMD ''
-        `loc`'s attrpath, without any leading "lib"
-      '';
-      description = ''
-        Optional attrpath where functions are defined.
-        Provided to `nixdoc` as `--category`.
-
-        Will scan `lib` for attribute locations in the functions set at this attrpath.
-
-        Used in conjunction with `nix`.
-      '';
-    };
-    options = lib.mkOption {
-      type = lib.types.nullOr lib.types.raw;
-      default = null;
-      apply = opts: if builtins.isAttrs opts then lib.options.optionAttrSetToDocList opts else opts;
-      description = ''
-        Optional set of options or list of option docs-templates.
-
-        If an attrset is provided, it will be coerced using `lib.options.optionAttrSetToDocList`.
-      '';
+    content = lib.mkOption {
+      type = lib.types.listOf contentType;
+      default = [ ];
+      description = "Optional content sections rendered after the title.";
     };
     toMenu = lib.mkOption {
       type = lib.types.functionTo lib.types.str;
@@ -103,28 +115,9 @@ in
       '';
       readOnly = true;
     };
-    hasContent = lib.mkOption {
-      type = lib.types.bool;
-      description = ''
-        Whether this page has any docs content.
-
-        When `false`, this page represents an _empty_ menu entry.
-      '';
-      readOnly = true;
-    };
   };
 
   config._page = {
-    source = lib.mkIf (cfg.text != null) (
-      lib.mkDerivedConfig opts.text (builtins.toFile "docs-${lib.attrsets.showAttrPath cfg.loc}-text.md")
-    );
-
-    hasContent = builtins.any (x: x != null) [
-      cfg.source # markdown
-      cfg.functions.file # doc-comments
-      cfg.options # module options
-    ];
-
     toMenu = import ./to-menu.nix {
       inherit lib;
       optionNames = builtins.attrNames options;
