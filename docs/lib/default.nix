@@ -1,7 +1,7 @@
 {
   lib,
+  jq,
   runCommand,
-  writers,
   nixdoc,
   nixvim,
   pageSpecs ? ./pages.nix,
@@ -55,7 +55,7 @@ let
     functions = { file, loc }: ''
       ${lib.getExe nixdoc} \
         --file ${file} \
-        --locs "$locations" \
+        --locs function-locations.json \
         --category ${lib.escapeShellArg (lib.showAttrPath loc)} \
         --description "REMOVED BY TAIL" \
         --prefix "lib" \
@@ -67,19 +67,24 @@ let
   result =
     runCommand "nixvim-lib-docs"
       {
-        locations = writers.writeJSON "locations.json" (
-          import ./function-locations.nix {
-            inherit lib;
-            rootPath = nixvim;
-            functionSet = lib.extend nixvim.lib.overlay;
-            pathsToScan = lib.pipe pageList [
-              (lib.concatMap (page: page.content))
-              (lib.catAttrs "functions")
-              (map (x: x.loc))
-            ];
-            revision = nixvim.rev or "main";
-          }
-        );
+        __structuredAttrs = true;
+        strictDeps = true;
+
+        nativeBuildInputs = [
+          jq
+        ];
+
+        functionLocations = import ./function-locations.nix {
+          inherit lib;
+          rootPath = nixvim;
+          functionSet = lib.extend nixvim.lib.overlay;
+          pathsToScan = lib.pipe pageList [
+            (lib.concatMap (page: page.content))
+            (lib.catAttrs "functions")
+            (map (x: x.loc))
+          ];
+          revision = nixvim.rev or "main";
+        };
 
         passthru.config = menuConfiguration;
 
@@ -88,6 +93,8 @@ let
         passthru.pages = map (page: "${result}/${page.target}") pagesToRender;
       }
       ''
+        jq .functionLocations "$NIX_ATTRS_JSON_FILE" > function-locations.json
+
         mkdir -p "$out"
 
         ${lib.concatMapStringsSep "\n" (
