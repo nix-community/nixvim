@@ -4,15 +4,12 @@
   runCommand,
   nixdoc,
   nixvim,
-  pageSpecs ? ./pages.nix,
 }:
 
+name: modules:
 let
   menuConfiguration = lib.evalModules {
-    modules = [
-      pageSpecs
-      ../modules
-    ];
+    modules = [ ../modules ] ++ lib.toList modules;
   };
   cfg = menuConfiguration.config;
 
@@ -53,7 +50,7 @@ let
   };
 
   result =
-    runCommand "nixvim-lib-docs"
+    runCommand name
       {
         __structuredAttrs = true;
         strictDeps = true;
