@@ -5,15 +5,9 @@
   ...
 }:
 let
-  categoryType = lib.types.submoduleWith {
-    modules = [ ./category.nix ];
-  };
-
   categories = removeAttrs config (builtins.attrNames options);
 in
 {
-  freeformType = lib.types.attrsOf categoryType;
-
   options._menu = {
     text = lib.mkOption {
       type = lib.types.str;

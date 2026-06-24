@@ -11,7 +11,7 @@ let
   menuConfiguration = lib.evalModules {
     modules = [
       pageSpecs
-      ../modules/menu.nix
+      ../modules
     ];
   };
   cfg = menuConfiguration.config;
