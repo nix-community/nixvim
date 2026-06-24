@@ -120,6 +120,12 @@ lib.fix (self: {
     inherit (self) lib-docs;
   };
 
+  # TODO: combine beta (option) docs with lib-docs
+  beta-docs = renderDocs "nixvim-beta-docs" [
+    ./lib/pages.nix
+    (lib.modules.importApply ./pages/options.nix { inherit configuration; })
+  ];
+
   lib-docs = renderDocs "nixvim-lib-docs" ./lib/pages.nix;
 
   search = mkNuschtosSearch {
