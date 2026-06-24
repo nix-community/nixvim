@@ -115,6 +115,11 @@ in
       '';
       readOnly = true;
     };
+    pages = lib.mkOption {
+      type = lib.types.listOf lib.types.raw;
+      description = "This page, its children, their children, etc.";
+      readOnly = true;
+    };
   };
 
   config._page = {
@@ -122,5 +127,13 @@ in
       inherit lib;
       optionNames = builtins.attrNames options;
     };
+
+    pages = lib.pipe options [
+      builtins.attrNames
+      (removeAttrs config)
+      builtins.attrValues
+      (lib.concatMap (x: x._page.pages))
+      (children: [ cfg ] ++ children)
+    ];
   };
 }

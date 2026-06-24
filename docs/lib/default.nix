@@ -15,22 +15,10 @@ let
     ];
   };
   cfg = menuConfiguration.config;
-  pages = cfg.functions;
 
-  # Collect all page nodes into a list of page entries
-  collectPages =
-    pages:
-    builtins.concatMap (
-      node:
-      let
-        children = removeAttrs node [ "_page" ];
-      in
-      lib.optional (node ? _page) node._page ++ lib.optionals (children != { }) (collectPages children)
-    ) (builtins.attrValues (removeAttrs pages [ "_category" ]));
-
-  # Normalised page specs
-  pageList = collectPages pages;
-  pagesToRender = builtins.filter (page: page.target != "") pageList;
+  # Page specs
+  inherit (cfg._menu) pages;
+  pagesToRender = builtins.filter (page: page.target != "") pages;
 
   # Function(s) to render page sections
   renderSection = {
@@ -78,7 +66,7 @@ let
           inherit lib;
           rootPath = nixvim;
           functionSet = lib.extend nixvim.lib.overlay;
-          pathsToScan = lib.pipe pageList [
+          pathsToScan = lib.pipe pages [
             (lib.concatMap (page: page.content))
             (lib.catAttrs "functions")
             (map (x: x.loc))
