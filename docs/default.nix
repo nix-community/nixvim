@@ -99,7 +99,7 @@ let
     }).optionsJSON;
 
   renderDocs = pkgs.callPackage ./modules/render.nix {
-    inherit nixvim lib;
+    inherit lib nixvim;
   };
 in
 lib.fix (self: {

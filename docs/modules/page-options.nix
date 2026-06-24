@@ -83,6 +83,14 @@ in
       type = lib.types.listOf contentType;
       default = [ ];
       description = "Optional content sections rendered after the title.";
+      # Give each section a unique ID, based on `loc`
+      apply = lib.imap0 (
+        i: section:
+        section
+        // {
+          id = lib.concatMapStringsSep "." toString (cfg.loc ++ [ i ]);
+        }
+      );
     };
     toMenu = lib.mkOption {
       type = lib.types.functionTo lib.types.str;
