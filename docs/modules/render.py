@@ -38,7 +38,7 @@ def render_functions(file, loc, function_locations):
     return "".join(markdown.splitlines(keepends=True)[2:])
 
 
-def render_page(page, function_locations):
+def render_page(page, option_sections, function_locations):
     output = []
 
     for section in page["sections"]:
@@ -53,6 +53,9 @@ def render_page(page, function_locations):
 
             case "text":
                 output.append(value)
+
+            case "options":
+                output.append(option_sections[id])
 
             case "functions":
                 output.append(
@@ -73,6 +76,9 @@ def main():
     with open(os.environ["NIX_ATTRS_JSON_FILE"]) as f:
         attrs = json.load(f)
 
+    with open(attrs["optionSections"]) as f:
+        option_sections = json.load(f)
+
     out_dir = Path(os.environ["out"])
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -86,6 +92,7 @@ def main():
         for page in attrs["pageModel"].values():
             markdown = render_page(
                 page,
+                option_sections=option_sections,
                 function_locations=function_locations,
             )
             target = out_dir / page["target"]

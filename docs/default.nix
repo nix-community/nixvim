@@ -98,12 +98,19 @@ let
       inherit transformOptions;
     }).optionsJSON;
 
+  multipage-render-docs = pkgs.python3.pkgs.callPackage ./multipage-render-docs { };
+
   renderDocs = pkgs.callPackage ./modules/render.nix {
-    inherit lib nixvim;
+    inherit
+      lib
+      nixvim
+      transformOptions
+      multipage-render-docs
+      ;
   };
 in
 lib.fix (self: {
-  inherit options-json;
+  inherit options-json multipage-render-docs;
   inherit (pkgs) nixos-render-docs;
 
   gfm-alerts-to-admonitions = pkgs.python3.pkgs.callPackage ./gfm-alerts-to-admonitions { };

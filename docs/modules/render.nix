@@ -1,8 +1,11 @@
 {
   lib,
+  path,
   runCommand,
   nixdoc,
+  multipage-render-docs,
   python3,
+  transformOptions,
   nixvim,
 }:
 
@@ -59,6 +62,55 @@ let
     ) pagesToRender
   );
 
+  # Convert the doc-options list into the structure required for options.json
+  # See https://github.com/NixOS/nixpkgs/blob/e2078ef3/nixos/lib/make-options-doc/default.nix#L167-L176
+  processOptions = lib.flip lib.pipe [
+    (lib.filter (opt: opt.visible && !opt.internal))
+    (map transformOptions)
+    (map (opt: {
+      inherit (opt) name;
+      value = removeAttrs opt [
+        "name"
+        "visible"
+        "internal"
+      ];
+    }))
+    builtins.listToAttrs
+  ];
+
+  # For performance reasons, all options are rendered in a single pass,
+  # we use multipage-render-docs instead of nixos-render-docs to keep
+  # options grouped by section ID.
+  optionSections =
+    runCommand "${name}-option-doc-sections"
+      {
+        __structuredAttrs = true;
+        strictDeps = true;
+
+        nativeBuildInputs = [
+          multipage-render-docs
+        ];
+
+        options = lib.pipe pagesToRender [
+          (lib.concatMap (page: page.content))
+          (lib.filter (section: section ? options))
+          (map ({ id, options }: lib.nameValuePair id (processOptions options)))
+          lib.listToAttrs
+        ];
+
+        env = {
+          # TODO: specify our Nixpkgs revision
+          # See https://github.com/NixOS/nixpkgs/blob/3e41b24a/pkgs/by-name/ni/nixos-render-docs/src/nixos_render_docs/options.py#L55-L64
+          NIXPKGS_REVISION = nixvim.inputs.nixpkgs.rev or "master";
+
+          # https://github.com/NixOS/nixpkgs/blob/3e41b24a/doc/manpage-urls.json
+          MANPAGE_URLS = "${path}/doc/manpage-urls.json";
+        };
+      }
+      ''
+        multipage-render-docs > "$out"
+      '';
+
   result =
     runCommand name
       {
@@ -81,6 +133,9 @@ let
           ];
           revision = nixvim.rev or "main";
         };
+
+        # TODO: optimize build closure by omitting when there are no options sections
+        inherit optionSections;
 
         inherit pageModel;
 
