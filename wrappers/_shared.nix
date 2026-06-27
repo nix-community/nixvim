@@ -44,8 +44,8 @@ let
         pkgs = lib.mkIf config.nixpkgs.useGlobalPackages (lib.mkDefault pkgs);
 
         # Inherit platform spec
-        hostPlatform = lib.mkOptionDefault pkgs.stdenv.hostPlatform;
-        buildPlatform = lib.mkOverride buildPlatformPrio pkgs.stdenv.buildPlatform;
+        hostPlatform = lib.mkOptionDefault { inherit (pkgs.stdenv.hostPlatform) config; };
+        buildPlatform = lib.mkOverride buildPlatformPrio { inherit (pkgs.stdenv.buildPlatform) config; };
       };
     };
 
