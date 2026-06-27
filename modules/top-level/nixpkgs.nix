@@ -168,6 +168,12 @@ in
         To cross-compile, also set `nixpkgs.buildPlatform`.
 
         Ignored when `nixpkgs.pkgs` is set.
+
+        > [!WARNING]
+        > Avoid passing a fully elaborated platform from another Nixpkgs instance,
+        > such as `pkgs.stdenv.hostPlatform`, when `nixpkgs.source` may point to a
+        > different Nixpkgs revision. Prefer a platform spec, such as
+        > `{ inherit (pkgs.stdenv.hostPlatform) config; }`, or a system string.
       '';
     };
 
@@ -195,6 +201,12 @@ in
         Setting this option will cause Nixvim to be cross-compiled.
 
         Ignored when `nixpkgs.pkgs` is set.
+
+        > [!WARNING]
+        > Avoid passing a fully elaborated platform from another Nixpkgs instance,
+        > such as `pkgs.stdenv.buildPlatform`, when `nixpkgs.source` may point to a
+        > different Nixpkgs revision. Prefer a platform spec, such as
+        > `{ inherit (pkgs.stdenv.buildPlatform) config; }`, or a system string.
       '';
     };
 
