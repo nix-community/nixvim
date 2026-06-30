@@ -1,40 +1,44 @@
 {
-  config,
   lib,
   pkgs,
+  config,
+  options,
   ...
 }:
 let
   cfg = config.plugins.lsp.servers.hls;
-  inherit (lib) types;
+  opts = options.plugins.lsp.servers.hls;
+  enabled = config.plugins.lsp.enable && cfg.enable;
 
-  ghcPackage = lib.optional (cfg.installGhc == true) cfg.ghcPackage;
+  # The new `installGhc` option doesn't support null values, so check how the old value is defined
+  installGhcValue =
+    lib.modules.mergeDefinitions opts.installGhc.loc opts.installGhc.type
+      opts.installGhc.definitionsWithLocations;
+  useInstallGhcValue = installGhcValue.optionalValue.value or null != null;
 in
 {
   options.plugins.lsp.servers.hls = {
     installGhc = lib.mkOption {
-      type = with types; nullOr bool;
+      type = lib.types.nullOr lib.types.bool;
       default = null;
       example = true;
       description = "Whether to install `ghc`.";
+      apply = v: if enabled then config.lsp.servers.hls.installGhc else v;
     };
 
-    ghcPackage = lib.mkPackageOption pkgs "ghc" { };
+    ghcPackage = lib.mkPackageOption pkgs "ghc" { } // {
+      apply = v: if enabled then config.lsp.servers.hls.ghcPackage else v;
+    };
   };
 
-  config = lib.mkIf cfg.enable {
-    warnings = lib.nixvim.mkWarnings "plugins.lsp.servers.hls" {
-      when = cfg.installGhc == null;
-      message = ''
-        `hls` relies on `ghc` (the Glasgow Haskell Compiler).
-        - Set `plugins.lsp.servers.hls.installGhc = true` to install it automatically with Nixvim.
-          You can customize which package to install by changing `plugins.lsp.servers.hls.ghcPackage`.
-        - Set `plugins.lsp.servers.hls.installGhc = false` to not have it install through Nixvim.
-          By doing so, you will dismiss this warning.
-      '';
+  config = lib.mkIf enabled {
+    lsp.servers.hls = {
+      installGhc = lib.mkIf useInstallGhcValue (
+        lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.installGhc
+      );
+      ghcPackage = lib.mkIf (opts.ghcPackage.highestPrio < 1500) (
+        lib.modules.mkAliasAndWrapDefsWithPriority lib.id opts.ghcPackage
+      );
     };
-
-    extraPackages = lib.optionals (!cfg.packageFallback) ghcPackage;
-    extraPackagesAfter = lib.optionals cfg.packageFallback ghcPackage;
   };
 }
