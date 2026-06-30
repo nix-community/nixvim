@@ -10,6 +10,12 @@ let
 
   defaultPkgs = pkgs;
 
+  # A fake nixpkgs source that can be imported
+  mockNixpkgs = {
+    inherit lib;
+    outPath = ./nixpkgs-mock.nix;
+  };
+
   # Only imports the bare minimum modules, to ensure we are not accidentally evaluating `pkgs.*`
   evalModule =
     name: module:
@@ -109,7 +115,7 @@ linkFarmFromDrvs "nixpkgs-module-test" [
   (testModule "nixpkgs-source" (
     { pkgs, ... }:
     {
-      nixpkgs.source = ./nixpkgs-mock.nix;
+      nixpkgs.source = mockNixpkgs;
 
       nixpkgs.hostPlatform = {
         inherit (stdenv.hostPlatform) system;
