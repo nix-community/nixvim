@@ -16,6 +16,13 @@ let
 
   optionDefaultPrio = (lib.mkOptionDefault null).priority;
 
+  # lib.systems.elaborate is sensitive to Nixpkgs revision, so import a `lib` instance from the Nixpkgs revision we're constructing.
+  libForPkgs =
+    if opt.source.highestPrio == optionDefaultPrio then
+      lib
+    else
+      cfg.source.lib or (import cfg.source + "/lib");
+
   isConfig = x: builtins.isAttrs x || lib.isFunction x;
 
   mergeConfig =
@@ -156,7 +163,7 @@ in
       example = {
         system = "aarch64-linux";
       };
-      apply = lib.systems.elaborate;
+      apply = libForPkgs.systems.elaborate;
       defaultText = lib.literalMD ''
         - Inherited from the "host" configuration's `pkgs`
         - Or `evalNixvim`'s `system` argument
@@ -186,11 +193,11 @@ in
       apply =
         value:
         let
-          elaborated = lib.systems.elaborate value;
+          elaborated = libForPkgs.systems.elaborate value;
         in
         # If equivalent to `hostPlatform`, make it actually identical so that `==` can be used
         # See https://github.com/NixOS/nixpkgs/issues/278001
-        if lib.systems.equals elaborated cfg.hostPlatform then cfg.hostPlatform else elaborated;
+        if libForPkgs.systems.equals elaborated cfg.hostPlatform then cfg.hostPlatform else elaborated;
       defaultText = lib.literalMD ''
         Inherited from the "host" configuration's `pkgs`.
         Or `config.nixpkgs.hostPlatform` when building a standalone nixvim.
