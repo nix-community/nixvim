@@ -32,6 +32,7 @@ jobs:
           app-id: ${{ vars.CI_APP_ID }}
           private-key: ${{ secrets.CI_APP_PRIVATE_KEY }}
           permission-contents: write
+          permission-workflows: write
           permission-pull-requests: write
 
       - uses: actions/checkout@v7
