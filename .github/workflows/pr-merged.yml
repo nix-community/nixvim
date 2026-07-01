@@ -77,6 +77,7 @@ jobs:
         id: checkout
         uses: actions/checkout@v7
         with:
+          ref: ${{ github.base_ref }}
           sparse-checkout: |
             flake/dev/diff-plugins.py
             flake.lock
