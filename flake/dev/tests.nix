@@ -9,6 +9,6 @@
     in
     {
       checks = tests.flakeCheck;
-      ci.buildbot = tests.buildbot;
+      ci.nixbot = tests.nixbot;
     };
 }
