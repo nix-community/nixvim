@@ -92,7 +92,7 @@ in
   # TODO: consider whether all these tests are needed in the `checks` output
   flakeCheck = misc // docs // platforms // packages // mainDrv;
 
-  # TODO: consider whether all these tests are needed to be built by buildbot
-  buildbot =
+  # TODO: consider whether all these tests are needed to be built by nixbot
+  nixbot =
     lib.optionalAttrs (system == "x86_64-linux") (misc // docs // mainGrouped) // platforms // packages;
 }

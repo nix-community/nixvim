@@ -8,13 +8,13 @@ in
   perSystem = {
     # per-system CI options
     options.ci = {
-      buildbot = lib.mkOption {
+      nixbot = lib.mkOption {
         type = types.lazyAttrsOf types.raw;
         default = { };
         description = ''
-          A set of tests for [buildbot] to run.
+          A set of tests for [nixbot] to run.
 
-          [buildbot]: https://buildbot.nix-community.org
+          [nixbot]: https://nixbot.nix-community.org/repos/github/nix-community/nixvim
         '';
       };
     };
@@ -38,7 +38,7 @@ in
 
     # Transpose per-system definitions to the top-level
     config.ci = {
-      buildbot = builtins.mapAttrs (_: sysCfg: sysCfg.ci.buildbot) config.allSystems;
+      nixbot = builtins.mapAttrs (_: sysCfg: sysCfg.ci.nixbot) config.allSystems;
     };
   };
 }
