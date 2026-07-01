@@ -1,6 +1,8 @@
 {
   description = "Private inputs for development purposes. These are used by the top level flake in the `dev` partition, but do not appear in consumers' lock files.";
 
+  # Avoid `flake = true` when we do not need to evaluate flake outputs or fetch flake inputs.
+  # e.g. when we only import loose files.
   inputs = {
     # Nix 2.26 improved support for relative path flake inputs.
     # This dev-flake is only evaluated by flake-parts' flake-compat,
@@ -16,23 +18,22 @@
     # keep-sorted start block=yes newline_separated=yes
     devshell = {
       url = "github:numtide/devshell";
-      inputs.nixpkgs.follows = "nixvim/nixpkgs";
+      flake = false;
     };
 
     git-hooks = {
       url = "github:cachix/git-hooks.nix";
-      inputs.nixpkgs.follows = "nixvim/nixpkgs";
-      inputs.flake-compat.follows = "flake-compat";
+      flake = false;
     };
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixvim/nixpkgs";
+      flake = false;
     };
 
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin";
-      inputs.nixpkgs.follows = "nixvim/nixpkgs";
+      flake = false;
     };
 
     nuschtosSearch = {
@@ -43,7 +44,7 @@
 
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixvim/nixpkgs";
+      flake = false;
     };
 
     # keep-sorted end

@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   imports = [
-    inputs.git-hooks.flakeModule
+    "${inputs.git-hooks}/flake-module.nix"
   ];
 
   perSystem =
