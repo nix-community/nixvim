@@ -21,7 +21,7 @@ let
     if opt.source.highestPrio == optionDefaultPrio then
       lib
     else
-      cfg.source.lib or (import cfg.source + "/lib");
+      cfg.source.lib or (import (cfg.source + "/lib"));
 
   isConfig = x: builtins.isAttrs x || lib.isFunction x;
 
