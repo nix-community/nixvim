@@ -1,0 +1,18 @@
+[project]
+name = "multipage-render-docs"
+version = "0.0"
+description = "Harness nixos-render-docs for multiple page sections"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+[project.scripts]
+multipage-render-docs = "multipage_render_docs:main"
+
+[build-system]
+requires = ["setuptools"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]

@@ -83,6 +83,14 @@ in
       type = lib.types.listOf contentType;
       default = [ ];
       description = "Optional content sections rendered after the title.";
+      # Give each section a unique ID, based on `loc`
+      apply = lib.imap0 (
+        i: section:
+        section
+        // {
+          id = lib.concatMapStringsSep "." toString (cfg.loc ++ [ i ]);
+        }
+      );
     };
     toMenu = lib.mkOption {
       type = lib.types.functionTo lib.types.str;
@@ -115,6 +123,11 @@ in
       '';
       readOnly = true;
     };
+    pages = lib.mkOption {
+      type = lib.types.listOf lib.types.raw;
+      description = "This page, its children, their children, etc.";
+      readOnly = true;
+    };
   };
 
   config._page = {
@@ -122,5 +135,13 @@ in
       inherit lib;
       optionNames = builtins.attrNames options;
     };
+
+    pages = lib.pipe options [
+      builtins.attrNames
+      (removeAttrs config)
+      builtins.attrValues
+      (lib.concatMap (x: x._page.pages))
+      (children: [ cfg ] ++ children)
+    ];
   };
 }

@@ -65,6 +65,12 @@ in
       description = "The rendered menu.";
       readOnly = true;
     };
+
+    pages = lib.mkOption {
+      type = lib.types.listOf lib.types.raw;
+      description = "All pages in the category.";
+      readOnly = true;
+    };
   };
 
   config._category = {
@@ -85,5 +91,7 @@ in
         (builtins.concatStringsSep "\n")
       ]}
     '';
+
+    pages = lib.concatMap (x: x._page.pages) (builtins.attrValues pages);
   };
 }
