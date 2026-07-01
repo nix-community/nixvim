@@ -41,6 +41,8 @@ jobs:
           # Unsafely checkout the PR HEAD.
           # backport-action does not execute any code from the checkout.
           allow-unsafe-pr-checkout: true
+          # backport-action needs git credentials to operate.
+          persist-credentials: true
 
       - name: Create backport PRs
         id: backport
