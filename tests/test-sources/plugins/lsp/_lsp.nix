@@ -96,37 +96,38 @@
     };
   };
 
-  volar-tsls-integration =
-    { config, ... }:
-    {
-      plugins.lsp = {
-        enable = true;
-        servers = {
-          volar.enable = true;
-          ts_ls = {
-            enable = true;
-            filetypes = [ "typescript" ];
-          };
-        };
-      };
-
-      assertions = [
-        {
-          assertion = lib.any (x: x == "vue") config.plugins.lsp.servers.ts_ls.filetypes;
-          message = "Expected `vue` filetype configuration.";
-        }
-        {
-          assertion = lib.any (
-            x: x.name == "@vue/typescript-plugin"
-          ) config.plugins.lsp.servers.ts_ls.extraOptions.init_options.plugins;
-          message = "Expected `@vue/typescript-plugin` plugin.";
-        }
-        {
-          assertion = lib.any (x: x == "typescript") config.plugins.lsp.servers.ts_ls.filetypes;
-          message = "Expected `typescript` filetype configuration.";
-        }
-      ];
-    };
+  # TODO: Test disabled on 2026-07-02 because the volar LS depends on insecure pnpm-9.15.9
+  # volar-tsls-integration =
+  #   { config, ... }:
+  #   {
+  #     plugins.lsp = {
+  #       enable = true;
+  #       servers = {
+  #         volar.enable = true;
+  #         ts_ls = {
+  #           enable = true;
+  #           filetypes = [ "typescript" ];
+  #         };
+  #       };
+  #     };
+  #
+  #     assertions = [
+  #       {
+  #         assertion = lib.any (x: x == "vue") config.plugins.lsp.servers.ts_ls.filetypes;
+  #         message = "Expected `vue` filetype configuration.";
+  #       }
+  #       {
+  #         assertion = lib.any (
+  #           x: x.name == "@vue/typescript-plugin"
+  #         ) config.plugins.lsp.servers.ts_ls.extraOptions.init_options.plugins;
+  #         message = "Expected `@vue/typescript-plugin` plugin.";
+  #       }
+  #       {
+  #         assertion = lib.any (x: x == "typescript") config.plugins.lsp.servers.ts_ls.filetypes;
+  #         message = "Expected `typescript` filetype configuration.";
+  #       }
+  #     ];
+  #   };
 
   tsls-filetypes =
     { config, ... }:

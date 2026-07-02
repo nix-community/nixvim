@@ -37,6 +37,11 @@ let
     let
 
       disabled = [
+        # 2026-07-02 insecure dependency (pnpm-9.15.9)
+        "stylelint_lsp"
+        "volar"
+        "vue_ls"
+
         # 2026-02-02 build failure
         "crystalline"
 
