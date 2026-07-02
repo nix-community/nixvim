@@ -148,7 +148,10 @@ in
       cljstyle = "cljstyle";
       cmake_format = "cmake-format";
       cmake_lint = "cmake-format";
-      credo = "elixir";
+      credo = [
+        "beamPackages"
+        "elixir"
+      ];
       crystal_format = "crystal";
       cue_fmt = "cue";
       d2_fmt = "d2";
@@ -190,7 +193,10 @@ in
       markdownlint = "markdownlint-cli";
       markdownlint_cli2 = "markdownlint-cli2";
       meson_format = "meson";
-      mix = "elixir";
+      mix = [
+        "beamPackages"
+        "elixir"
+      ];
       nimpretty = "nim";
       nixpkgs_fmt = "nixpkgs-fmt";
       opacheck = "open-policy-agent";
@@ -237,7 +243,10 @@ in
         "sqlparse"
       ];
       staticcheck = "go-tools";
-      surface = "elixir";
+      surface = [
+        "beamPackages"
+        "elixir"
+      ];
       swift_format = "swift-format";
       swiftformat = "swiftformat";
       swiftlint = "swiftlint";
