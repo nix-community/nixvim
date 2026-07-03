@@ -190,7 +190,7 @@ url = "https://github.com/literally-sai/vermvim"
 owner = "carl0xs"
 title = "nixcfg"
 description = "Nix configuration setup, including nixvim"
-url = "https://github.com/carl0xs/nixcfg/blob/main/modules/workstation/neovim.nix"
+url = "https://github.com/carl0xs/nixcfg/blob/main/modules/nvim/default.nix"
 
 [[config]]
 owner = "ar-at-localhost"
