@@ -98,9 +98,19 @@ let
       inherit transformOptions;
     }).optionsJSON;
 
+  multipage-render-docs = pkgs.python3.pkgs.callPackage ./multipage-render-docs { };
+
+  renderDocs = pkgs.callPackage ./modules/render.nix {
+    inherit
+      lib
+      nixvim
+      transformOptions
+      multipage-render-docs
+      ;
+  };
 in
 lib.fix (self: {
-  inherit options-json;
+  inherit options-json multipage-render-docs;
   inherit (pkgs) nixos-render-docs;
 
   gfm-alerts-to-admonitions = pkgs.python3.pkgs.callPackage ./gfm-alerts-to-admonitions { };
@@ -110,9 +120,13 @@ lib.fix (self: {
     inherit (self) lib-docs;
   };
 
-  lib-docs = pkgs.callPackage ./lib {
-    inherit nixvim lib;
-  };
+  # TODO: combine beta (option) docs with lib-docs
+  beta-docs = renderDocs "nixvim-beta-docs" [
+    ./lib/pages.nix
+    (lib.modules.importApply ./pages/options.nix { inherit configuration; })
+  ];
+
+  lib-docs = renderDocs "nixvim-lib-docs" ./lib/pages.nix;
 
   search = mkNuschtosSearch {
     optionsJSON = options-json + "/share/doc/nixos/options.json";
