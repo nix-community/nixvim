@@ -52,12 +52,6 @@
     githubId = 51029895;
     name = "GGORG";
   };
-  guelakais = {
-    email = "koroyeldiores@gmail.com";
-    github = "Guelakais";
-    githubId = 76840985;
-    name = "GueLaKais";
-  };
   JanKremer = {
     email = "mail@jankremer.eu";
     matrix = "@jankremer:matrix.org";
