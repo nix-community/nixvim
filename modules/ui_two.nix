@@ -13,7 +13,7 @@
 
   config = lib.mkIf (config.ui_two.enable) {
     extraConfigLua = ''
-      require('vim._core.ui2').enable()
+      require('vim._core.ui2').enable(${lib.nixvim.toLuaObject cfg.settings})
     '';
   };
 }
