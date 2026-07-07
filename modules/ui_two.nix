@@ -3,6 +3,9 @@
   config,
   ...
 }:
+let
+  cfg = config.ui2;
+in
 {
   options.ui_two.enable = lib.mkOption {
     type = lib.types.bool;
