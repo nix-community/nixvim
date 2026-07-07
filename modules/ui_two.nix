@@ -7,12 +7,7 @@ let
   cfg = config.ui2;
 in
 {
-  options.ui_two.enable = lib.mkOption {
-    type = lib.types.bool;
-    description = "enables neovim ui2 features";
-    default = false;
-    example = true;
-  };
+  options.ui2.enable = lib.mkEnableOption "Neovim's [experimental UI2](https://neovim.io/doc/user/lua/#ui2)";
 
   config = lib.mkIf (config.ui_two.enable) {
     extraConfigLua = ''
