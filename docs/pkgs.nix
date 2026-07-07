@@ -15,23 +15,17 @@ let
     };
   };
 
-  # Extended nixpkgs instance, with patches to nixos-render-docs
   overlay = final: prev: {
     lib = prev.lib.extend libOverlay;
 
     nixos-render-docs = prev.nixos-render-docs.overrideAttrs (old: {
-      propagatedBuildInputs = old.propagatedBuildInputs ++ [
-        (final.python3.pkgs.callPackage ./gfm-alerts-to-admonitions {
-          # Use the same override as `nixos-render-docs` does, to avoid "duplicate dependency" errors
-          markdown-it-py = final.python3.pkgs.markdown-it-py.overridePythonAttrs { doCheck = false; };
-        })
-      ];
-
       patches = old.patches or [ ] ++ [
-        # Adds support for GFM-style admonitions in rendered commonmark
-        ./0001-nixos-render-docs-Output-GFM-admonition.patch
-        # Adds support for parsing GFM-style admonitions
-        ./0002-nixos-render-docs-Support-gfm-style-admonitions.patch
+        (final.fetchpatch {
+          name = "extend-admonition-support.patch";
+          url = "https://github.com/NixOS/nixpkgs/pull/538502.patch";
+          hash = "sha256-rhAp95lH5fPvdtylIDx+LazoCtgfhs4AOaq8CagTfZ8=";
+          stripLen = 5;
+        })
       ];
     });
   };

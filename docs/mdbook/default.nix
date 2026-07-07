@@ -23,7 +23,12 @@ let
     options:
     (nixosOptionsDoc {
       inherit options transformOptions;
-    }).optionsCommonMark;
+    }).optionsCommonMark.overrideAttrs
+      (prevAttrs: {
+        extraArgs = prevAttrs.extraArgs ++ [
+          "--admonition-style=gfm"
+        ];
+      });
 
   removeUnwanted =
     attrs:
