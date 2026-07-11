@@ -526,6 +526,7 @@
         "eslint_d",
         "fecs",
         "js_standard",
+        "oxfmt",
         "prettier",
         "prettier_d",
         "prettier_eslint",
@@ -541,6 +542,7 @@
         "eslint_d",
         "fecs",
         "js_standard",
+        "oxlint",
         "xo",
         "alex",
         "codespell",
@@ -558,11 +560,12 @@
   "javascriptreact": {
     "formatter": {
       "lang": "javascriptreact",
-      "possible": ["deno_fmt"]
+      "possible": ["deno_fmt", "oxfmt"]
     },
     "linter": {
       "lang": "javascriptreact",
       "possible": [
+        "oxlint",
         "alex",
         "codespell",
         "cspell",
@@ -1297,6 +1300,7 @@
         "eslint",
         "eslint_d",
         "fecs",
+        "oxfmt",
         "prettier",
         "prettier_d",
         "prettier_eslint",
@@ -1310,6 +1314,7 @@
       "possible": [
         "eslint",
         "eslint_d",
+        "oxlint",
         "xo",
         "alex",
         "codespell",
@@ -1327,11 +1332,12 @@
   "typescriptreact": {
     "formatter": {
       "lang": "typescriptreact",
-      "possible": ["deno_fmt"]
+      "possible": ["deno_fmt", "oxfmt"]
     },
     "linter": {
       "lang": "typescriptreact",
       "possible": [
+        "oxlint",
         "alex",
         "codespell",
         "cspell",
