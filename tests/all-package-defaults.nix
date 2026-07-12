@@ -104,6 +104,9 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2026-07-12 transitive build failure: qtspeech
+    "sioyek"
+
     # 2026-05-28: build failure (compiler-rt-libc)
     "ols"
 
