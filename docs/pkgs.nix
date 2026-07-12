@@ -17,17 +17,6 @@ let
 
   overlay = final: prev: {
     lib = prev.lib.extend libOverlay;
-
-    nixos-render-docs = prev.nixos-render-docs.overrideAttrs (old: {
-      patches = old.patches or [ ] ++ [
-        (final.fetchpatch {
-          name = "extend-admonition-support.patch";
-          url = "https://github.com/NixOS/nixpkgs/pull/538502.patch";
-          hash = "sha256-rhAp95lH5fPvdtylIDx+LazoCtgfhs4AOaq8CagTfZ8=";
-          stripLen = 5;
-        })
-      ];
-    });
   };
 
 in

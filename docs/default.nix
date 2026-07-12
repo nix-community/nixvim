@@ -104,7 +104,6 @@ let
 in
 lib.fix (self: {
   inherit options-json;
-  inherit (pkgs) nixos-render-docs;
 
   man-docs = pkgs.callPackage ./man {
     inherit options-json;
