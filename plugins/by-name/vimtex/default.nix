@@ -30,11 +30,7 @@ lib.nixvim.plugins.mkVimPlugin {
   extraOptions = {
     texlivePackage = lib.mkPackageOption pkgs "texlive" {
       nullable = true;
-      default = [
-        "texlive"
-        "combined"
-        "scheme-medium"
-      ];
+      default = "texliveMedium";
     };
 
     xdotoolPackage = lib.mkPackageOption pkgs "xdotool" {
