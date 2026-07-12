@@ -104,6 +104,9 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2026-07-12 transitive build failure: livekit-libwebrtc
+    "codex"
+
     # 2026-07-12 build failure
     "godot"
 
