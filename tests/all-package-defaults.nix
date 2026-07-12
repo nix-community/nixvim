@@ -53,6 +53,10 @@ let
     "swiftformat"
     "swift-format"
   ]
+  ++ lib.optionals hostPlatform.isLinux [
+    # 2026-07-12 dependency z3 has a build failure
+    "fstar"
+  ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # 2026-06-15: semgrep fails its installCheckPhase
     "semgrep"
