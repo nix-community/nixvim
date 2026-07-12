@@ -40,9 +40,6 @@ let
         # 2026-07-12 dependency z3 has a build failure
         "fstar"
 
-        # 2026-07-12 dependency python3.frictionless has a build failure
-        "vectorcode_server"
-
         # 2026-07-02 insecure dependency (pnpm-9.15.9)
         "stylelint_lsp"
         "volar"

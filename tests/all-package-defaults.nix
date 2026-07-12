@@ -48,10 +48,6 @@ let
     "skim"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isx86_64) [
-    # 2026-07-12 dependency python3.frictionless has a build failure
-    "vectorcode"
-    "vectorcode.nvim"
-
     # TODO: 2026-07-12 dependency swift is broken
     "swiftformat"
     "swift-format"
