@@ -73,6 +73,8 @@ in
       "languagetool"
       "mypy"
       "nixfmt"
+      "oxfmt"
+      "oxlint"
       "php"
       "phpstan"
       "prettier"
