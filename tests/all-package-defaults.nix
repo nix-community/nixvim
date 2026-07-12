@@ -48,6 +48,10 @@ let
     # 2026-07-12 dependency python3.frictionless has a build failure
     "vectorcode"
     "vectorcode.nvim"
+
+    # TODO: 2026-07-12 dependency swift is broken
+    "swiftformat"
+    "swift-format"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # 2026-06-15: semgrep fails its installCheckPhase
