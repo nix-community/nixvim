@@ -22,6 +22,9 @@
       ];
 
       brokenTools = [
+        # TODO: 2026-07-12: transitive broken dependency: py-evm-0.12.1-beta.1 not supported for interpreter python3.14
+        "slither"
+
         # TODO: 2026-01-23: dmd build failure with gcc 15 (nullptr identifier)
         "dfmt"
         "dmd"

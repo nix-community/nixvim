@@ -13,6 +13,9 @@ let
   };
 
   disabledPackages = [
+    # 2026-07-12 transitive broken dependency: py-evm-0.12.1-beta.1 not supported for interpreter python3.14
+    "slither-analyzer"
+
     # 2026-07-02 insecure dependency (pnpm-9.15.9)
     "stylelint-lsp"
     "vue-language-server"
