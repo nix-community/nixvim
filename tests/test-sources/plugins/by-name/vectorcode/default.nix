@@ -3,6 +3,9 @@
   empty =
     { config, ... }:
     {
+      # TODO: 2026-07-12 dependency python3.frictionless has a build failure
+      test.buildNixvim = false;
+
       plugins.vectorcode.enable = true;
 
       assertions = [
@@ -64,6 +67,9 @@
   };
 
   defaults = {
+    # TODO: 2026-07-12 dependency python3.frictionless has a build failure
+    test.buildNixvim = false;
+
     plugins.vectorcode = {
       enable = true;
       settings = {
@@ -98,6 +104,9 @@
   };
 
   example = {
+    # TODO: 2026-07-12 dependency python3.frictionless has a build failure
+    test.buildNixvim = false;
+
     plugins.vectorcode = {
       enable = true;
       settings = {

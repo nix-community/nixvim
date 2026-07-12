@@ -3,6 +3,10 @@ let
   inherit (pkgs.stdenv) hostPlatform;
 
   disabledDeps = [
+    # TODO: 2026-07-12
+    # Dependency python3.frictionless has a build failure
+    "vectorcode"
+
     # TODO: 2025-10-03
     # Transient dependency `vmr` has a build failure
     # https://github.com/NixOS/nixpkgs/issues/431811

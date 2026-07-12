@@ -44,6 +44,11 @@ let
     # 2026-02-05: build failure
     "skim"
   ]
+  ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isx86_64) [
+    # 2026-07-12 dependency python3.frictionless has a build failure
+    "vectorcode"
+    "vectorcode.nvim"
+  ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
     # 2026-06-15: semgrep fails its installCheckPhase
     "semgrep"
