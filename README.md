@@ -152,11 +152,14 @@ flakes, just add the `nixvim` input:
     url = "github:nix-community/nixvim";
     # If you are not running an unstable channel of nixpkgs, select the corresponding branch of Nixvim.
     # url = "github:nix-community/nixvim/nixos-26.05";
-
-    inputs.nixpkgs.follows = "nixpkgs";
   };
 }
 ```
+
+Nixvim is tested against its own Nixpkgs revision. We recommend not overriding
+its `nixpkgs` input with `follows`; see the
+[installation guide](https://nix-community.github.io/nixvim/user-guide/install.html#accessing-nixvim)
+for details.
 
 You can now access the module using `inputs.nixvim.homeModules.nixvim`,
 for a Home Manager installation, `inputs.nixvim.nixosModules.nixvim`, for NixOS,
