@@ -162,6 +162,21 @@ lib.nixvim.plugins.mkNeovimPlugin {
           foldingSubmodule = types.submodule {
             options = {
               enable = lib.mkEnableOption "tree-sitter based folding";
+
+              disable = mkOption {
+                type = lib.types.maybeRaw (types.listOf types.str);
+                default = [ ];
+                example = [
+                  "markdown"
+                  "nix"
+                ];
+                description = ''
+                  Languages or filetypes for which tree-sitter based folding should not be enabled by
+                  Nixvim. A raw Lua function may be used for buffer-specific control; it receives the
+                  tree-sitter language, buffer number, and filetype, in that order, and should return
+                  `true` to disable folding.
+                '';
+              };
             };
           };
         in
@@ -180,6 +195,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
             "Passing a boolean to `${options.plugins.treesitter.folding}` is deprecated, use `${options.plugins.treesitter.folding}.enable`. Definitions: ${lib.options.showDefs options.plugins.treesitter.folding.definitionsWithLocations}"
             {
               enable = x;
+              disable = [ ];
             }
         else
           x;
@@ -189,25 +205,60 @@ lib.nixvim.plugins.mkNeovimPlugin {
       enable = lib.mkEnableOption "tree-sitter based syntax highlighting";
 
       disable = mkOption {
-        type = with types; listOf str;
+        type = lib.types.maybeRaw (types.listOf types.str);
         default = [ ];
         example = [
           "latex"
           "html"
         ];
         description = ''
-          List of languages or filetypes for which tree-sitter based syntax highlighting should not
-          be started by Nixvim.
+          Languages or filetypes for which tree-sitter based syntax highlighting should not be
+          started by Nixvim. A raw Lua function may be used for buffer-specific control; it receives
+          the tree-sitter language, buffer number, and filetype, in that order, and should return
+          `true` to disable highlighting.
 
           This option only applies to Nixvim's native tree-sitter highlighting setup for the modern
           nvim-treesitter main branch. Legacy nvim-treesitter configuration should continue using
           upstream settings under `plugins.treesitter.settings`.
         '';
       };
+
+      enableVimSyntax = mkOption {
+        type = with types; either bool (listOf str);
+        default = false;
+        example = [
+          "latex"
+          "html"
+        ];
+        description = ''
+          Whether to enable Vim's legacy regex syntax highlighting in addition to native tree-sitter
+          highlighting. Set this to `true` for all languages, or provide a list of languages or
+          filetypes for which it should be enabled.
+        '';
+      };
     };
 
     indent = {
       enable = lib.mkEnableOption "tree-sitter based indentation";
+
+      disable = mkOption {
+        type = lib.types.maybeRaw (types.listOf types.str);
+        default = [ ];
+        example = [
+          "python"
+          "yaml"
+        ];
+        description = ''
+          Languages or filetypes for which tree-sitter based indentation should not be enabled by
+          Nixvim. A raw Lua function may be used for buffer-specific control; it receives the
+          tree-sitter language, buffer number, and filetype, in that order, and should return `true`
+          to disable indentation.
+
+          This option only applies to Nixvim's native tree-sitter indentation setup for the modern
+          nvim-treesitter main branch. Legacy nvim-treesitter configuration should continue using
+          upstream settings under `plugins.treesitter.settings`.
+        '';
+      };
     };
 
     grammarPackages = mkOption {
@@ -309,34 +360,67 @@ lib.nixvim.plugins.mkNeovimPlugin {
           ${optionalString (mainBranchSettings != { }) ''
             require'nvim-treesitter'.setup(${lib.nixvim.toLuaObject mainBranchSettings})
           ''}
-          ${optionalString (highlightEnabled || indentEnabled) ''
-            -- Enable features via autocommands for modern nvim-treesitter
-            ${optionalString highlightEnabled ''
-              local disabled_highlight = ${lib.nixvim.toLuaObject cfg.highlight.disable}
-            ''}
-
+          ${optionalString (highlightEnabled || indentEnabled || cfg.folding.enable) ''
+            -- Enable features via an autocommand for modern nvim-treesitter
             vim.api.nvim_create_autocmd('FileType', {
               group = augroup,
               pattern = '*',
               callback = function(args)
-                ${optionalString highlightEnabled ''
-                  local filetype = vim.bo[args.buf].filetype
-                  local lang = vim.treesitter.language.get_lang(filetype) or filetype
-                  local start_highlight = true
+                local buf = args.buf
+                local filetype = vim.bo[buf].filetype
+                local lang = vim.treesitter.language.get_lang(filetype)
+                if not lang then
+                  return
+                end
+                local has_parser = vim.treesitter.language.add(lang)
 
-                  for _, disabled in ipairs(disabled_highlight) do
-                    if disabled == lang or disabled == filetype then
-                      start_highlight = false
-                      break
+                local function has_query(query_name)
+                  return vim.treesitter.query.get(lang, query_name) ~= nil
+                end
+
+                local function add_undo_ftplugin(command)
+                  vim.b.undo_ftplugin = (vim.b.undo_ftplugin and vim.b.undo_ftplugin .. " | " or "") .. command
+                end
+
+                local function is_disabled(disabled)
+                  if type(disabled) == 'function' then
+                    return disabled(lang, buf, filetype)
+                  elseif type(disabled) == 'table' then
+                    for _, disabled_language in ipairs(disabled) do
+                      if disabled_language == lang or disabled_language == filetype then
+                        return true
+                      end
                     end
                   end
 
-                  if start_highlight then
-                    pcall(vim.treesitter.start, args.buf, lang)
+                  return false
+                end
+
+              ${optionalString highlightEnabled ''
+                local disabled_highlight = ${lib.nixvim.toLuaObject cfg.highlight.disable}
+                if has_parser and has_query('highlights') and not is_disabled(disabled_highlight) then
+                  vim.treesitter.start(buf, lang)
+                  add_undo_ftplugin(("call v:lua.vim.treesitter.stop(%d)"):format(buf))
+
+                  local vim_syntax = ${lib.nixvim.toLuaObject cfg.highlight.enableVimSyntax}
+                  if vim_syntax == true or is_disabled(vim_syntax) then
+                    vim.bo[buf].syntax = 'ON'
                   end
-                ''}${optionalString indentEnabled ''
-                  vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-                ''}
+                end
+              ''}${optionalString indentEnabled ''
+                local disabled_indent = ${lib.nixvim.toLuaObject cfg.indent.disable}
+                if has_parser and has_query('indents') and not is_disabled(disabled_indent) then
+                  vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                  add_undo_ftplugin('setlocal indentexpr<')
+                end
+              ''}${optionalString cfg.folding.enable ''
+                local disabled_folding = ${lib.nixvim.toLuaObject cfg.folding.disable}
+                if has_parser and has_query('folds') and not is_disabled(disabled_folding) then
+                  vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+                  vim.wo[0][0].foldmethod = 'expr'
+                  add_undo_ftplugin('setlocal foldexpr< foldmethod<')
+                end
+              ''}
               end,
             })
           ''}
@@ -360,22 +444,6 @@ lib.nixvim.plugins.mkNeovimPlugin {
       pkg: pkg.withPlugins (_: cfg.grammarPackages)
     );
 
-    # NOTE: This autoCmd is declared outside of Lua while the autogroup is created in luaConfig.content.
-    # This is fragile - if module generation order changes, the autocmd might be created before the
-    # autogroup exists (causing failure), or the autogroup's clear=true might clear this autocmd.
-    # The current order happens to work, but changes to nixvim's module system could break this.
-    autoCmd = lib.optional cfg.folding.enable {
-      event = "FileType";
-      group = "nixvim_treesitter";
-      pattern = "*";
-      callback.__raw = ''
-        function()
-          vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-          vim.wo[0][0].foldmethod = 'expr'
-        end
-      '';
-    };
-
     warnings = lib.nixvim.mkWarnings "plugins.treesitter" (
       [
         {
@@ -386,6 +454,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
             `plugins.treesitter.settings.highlight.disable` is an upstream legacy nvim-treesitter
             option. For Nixvim's native highlighting support with the modern nvim-treesitter main
             branch, use `${opt.highlight.disable}` instead.
+          '';
+        }
+        {
+          when =
+            (cfg.settings.indent.disable or null) != null
+            && !(lib.hasInfix "nvim-treesitter-legacy" (lib.getName cfg.package));
+          message = ''
+            `plugins.treesitter.settings.indent.disable` is an upstream legacy nvim-treesitter
+            option. For Nixvim's native indentation support with the modern nvim-treesitter main
+            branch, use `${opt.indent.disable}` instead.
           '';
         }
       ]
