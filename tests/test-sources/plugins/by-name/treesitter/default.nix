@@ -53,8 +53,8 @@
           message = "Treesitter highlight disable check should match language and filetype.";
         }
         {
-          assertion = lib.hasInfix "if has_parser and has_query('highlights') and not is_disabled(disabled_highlight) then" config.content;
-          message = "Treesitter highlight should be enabled only if there are parser and queries, and if not disabled.";
+          assertion = lib.hasInfix "if has_query('highlights') and not is_disabled(disabled_highlight) then" config.content;
+          message = "Treesitter highlight should be enabled only if there are queries, and if not disabled.";
         }
         {
           assertion = lib.hasInfix "vim.treesitter.start(buf, lang)" config.content;
@@ -100,8 +100,8 @@
           message = "Treesitter indentation disable list should be present in generated lua.";
         }
         {
-          assertion = lib.hasInfix "if has_parser and has_query('indents') and not is_disabled(disabled_indent) then" config.content;
-          message = "Treesitter indentation should be enabled only if there are parser and queries, and if not disabled.";
+          assertion = lib.hasInfix "if has_query('indents') and not is_disabled(disabled_indent) then" config.content;
+          message = "Treesitter indentation should be enabled only if there are queries, and if not disabled.";
         }
         {
           assertion = lib.hasInfix ''vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"'' config.content;
@@ -134,8 +134,8 @@
           message = "Treesitter folding disable list should be present in generated lua.";
         }
         {
-          assertion = lib.hasInfix "if has_parser and has_query('folds') and not is_disabled(disabled_folding) then" config.content;
-          message = "Treesitter folding should be enabled only if there are parser and queries, and if not disabled.";
+          assertion = lib.hasInfix "if has_query('folds') and not is_disabled(disabled_folding) then" config.content;
+          message = "Treesitter folding should be enabled only if there are queries, and if not disabled.";
         }
         {
           assertion = lib.hasInfix "vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'" config.content;
