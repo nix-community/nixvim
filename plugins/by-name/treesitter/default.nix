@@ -361,6 +361,18 @@ lib.nixvim.plugins.mkNeovimPlugin {
               group = augroup,
               pattern = '*',
               callback = function(args)
+                local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
+                if not lang or not vim.treesitter.language.add(lang) or not vim.treesitter.query.get(lang, 'folds') then
+                  return
+                end
+
+                local disabled = ${lib.nixvim.toLuaObject cfg.folding.disable}
+                if type(disabled) == 'function' and disabled(lang, args.buf, vim.bo[args.buf].filetype) then
+                  return
+                elseif type(disabled) == 'table' and (vim.list_contains(disabled, lang) or vim.list_contains(disabled, vim.bo[args.buf].filetype)) then
+                  return
+                end
+
                 vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
                 vim.wo[0][0].foldmethod = 'expr'
               end,
