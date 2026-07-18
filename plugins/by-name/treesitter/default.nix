@@ -356,6 +356,16 @@ lib.nixvim.plugins.mkNeovimPlugin {
 
         if has_configs_module then
           require('nvim-treesitter.configs').setup(${lib.nixvim.toLuaObject legacySettings})
+          ${optionalString cfg.folding.enable ''
+            vim.api.nvim_create_autocmd('FileType', {
+              group = augroup,
+              pattern = '*',
+              callback = function(args)
+                vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+                vim.wo[0][0].foldmethod = 'expr'
+              end,
+            })
+          ''}
         else
           ${optionalString (mainBranchSettings != { }) ''
             require'nvim-treesitter'.setup(${lib.nixvim.toLuaObject mainBranchSettings})
