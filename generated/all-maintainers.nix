@@ -77,9 +77,9 @@
     name = "Filippo Airaldi";
     source = "nixpkgs";
   };
-  Fovir-GitHub = {
+  FovirDev = {
     email = "fovir@disroot.org";
-    github = "Fovir-GitHub";
+    github = "FovirDev";
     githubId = 175422207;
     name = "Fovir";
     source = "nixpkgs";
