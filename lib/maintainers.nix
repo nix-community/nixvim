@@ -41,7 +41,7 @@
   };
   Fovir = {
     email = "fovir@disroot.org";
-    github = "Fovir-GitHub";
+    github = "FovirDev";
     githubId = 175422207;
     name = "Fovir";
   };
