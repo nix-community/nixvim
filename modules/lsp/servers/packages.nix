@@ -190,6 +190,20 @@
     # keep-sorted end
   ];
 
+  serverArgs = {
+    tinymist = {
+      description = "Tinymist is a language server for the typesetting system Typst.";
+      config = {
+        extraDescription = ''
+          Configuration options are described in the [Tinymist documentation](https://myriad-dreamin.github.io/tinymist/).
+        '';
+        example = {
+          settings.formatterMode = "typstyle";
+        };
+      };
+    };
+  };
+
   packages = {
     # keep-sorted start block=yes newline_separated=no
     aiken = "aiken";
