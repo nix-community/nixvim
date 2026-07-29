@@ -11,6 +11,7 @@ let
 
   cfg = config.lsp;
   oldCfg = config.plugins.lsp;
+  serverData = import ./packages.nix;
 
   # Create a submodule type from `server.nix`
   # Used as the type for both the freeform `lsp.servers.<name>`
@@ -32,7 +33,11 @@ let
   # Create a server option
   # Used below for the `lsp.servers.*` options
   mkServerOption =
-    { name, ... }@args:
+    {
+      name,
+      description ? null,
+      ...
+    }@args:
     let
       homepage = lib.pipe options.lsp.servers [
         # Get suboptions of `lsp.servers`
@@ -53,10 +58,14 @@ let
       nameLink = if homepage == null then name else "[${name}](${homepage})";
     in
     lib.mkOption {
-      type = mkServerType args;
-      description = ''
-        The ${nameLink} language server.
-      '';
+      type = mkServerType (removeAttrs args [ "description" ]);
+      description =
+        if description == null then
+          ''
+            The ${nameLink} language server.
+          ''
+        else
+          description;
       default = { };
     };
 in
@@ -70,8 +79,14 @@ in
         {
           # Declare explicit options for each `packages.nix` entry with a known package
           options = builtins.mapAttrs (
-            name: package: mkServerOption { inherit name package; }
-          ) (import ./packages.nix).packages;
+            name: package:
+            mkServerOption (
+              {
+                inherit name package;
+              }
+              // (serverData.serverArgs or { }).${name} or { }
+            )
+          ) serverData.packages;
         }
         {
           # `*` is effectively a meta server, where shared config & defaults can be set.
