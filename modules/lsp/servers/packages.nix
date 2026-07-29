@@ -191,6 +191,61 @@
   ];
 
   serverArgs = {
+    # keep-sorted start block=yes newline_separated=yes
+    gopls = {
+      description = "gopls is the official language server for Go.";
+      config = {
+        extraDescription = ''
+          Server settings belong under `settings.gopls` and are described in the [gopls settings documentation](https://go.dev/gopls/settings).
+        '';
+        example = {
+          settings.gopls.gofumpt = true;
+        };
+      };
+    };
+
+    nixd = {
+      description = "nixd is a Nix language server based on Nix libraries.";
+      config = {
+        extraDescription = ''
+          Configuration options are described in the [nixd configuration documentation](https://github.com/nix-community/nixd/blob/main/nixd/docs/configuration.md).
+
+          Replace `hostname` in the example with the relevant `nixosConfigurations` output name.
+        '';
+        example = {
+          settings.nixd.options.nixos.expr =
+            "(builtins.getFlake (builtins.toString ./.)).nixosConfigurations.hostname.options";
+        };
+      };
+    };
+
+    rust_analyzer = {
+      description = "rust-analyzer is a language server that provides IDE functionality for Rust.";
+      config = {
+        extraDescription = ''
+          Server settings belong under `settings."rust-analyzer"` and are described in the [rust-analyzer configuration documentation](https://rust-analyzer.github.io/book/configuration.html).
+        '';
+        example = {
+          settings."rust-analyzer".check.command = "clippy";
+        };
+      };
+    };
+
+    terraformls = {
+      description = "Terraform Language Server provides language features for Terraform configuration.";
+      config = {
+        extraDescription = ''
+          Terraform Language Server reads static configuration from `init_options`; `settings` is not supported. See the [Terraform Language Server settings documentation](https://github.com/hashicorp/terraform-ls/blob/main/docs/SETTINGS.md).
+        '';
+        example = {
+          init_options = {
+            ignoreSingleFileWarning = true;
+            indexing.ignoreDirectoryNames = [ ".direnv" ];
+          };
+        };
+      };
+    };
+
     tinymist = {
       description = "Tinymist is a language server for the typesetting system Typst.";
       config = {
@@ -202,6 +257,21 @@
         };
       };
     };
+
+    yamlls = {
+      description = "YAML Language Server provides validation, completion, formatting, and schema-based intelligence for YAML.";
+      config = {
+        extraDescription = ''
+          Configuration options are described in the [YAML Language Server settings documentation](https://github.com/redhat-developer/yaml-language-server#language-server-settings).
+        '';
+        example = {
+          settings.yaml.schemas = {
+            "https://json.schemastore.org/github-workflow.json" = "/.github/workflows/*";
+          };
+        };
+      };
+    };
+    # keep-sorted end
   };
 
   packages = {
