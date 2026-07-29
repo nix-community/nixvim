@@ -58,6 +58,7 @@ let
 
   docs = lib.optionalAttrs (selfPackages ? docs) {
     # Individual tests can be run using: nix build .#docs.user-configs.tests.<test>
+    docs-options = callTest ./docs-options.nix { inherit selfPackages; };
     docs-user-configs = linkFarm "user-configs-tests" selfPackages.docs.user-configs.tests;
   };
 
