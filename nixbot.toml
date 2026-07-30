@@ -1,1 +1,4 @@
 attribute = "ci.nixbot"
+# Additional branches to build on push.
+# The default branch and merge-queue branches always build.
+build_branches = ["nixos-*"]
