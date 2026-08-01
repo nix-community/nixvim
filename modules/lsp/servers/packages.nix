@@ -274,6 +274,15 @@
         };
       };
     };
+
+    zuban = {
+      config = {
+        extraDescription = ''
+          As described in the [documentation](https://docs.zubanls.com/en/latest/usage.html#configuration) Zuban is configured in the mypy or `pyproject.toml` configuration file of the project, not globally.
+        '';
+        example = { };
+      };
+    };
     # keep-sorted end
   };
 
