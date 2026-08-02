@@ -19,6 +19,8 @@ logging.basicConfig(
     stream=sys.stderr,
 )
 
+logger = logging.getLogger(__name__)
+
 MANUAL_REVIEW_REQUEST_QUERY: Final[str] = """
 query($owner: String!, $repo: String!, $prNumber: Int!) {
   repository(owner: $owner, name: $repo) {
@@ -46,8 +48,6 @@ query($owner: String!, $repo: String!, $prNumber: Int!) {
 class GHError(Exception):
     """Custom exception for errors related to 'gh' CLI commands."""
 
-    pass
-
 
 def run_gh_command(
     args: list[str],
@@ -66,8 +66,8 @@ def run_gh_command(
         )
         return result
     except subprocess.CalledProcessError as e:
-        logging.error("Error running command: %s", " ".join(command))
-        logging.error("Stderr: %s", e.stderr.strip())
+        logger.error("Error running command: %s", " ".join(command))
+        logger.error("Stderr: %s", e.stderr.strip())
         raise GHError(f"Failed to execute gh command: {e}") from e
 
 
@@ -108,7 +108,7 @@ def get_manually_requested_reviewers(
         }
         return manually_requested
     except (GHError, json.JSONDecodeError, KeyError) as e:
-        logging.error("Could not determine manually requested reviewers: %s", e)
+        logger.error("Could not determine manually requested reviewers: %s", e)
         return set()
 
 
@@ -118,7 +118,7 @@ def get_users_from_gh(args: list[str], error_message: str) -> set[str]:
         result = run_gh_command(args)
         return {user.strip() for user in result.stdout.split("\n") if user.strip()}
     except GHError as e:
-        logging.error("%s: %s", error_message, e)
+        logger.error("%s: %s", error_message, e)
         return set()
 
 
@@ -164,13 +164,13 @@ def is_collaborator(owner: str, repo: str, username: str) -> bool:
         return True
 
     if "HTTP 404" in result.stderr:
-        logging.error("'%s' is not a collaborator in this repository.", username)
+        logger.error("'%s' is not a collaborator in this repository.", username)
         return False
     else:
-        logging.error(
+        logger.error(
             "Unexpected error checking collaborator status for '%s'.", username
         )
-        logging.error("Stderr: %s", result.stderr.strip())
+        logger.error("Stderr: %s", result.stderr.strip())
         raise GHError(
             f"Unexpected API error for user '{username}': {result.stderr.strip()}"
         )
@@ -185,7 +185,7 @@ def update_reviewers(
 ) -> None:
     """Adds or removes reviewers from a PR in a single operation per action."""
     if reviewers_to_add:
-        logging.info("Requesting reviews from: %s", ", ".join(reviewers_to_add))
+        logger.info("Requesting reviews from: %s", ", ".join(reviewers_to_add))
         try:
             run_gh_command(
                 [
@@ -197,12 +197,10 @@ def update_reviewers(
                 ]
             )
         except GHError as e:
-            logging.error("Failed to add reviewers: %s", e)
+            logger.error("Failed to add reviewers: %s", e)
 
     if reviewers_to_remove and owner and repo:
-        logging.info(
-            "Removing review requests from: %s", ", ".join(reviewers_to_remove)
-        )
+        logger.info("Removing review requests from: %s", ", ".join(reviewers_to_remove))
         payload = json.dumps({"reviewers": list(reviewers_to_remove)})
         try:
             run_gh_command(
@@ -217,7 +215,7 @@ def update_reviewers(
                 input_data=payload,
             )
         except GHError as e:
-            logging.error("Failed to remove reviewers: %s", e)
+            logger.error("Failed to remove reviewers: %s", e)
 
 
 def main() -> None:
@@ -256,20 +254,20 @@ def main() -> None:
         args.owner, args.repo, args.pr_number, args.bot_user_name
     )
 
-    logging.info("Current Maintainers: %s", " ".join(maintainers) or "None")
-    logging.info("Pending Reviewers: %s", " ".join(pending_reviewers) or "None")
-    logging.info("Past Reviewers: %s", " ".join(past_reviewers) or "None")
-    logging.info("Manually Requested: %s", " ".join(manually_requested) or "None")
+    logger.info("Current Maintainers: %s", " ".join(maintainers) or "None")
+    logger.info("Pending Reviewers: %s", " ".join(pending_reviewers) or "None")
+    logger.info("Past Reviewers: %s", " ".join(past_reviewers) or "None")
+    logger.info("Manually Requested: %s", " ".join(manually_requested) or "None")
 
     # --- 2. Determine reviewers to remove ---
     reviewers_to_remove: set[str] = set()
     if no_plugin_files:
         reviewers_to_remove = pending_reviewers - manually_requested
-        logging.info("No plugin files changed. Removing bot-requested reviewers.")
+        logger.info("No plugin files changed. Removing bot-requested reviewers.")
     else:
         outdated_reviewers = pending_reviewers - maintainers
         reviewers_to_remove = outdated_reviewers - manually_requested
-        logging.info("Removing outdated bot-requested reviewers.")
+        logger.info("Removing outdated bot-requested reviewers.")
 
     if reviewers_to_remove:
         update_reviewers(
@@ -279,7 +277,7 @@ def main() -> None:
             reviewers_to_remove=reviewers_to_remove,
         )
     else:
-        logging.info("No reviewers to remove.")
+        logger.info("No reviewers to remove.")
 
     # --- 3. Determine new reviewers to add ---
     reviewers_to_add: set[str] = set()
@@ -295,14 +293,14 @@ def main() -> None:
 
         non_collaborators = potential_reviewers - reviewers_to_add
         if non_collaborators:
-            logging.warning(
+            logger.warning(
                 "Ignoring non-collaborators: %s", ", ".join(non_collaborators)
             )
 
     if reviewers_to_add:
         update_reviewers(args.pr_number, reviewers_to_add=reviewers_to_add)
     else:
-        logging.info("No new reviewers to add.")
+        logger.info("No new reviewers to add.")
 
 
 if __name__ == "__main__":
