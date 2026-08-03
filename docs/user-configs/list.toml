@@ -207,3 +207,8 @@ description = "Standalone NixVim config for x86_64-linux featuring 25 language s
 owner = "allen-liaoo"
 repo = "nvimx"
 description = "Project based, modular Neovim. Contains language-specific presets."
+
+[[config]]
+owner = "rbpatt2019"
+repo = "minixvim"
+description = "A nixvim configuration powered (mostly) by mini.nvim"
