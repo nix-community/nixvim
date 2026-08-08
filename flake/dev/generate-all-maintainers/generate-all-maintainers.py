@@ -72,22 +72,26 @@ class MetaMaintainerGenerator:
                 capture_output=True,
                 text=True,
                 timeout=60,
+                check=True,
             )
-
-            if result.returncode == 0:
-                data = json.loads(result.stdout)
-                print("✅ Successfully extracted maintainers using meta.maintainers")
-                return data
-            else:
-                print(f"❌ Failed to extract maintainers: {result.stderr}")
-                sys.exit(1)
-
         except subprocess.TimeoutExpired:
             print("❌ Timeout while extracting maintainers")
             sys.exit(1)
-        except Exception as e:
+        except subprocess.CalledProcessError as e:
+            print(f"❌ Failed to extract maintainers: {e.stderr}")
+            sys.exit(1)
+        except OSError as e:
             print(f"❌ Error extracting maintainers: {e}")
             sys.exit(1)
+
+        try:
+            data = json.loads(result.stdout)
+        except json.JSONDecodeError as e:
+            print(f"❌ Error parsing extracted maintainers: {e}")
+            sys.exit(1)
+
+        print("✅ Successfully extracted maintainers using meta.maintainers")
+        return data
 
     def generate_maintainers_file(self) -> None:
         """Generate the complete all-maintainers.nix file."""
@@ -132,23 +136,23 @@ class MetaMaintainerGenerator:
     def validate_generated_file(self) -> bool:
         """Validate the generated Nix file syntax."""
         try:
-            result = subprocess.run(
+            subprocess.run(
                 ["nix-instantiate", "--eval", str(self.output_file), "--strict"],
                 capture_output=True,
                 text=True,
                 timeout=10,
+                check=True,
             )
-
-            if result.returncode == 0:
-                print("✅ Generated file has valid Nix syntax")
-                return True
-            else:
-                print("❌ Warning: Generated file has Nix syntax errors")
-                print(result.stderr[:500])
-                return False
-        except Exception as e:
+        except subprocess.CalledProcessError as e:
+            print("❌ Warning: Generated file has Nix syntax errors")
+            print(e.stderr[:500])
+            return False
+        except (OSError, subprocess.TimeoutExpired) as e:
             print(f"Warning: Could not validate file: {e}")
             return False
+
+        print("✅ Generated file has valid Nix syntax")
+        return True
 
     def print_statistics(self, maintainer_data: dict) -> None:
         """Print generation statistics."""
@@ -203,7 +207,7 @@ def main():
     except KeyboardInterrupt:
         print("\n❌ Generation cancelled by user")
         sys.exit(1)
-    except Exception as e:
+    except (OSError, KeyError) as e:
         print(f"❌ Error generating maintainers file: {e}")
         sys.exit(1)
 

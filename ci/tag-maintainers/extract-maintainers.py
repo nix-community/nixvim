@@ -11,7 +11,6 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import List
 
 
 def run_nix_eval(file: str, *args: str) -> str:
@@ -30,7 +29,7 @@ def run_nix_eval(file: str, *args: str) -> str:
         sys.exit()
 
 
-def extract_maintainers(changed_files: List[str], pr_author: str) -> List[str]:
+def extract_maintainers(changed_files: list[str], pr_author: str) -> list[str]:
     """Extract maintainers from changed plugin files."""
     if not changed_files:
         print("No plugin files changed. No maintainers to tag.", file=sys.stderr)

@@ -1,0 +1,7 @@
+[lint]
+ignore = [
+  # Some of our scripts are run through `nix-shell` as an interpreter, which
+  # requires a second `#!nix-shell ...` line right after the shebang.
+  # See https://nix.dev/manual/nix/latest/command-ref/nix-shell#use-as-a-interpreter
+  "EXE005",
+]
