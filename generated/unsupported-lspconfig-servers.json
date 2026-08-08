@@ -13,6 +13,7 @@
   "openedge_ls",
   "pkgbuild_language_server",
   "relay_lsp",
+  "rls",
   "sourcery",
   "vdmj",
   "vuels"
