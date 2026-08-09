@@ -57,6 +57,9 @@ let
     "fstar"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+    # 2026-08-09: build failure
+    "ponyc"
+
     # 2026-06-15: semgrep fails its installCheckPhase
     "semgrep"
 
