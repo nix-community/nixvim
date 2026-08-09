@@ -50,6 +50,7 @@
     "esbonio"
     "expert"
     "facility_language_server"
+    "fallow"
     "fennel_language_server"
     "flux_lsp"
     "foam_ls"
@@ -84,6 +85,7 @@
     "julials"
     "kakehashi"
     "kcl"
+    "kdl_lsp"
     "kotlin_lsp"
     "kulala_ls"
     "laravel_ls"
@@ -125,6 +127,7 @@
     "puppet"
     "purescriptls"
     "pyre"
+    "pytest_language_server"
     "r_language_server"
     "racket_langserver"
     "raku_navigator"
@@ -164,6 +167,7 @@
     "svlangserver"
     "tabby_ml"
     "termux_language_server"
+    "terragrunt_ls"
     "theme_check"
     "tsp_server"
     "turbo_ls"
@@ -183,6 +187,7 @@
     # coqPackages.vscoq-language-server is unavailable since the bump to coq 9.0: https://github.com/NixOS/nixpkgs/pull/389454
     "vscoqtop"
     "wc_language_server"
+    "wolfram_lsp"
     "yang_lsp"
     "yls"
     "ziggy"
@@ -396,6 +401,7 @@
     matlab_ls = "matlab-language-server";
     mesonlsp = "mesonlsp";
     metals = "metals";
+    microcad_lsp = "microcad";
     millet = "millet";
     mint = "mint";
     mlir_lsp_server = [
@@ -462,8 +468,6 @@
     regal = "regal";
     regols = "regols";
     rescriptls = "rescript-language-server";
-    # This is not entirely true, but the server is deprecated
-    rls = "rustup";
     roslyn_ls = "roslyn-ls";
     rubocop = "rubocop";
     ruby_lsp = "ruby-lsp";
