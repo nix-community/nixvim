@@ -103,6 +103,9 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2026-08-09 build failure
+    "oxlint"
+
     # 2026-07-12 build failure
     "R"
 
