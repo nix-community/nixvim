@@ -28,4 +28,9 @@ lib.nixvim.plugins.mkNeovimPlugin {
       };
     };
   };
+
+  extraConfig = {
+    # Native library is in lib/libblink_pairs_parser.so
+    performance.combinePlugins.pathsToLink = [ "/lib" ];
+  };
 }
