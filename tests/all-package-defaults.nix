@@ -78,6 +78,16 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2026-08-16: dependency build failure (dotnet)
+    "Dafny"
+    "csharpier"
+    "dotnet-runtime-wrapped"
+    "fantomas"
+    "fsautocomplete"
+    "omnisharp-roslyn"
+    "roslyn-ls"
+    "rzls"
+
     # 2026-05-28: build failure (compiler-rt-libc)
     "ols"
 
