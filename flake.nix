@@ -4,7 +4,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    systems.url = "github:nix-systems/default/future-26.11";
+    systems = {
+      url = "github:nix-systems/default/future-26.11";
+      flake = false;
+    };
 
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
