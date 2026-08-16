@@ -13,6 +13,9 @@ let
   };
 
   disabledPackages = [
+    # 2026-08-16: broken dependency "sv-lang"
+    "veridian"
+
     # 2026-07-12: build failure: cpplint_unittest.py:7209: AssertionError
     "cpplint"
 

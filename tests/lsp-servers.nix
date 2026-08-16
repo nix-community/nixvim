@@ -37,6 +37,9 @@ let
     let
 
       disabled = [
+        # 2026-08-16: broken dependency "sv-lang"
+        "veridian"
+
         # 2026-07-12 dependency z3 has a build failure
         "fstar"
 
