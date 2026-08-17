@@ -13,7 +13,13 @@ in
     };
 
     inlayHints = {
-      enable = lib.mkEnableOption "inlay hints globally";
+      enable = lib.mkEnableOption null // {
+        description = ''
+          Whether to enable inlay hints globally.
+
+          See [`:h lsp-inlay_hint`](https://neovim.io/doc/user/lsp/#lsp-inlay_hint)
+        '';
+      };
     };
     codelens = {
       enable = lib.mkEnableOption null // {
