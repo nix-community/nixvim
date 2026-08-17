@@ -15,6 +15,15 @@ in
     inlayHints = {
       enable = lib.mkEnableOption "inlay hints globally";
     };
+    codelens = {
+      enable = lib.mkEnableOption null // {
+        description = ''
+          Whether to enable codelens globally.
+
+          See [`:h lsp-codelens`](https://neovim.io/doc/user/lsp/#lsp-codelens)
+        '';
+      };
+    };
   };
 
   imports = [
@@ -24,7 +33,10 @@ in
   ];
 
   config = {
-    lsp.luaConfig.content = lib.mkIf cfg.inlayHints.enable "vim.lsp.inlay_hint.enable(true)";
+    lsp.luaConfig.content = lib.mkMerge [
+      (lib.mkIf cfg.inlayHints.enable "vim.lsp.inlay_hint.enable(true)")
+      (lib.mkIf cfg.codelens.enable "vim.lsp.codelens.enable(true)")
+    ];
 
     extraConfigLua = lib.mkIf (cfg.luaConfig.content != "") ''
       -- LSP {{{
