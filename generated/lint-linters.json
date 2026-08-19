@@ -60,6 +60,7 @@
   "ghdl",
   "gitleaks",
   "gitlint",
+  "glinter",
   "glslc",
   "golangcilint",
   "hadolint",
