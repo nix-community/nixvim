@@ -145,6 +145,12 @@
     githubId = 37534;
     name = "Paul Hinze";
   };
+  pierreborine = {
+    email = "nixpkgs@thecakeis.top";
+    github = "PierreBorine";
+    githubId = 85021467;
+    name = "Pierre Borine";
+  };
   psfloyd = {
     email = "peter.racoon@gmail.com";
     github = "psfloyd";
