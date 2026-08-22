@@ -12,7 +12,9 @@ let
   overridePlugin =
     plugin:
     plugin.plugin.overrideAttrs (prev: {
-      nativeBuildInputs = lib.remove vimUtils.vimGenDocHook prev.nativeBuildInputs or [ ];
+      nativeBuildInputs = builtins.filter (
+        drv: lib.getName drv != "vim-gen-doc-hook"
+      ) prev.nativeBuildInputs or [ ];
       configurePhase = ''
         ${prev.configurePhase or ""}
         rm -vf doc/tags'';
