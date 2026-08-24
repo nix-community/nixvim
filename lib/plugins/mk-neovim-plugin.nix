@@ -92,13 +92,24 @@ let
               description = ''
                 Whether to generate the standard `require('${moduleName}')${setup}(...)` call for this plugin.
 
-                The default follows the plugin's built-in behavior. Set `false` to
-                disable the generated call. Set `true` to force the call when the plugin
-                disables it or emits it conditionally.
+              ''
+              + (
+                if defaultCallSetup == "optional" then
+                  ''
+                    Explicitly set to `true` to call `${setup}()`, even when `settings` is undefined.
+                    Or set to `false` to disable calling `${setup}()` at all.
+                  ''
+                else if defaultCallSetup then
+                  "Explicitly set to `false` to disable calling `${setup}()`."
+                else
+                  ''
+                    Explicitly set to `true` to force calling `${setup}()`.
 
-                A forced call can emit a duplicate or invalid `setup()`. Some plugins
-                generate custom setup code or have no real `${moduleName}` Lua module.
-              '';
+                    > [!CAUTION]
+                    > A forced call can emit a duplicate or invalid setup.
+                    > Some plugins generate custom setup code or have no real `${moduleName}` Lua module.
+                  ''
+              );
             }
             // lib.optionalAttrs (defaultCallSetup == "optional") {
               defaultText = lib.literalMD "`true` when `settings` is explicitly defined, otherwise `false`.";
