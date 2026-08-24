@@ -60,23 +60,13 @@ let
     let
       cfg = lib.getAttrFromPath loc config;
       opts = lib.getAttrFromPath loc options;
-      userCallSetup = if opts ? callSetup then cfg.callSetup else null;
       settingsWereDefined =
         hasSettings && (opts.settings.highestPrio or optionDefaultPriority) < optionDefaultPriority;
-      effectiveCallSetup = if userCallSetup != null then userCallSetup else defaultCallSetup;
       setupCode = ''
         require('${moduleName}')${setup}(${
           lib.optionalString (cfg ? settings) (lib.nixvim.toLuaObject cfg.settings)
         })
       '';
-      shouldCallSetup =
-        if effectiveCallSetup == true then
-          true
-        else if effectiveCallSetup == "optional" then
-          settingsWereDefined
-        else
-          false;
-      setupContent = lib.optionalString shouldCallSetup setupCode;
 
       luaConfigAtLocation = utils.mkConfigAt configLocation cfg.luaConfig.content;
     in
@@ -94,28 +84,33 @@ let
             example = settingsExample;
           };
         }
-        // lib.optionalAttrs hasLuaConfig (
-          lib.optionalAttrs (defaultCallSetup != false) {
-            callSetup = lib.mkOption {
-              type = with lib.types; nullOr bool;
-              default = null;
+        // lib.optionalAttrs hasLuaConfig {
+          callSetup = lib.mkOption (
+            {
+              type = lib.types.bool;
+              default = if defaultCallSetup == "optional" then settingsWereDefined else defaultCallSetup;
               description = ''
                 Whether to generate the standard `require('${moduleName}')${setup}(...)` call for this plugin.
 
-                By default, this follows the plugin's built-in behavior. Set this to `false`
-                to disable the generated setup call, or to `true` to force it even when the
-                plugin would only call it conditionally.
+                The default follows the plugin's built-in behavior. Set `false` to
+                disable the generated call. Set `true` to force the call when the plugin
+                disables it or emits it conditionally.
+
+                A forced call can emit a duplicate or invalid `setup()`. Some plugins
+                generate custom setup code or have no real `${moduleName}` Lua module.
               '';
-            };
-          }
-          // {
-            luaConfig = lib.mkOption {
-              type = lib.types.pluginLuaConfig;
-              default = { };
-              description = "The plugin's lua configuration";
-            };
-          }
-        )
+            }
+            // lib.optionalAttrs (defaultCallSetup == "optional") {
+              defaultText = lib.literalMD "`true` when `settings` is explicitly defined, otherwise `false`.";
+            }
+          );
+
+          luaConfig = lib.mkOption {
+            type = lib.types.pluginLuaConfig;
+            default = { };
+            description = "The plugin's lua configuration";
+          };
+        }
         // extraOptions
       );
 
@@ -185,7 +180,7 @@ let
             ++ lib.optionals hasLuaConfig [
 
               # Add the plugin setup code `require('foo').setup(...)` to the lua configuration
-              (lib.setAttrByPath loc { luaConfig.content = lib.mkIf (effectiveCallSetup != false) setupContent; })
+              (lib.setAttrByPath loc { luaConfig.content = lib.mkIf cfg.callSetup setupCode; })
 
               # When NOT lazy loading, write `luaConfig.content` to `configLocation`
               (lib.mkIf (!cfg.lazyLoad.enable) luaConfigAtLocation)
