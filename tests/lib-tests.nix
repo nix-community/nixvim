@@ -89,9 +89,43 @@ let
       };
     };
 
-  inlinePluginConfig =
+  neverSetupInlinePlugin =
+    { lib, ... }:
+    lib.nixvim.plugins.mkNeovimPlugin {
+      name = "fake";
+      moduleName = "fake";
+      package = [
+        "vimPlugins"
+        "vim-repeat"
+      ];
+      maintainers = [ ];
+      callSetup = false;
+
+      settingsOptions = {
+        foo = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+        };
+      };
+    };
+
+  noLuaConfigInlinePlugin =
+    { lib, ... }:
+    lib.nixvim.plugins.mkNeovimPlugin {
+      name = "fake";
+      package = [
+        "vimPlugins"
+        "vim-repeat"
+      ];
+      maintainers = [ ];
+      callSetup = false;
+      hasLuaConfig = false;
+      hasSettings = false;
+    };
+
+  inlinePluginEval =
     plugin: module:
-    (lib.nixvim.modules.evalNixvim {
+    lib.nixvim.modules.evalNixvim {
       modules = [
         {
           _module.args.pkgs = lib.mkForce pkgs;
@@ -99,10 +133,13 @@ let
         plugin
         module
       ];
-    }).config.content;
+    };
+
+  inlinePluginConfig = plugin: module: (inlinePluginEval plugin module).config.content;
 
   optionalSetupConfig = inlinePluginConfig optionalSetupInlinePlugin;
   alwaysSetupConfig = inlinePluginConfig alwaysSetupInlinePlugin;
+  neverSetupConfig = inlinePluginConfig neverSetupInlinePlugin;
 
   results = lib.runTests {
     testToLuaObject = {
@@ -645,6 +682,54 @@ let
           };
         in
         lib.hasInfix "require('fake').setup(" content;
+      expected = false;
+    };
+
+    testMkNeovimPluginCallSetupOptionForcesDisabledSetup = {
+      expr =
+        let
+          content = neverSetupConfig {
+            plugins.fake = {
+              enable = true;
+              callSetup = true;
+            };
+          };
+        in
+        lib.hasInfix "require('fake').setup(" content;
+      expected = true;
+    };
+
+    testMkNeovimPluginCallSetupOptionPreservesDisabledSetup = {
+      expr =
+        let
+          content = neverSetupConfig {
+            plugins.fake = {
+              enable = true;
+              callSetup = false;
+            };
+          };
+        in
+        lib.hasInfix "require('fake').setup(" content;
+      expected = false;
+    };
+
+    testMkNeovimPluginCallSetupOptionDefaultsToDisabledSetup = {
+      expr =
+        let
+          content = neverSetupConfig {
+            plugins.fake.enable = true;
+          };
+        in
+        lib.hasInfix "require('fake').setup(" content;
+      expected = false;
+    };
+
+    testMkNeovimPluginWithoutLuaConfigOmitsCallSetupOption = {
+      expr = lib.hasAttrByPath [
+        "plugins"
+        "fake"
+        "callSetup"
+      ] (inlinePluginEval noLuaConfigInlinePlugin { }).options;
       expected = false;
     };
 
