@@ -148,6 +148,13 @@
     name = "Nick Hu";
     source = "nixpkgs";
   };
+  PierreBorine = {
+    email = "nixpkgs@thecakeis.top";
+    github = "PierreBorine";
+    githubId = 85021467;
+    name = "Pierre Borine";
+    source = "nixpkgs";
+  };
   alisonjenkins = {
     email = "alison.juliet.jenkins@gmail.com";
     github = "alisonjenkins";
