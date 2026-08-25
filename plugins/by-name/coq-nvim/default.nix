@@ -8,6 +8,7 @@ let
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "coq-nvim";
+  moduleName = "coq";
   package = "coq_nvim";
   description = "A fast nvim completion engine.";
 
@@ -44,7 +45,7 @@ lib.nixvim.plugins.mkNeovimPlugin {
       coq_settings = cfg.settings;
     };
 
-    plugins.coq-nvim.luaConfig.content = "require('coq')";
+    plugins.coq-nvim.luaConfig.content = lib.mkIf (!cfg.callSetup) "require('coq')";
 
     plugins.lsp = {
       preConfig = ''
