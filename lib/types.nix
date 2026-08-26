@@ -4,7 +4,6 @@ let
   inherit (lib) types;
   inherit (lib.nixvim)
     deprecation
-    mkNullOrStr
     mkNullOrOption
     ;
 
@@ -89,9 +88,9 @@ rec {
 
     # :help nvim_set_hl()
     options = with types; {
-      fg = mkNullOrStr "Color for the foreground (color name or '#RRGGBB').";
-      bg = mkNullOrStr "Color for the background (color name or '#RRGGBB').";
-      sp = mkNullOrStr "Special color (color name or '#RRGGBB').";
+      fg = mkNullOrOption (maybeRaw (either int str)) "Color for the foreground (color name, '#RRGGBB', or 24-bit RGB integer).";
+      bg = mkNullOrOption (maybeRaw (either int str)) "Color for the background (color name, '#RRGGBB', or 24-bit RGB integer).";
+      sp = mkNullOrOption (maybeRaw (either int str)) "Special color (color name, '#RRGGBB', or 24-bit RGB integer).";
       blend = mkNullOrOption (maybeRaw (numbers.between 0 100)) "Integer between 0 and 100.";
       bold = mkNullOrOption (maybeRaw bool) "";
       standout = mkNullOrOption (maybeRaw bool) "";
@@ -104,10 +103,10 @@ rec {
       italic = mkNullOrOption (maybeRaw bool) "";
       reverse = mkNullOrOption (maybeRaw bool) "";
       nocombine = mkNullOrOption (maybeRaw bool) "";
-      link = mkNullOrStr "Name of another highlight group to link to.";
+      link = mkNullOrOption (maybeRaw (either int str)) "Name or id of another highlight group to link to.";
       default = mkNullOrOption (maybeRaw bool) "Don't override existing definition.";
-      ctermfg = mkNullOrStr "Sets foreground of cterm color.";
-      ctermbg = mkNullOrStr "Sets background of cterm color.";
+      ctermfg = mkNullOrOption (maybeRaw (either int str)) "Sets foreground of cterm color (color name or palette index).";
+      ctermbg = mkNullOrOption (maybeRaw (either int str)) "Sets background of cterm color (color name or palette index).";
       cterm = mkNullOrOption (either str attrs) ''
         cterm attribute map, like |highlight-args|.
         If not set, cterm attributes will match those from the attribute map documented above.
