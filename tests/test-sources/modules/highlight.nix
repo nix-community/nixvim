@@ -4,8 +4,10 @@
 
     highlight = {
       MacchiatoRed.fg = "#ed8796";
-      # Boolean attributes take raw Lua, like the string attributes
+      # These two pin the widened types: raw Lua on a boolean, and the
+      # `integer|string` the keyset gives every color attribute.
       Todo.bold.__raw = "true";
+      WarningMsg.ctermfg = 1;
     };
 
     highlightOverride = {
