@@ -4,6 +4,8 @@
 
     highlight = {
       MacchiatoRed.fg = "#ed8796";
+      # Boolean attributes take raw Lua, like the string attributes
+      Todo.bold.__raw = "true";
     };
 
     highlightOverride = {
