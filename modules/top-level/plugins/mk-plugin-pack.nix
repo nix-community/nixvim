@@ -34,6 +34,15 @@ let
       (builtins.concatMap (f: f ps))
     ];
 
+  # nixpkgs reads `plugin.runtimeDeps` in plugin-submodule.nix to suffix PATH
+  # in the neovim wrapper when `autowrapRuntimeDeps` is enabled.
+  runtimeDeps = lib.pipe pluginsToCombine [
+    (builtins.catAttrs "plugin")
+    (builtins.catAttrs "runtimeDeps")
+    builtins.concatLists
+    lib.unique
+  ];
+
   requiredLuaModules = lib.pipe pluginsToCombine [
     (builtins.catAttrs "plugin")
     (builtins.catAttrs "requiredLuaModules")
@@ -65,7 +74,11 @@ let
           fixupPhase
         '';
         passthru = {
-          inherit python3Dependencies;
+          # The wrapper reads these, not the pack build. `python3Dependencies`
+          # is a function, which a derivation attribute cannot hold.
+          # `runtimeDeps` as one would pull every dependency into the pack's
+          # build closure.
+          inherit python3Dependencies runtimeDeps;
         };
       }
       [
