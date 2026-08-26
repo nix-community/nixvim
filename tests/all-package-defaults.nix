@@ -106,6 +106,10 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # 2026-08-26 dependency "dtools" build failure (only in the NixBot CI)
+    # std.file.FileException@std/file.d(1091): Failed to remove file /private/tmp/rdmd_app_: Permission denied
+    "serve-d"
+
     # 2026-08-09 build failure
     "oxlint"
 
