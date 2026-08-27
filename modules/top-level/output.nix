@@ -13,6 +13,21 @@ let
 in
 {
   options = {
+    autoconfigure = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to apply the Lua snippets that Nixpkgs plugins advise through `passthru.initLua`.
+
+        Some plugins need store paths in their Lua configuration, such as
+        `rocks-nvim`'s `luarocks` executable.
+
+        Off by default, because the snippets come from Nixpkgs rather than
+        from your configuration. When enabled, they run before every other
+        part of the config, so anything you set yourself overrides them.
+      '';
+    };
+
     autowrapRuntimeDeps = mkOption {
       type = types.bool;
       default = true;
@@ -220,6 +235,8 @@ in
       wrappedNeovim =
         (pkgs.wrapNeovimUnstable package {
           extraLuaPackages = luaPackagesForWrapper;
+          # Keep upstream `luaRcContent` free of advice; `customRC` owns it below.
+          autoconfigure = false;
           inherit (config)
             autowrapRuntimeDeps
             extraPython3Packages
@@ -259,7 +276,28 @@ in
         wrapRc = false;
       });
 
+      pluginAdvisedLua =
+        let
+          # Packaging transforms rewrite `build.plugins`; collect advice from
+          # `extraPlugins` to preserve membership and order.
+          configuredVimPackageInfo = pkgs.neovimUtils.makeVimPackageInfo config.extraPlugins;
+
+          # `stylua` parses the generated `init.lua`. Match malformed text exactly so
+          # a corrected upstream value flows through.
+          brokenPluginAdvice = [
+            # fzf-hoogle.vim: unterminated string literal
+            "vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json"
+          ];
+        in
+        lib.nixvim.concatNonEmptyLines (
+          builtins.filter (
+            snippet: !builtins.elem snippet brokenPluginAdvice
+          ) configuredVimPackageInfo.pluginAdvisedLua
+        );
+
       customRC = lib.nixvim.concatNonEmptyLines [
+        # Apply advice first so setup calls can use it and explicit configuration wins.
+        (lib.optionalString config.autoconfigure pluginAdvisedLua)
         (lib.nixvim.wrapVimscriptForLua wrappedNeovim.initRc)
         (nvimPackage.passthru.providerLuaRc or "")
         config.content
