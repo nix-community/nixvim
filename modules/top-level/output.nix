@@ -8,11 +8,27 @@
 let
   inherit (lib) types mkOption mkPackageOption;
   inherit (lib) optional;
+  inherit (import ./plugins/utils.nix lib) normalizePlugins;
   builders = lib.nixvim.builders.withPkgs pkgs;
   inherit (pkgs.stdenv.hostPlatform) system;
 in
 {
   options = {
+    autoconfigure = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to apply the Lua snippets that Nixpkgs plugins advise through `passthru.initLua`.
+
+        Some Nixpkgs plugins need extra Lua to work from the nix store.
+        For example, `sqlite-lua` must be told where `libsqlite3` lives.
+
+        Off by default, because the snippets come from Nixpkgs rather than
+        from your configuration. When enabled, they run before every other
+        part of the config, so anything you set yourself overrides them.
+      '';
+    };
+
     autowrapRuntimeDeps = mkOption {
       type = types.bool;
       default = true;
@@ -210,6 +226,10 @@ in
 
       vimPackageInfo = pkgs.neovimUtils.makeVimPackageInfo config.build.plugins;
 
+      # Compare against Nixpkgs using the same pre-combine plugin list.
+      normalizedConfiguredPlugins = normalizePlugins config.extraPlugins;
+      configuredVimPackageInfo = pkgs.neovimUtils.makeVimPackageInfo normalizedConfiguredPlugins;
+
       luaPackagesForWrapper =
         ps:
         extraLuaPackages ps
@@ -220,6 +240,8 @@ in
       wrappedNeovim =
         (pkgs.wrapNeovimUnstable package {
           extraLuaPackages = luaPackagesForWrapper;
+          # Keep upstream `luaRcContent` free of advice; `customRC` owns it below.
+          autoconfigure = false;
           inherit (config)
             autowrapRuntimeDeps
             extraPython3Packages
@@ -259,7 +281,34 @@ in
         wrapRc = false;
       });
 
+      # Packaging transforms rewrite `build.plugins`; collect from `extraPlugins`
+      # to preserve advice membership and order.
+      pluginAdvisedLuaEntries = lib.optionals config.autoconfigure (
+        lib.concatMap (
+          normalizedPlugin:
+          lib.optional (normalizedPlugin.plugin.passthru ? initLua) {
+            pname = lib.getName normalizedPlugin.plugin;
+            inherit (normalizedPlugin.plugin.passthru) initLua;
+          }
+        ) normalizedConfiguredPlugins
+      );
+
+      # `stylua` parses the generated `init.lua`. Match malformed text exactly so
+      # a corrected upstream value flows through.
+      brokenPluginAdvice = {
+        "fzf-hoogle.vim" = "vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json";
+      };
+
+      pluginAdvisedLua = lib.nixvim.concatNonEmptyLines (
+        lib.pipe pluginAdvisedLuaEntries [
+          (builtins.filter (entry: brokenPluginAdvice.${entry.pname} or null != entry.initLua))
+          (builtins.catAttrs "initLua")
+        ]
+      );
+
       customRC = lib.nixvim.concatNonEmptyLines [
+        # Apply advice first so setup calls can use it and explicit configuration wins.
+        (lib.optionalString config.autoconfigure pluginAdvisedLua)
         (lib.nixvim.wrapVimscriptForLua wrappedNeovim.initRc)
         (nvimPackage.passthru.providerLuaRc or "")
         config.content
@@ -426,6 +475,16 @@ in
           message = "`impureRtp = false` requires `wrapRc = true` so Nixvim can suppress system/XDG startup config.";
         }
       ];
+
+      # Tests reject drift warnings at Nixpkgs bumps; user evaluation remains non-fatal.
+      warnings = lib.nixvim.mkWarnings "output" {
+        when =
+          config.autoconfigure
+          &&
+            builtins.catAttrs "initLua" pluginAdvisedLuaEntries
+            != (configuredVimPackageInfo.pluginAdvisedLua or null);
+        message = "Nixvim's plugin advised Lua no longer matches Nixpkgs `vimPackageInfo.pluginAdvisedLua`. Update the collection in `modules/top-level/output.nix`.";
+      };
 
       extraConfigLuaPre = lib.mkOrder 100 (
         lib.concatStringsSep "\n" (
