@@ -78,6 +78,201 @@
         ++ mkConfigAssertions "test.vim" config.files."test.vim".content;
     };
 
+  plugin-advised-lua =
+    {
+      config,
+      pkgs,
+      ...
+    }:
+    let
+      plugin = pkgs.vimUtils.buildVimPlugin {
+        pname = "nixvim-plugin-advised-lua-test";
+        version = "1";
+        src = pkgs.emptyDirectory;
+        passthru.initLua = ''
+          vim.g.nixvim_plugin_advised_lua = "advised1"
+        '';
+      };
+    in
+    {
+      autoconfigure = true;
+
+      extraPlugins = [ plugin ];
+
+      test.extraInputs = [
+        (pkgs.runCommandLocal "plugin-advised-lua-content-test" { } ''
+          if ! grep -qF 'vim.g.nixvim_plugin_advised_lua = "advised1"' "${config.build.initFile}"; then
+              echo "init.lua should contain the plugin's advised Lua snippet" >&2
+              exit 1
+          fi
+
+          touch $out
+        '')
+      ];
+
+      extraConfigLuaPre = ''
+        assert(
+          vim.g.nixvim_plugin_advised_lua == "advised1",
+          "advised Lua was not applied before the user config"
+        )
+      '';
+    };
+
+  plugin-advised-lua-user-override =
+    {
+      config,
+      pkgs,
+      ...
+    }:
+    let
+      plugin = pkgs.vimUtils.buildVimPlugin {
+        pname = "nixvim-plugin-advised-lua-override-test";
+        version = "1";
+        src = pkgs.emptyDirectory;
+        passthru.initLua = ''
+          vim.g.nixvim_advised_lua_override = "advised"
+        '';
+      };
+    in
+    {
+      autoconfigure = true;
+
+      extraPlugins = [
+        {
+          inherit plugin;
+          config = ''let g:nixvim_advised_lua_override = "user"'';
+        }
+      ];
+
+      # An assertion inside init.lua would miss advice appended after it.
+      test.extraInputs = [
+        (pkgs.runCommandLocal "plugin-advised-lua-order-test" { } ''
+          advised=$(grep -n 'nixvim_advised_lua_override = "advised"' "${config.build.initFile}" | cut -d: -f1)
+          user=$(grep -n 'nixvim_advised_lua_override = "user"' "${config.build.initFile}" | cut -d: -f1)
+
+          if [ -z "$advised" ] || [ -z "$user" ]; then
+              echo "init.lua should contain both assignments, got advised='$advised' user='$user'" >&2
+              exit 1
+          fi
+
+          if [ "$advised" -ge "$user" ]; then
+              echo "advised Lua on line $advised should precede \`extraPlugins[].config\` on line $user" >&2
+              exit 1
+          fi
+
+          touch $out
+        '')
+      ];
+    };
+
+  plugin-advised-lua-default-off =
+    {
+      config,
+      pkgs,
+      ...
+    }:
+    let
+      plugin = pkgs.vimUtils.buildVimPlugin {
+        pname = "nixvim-plugin-advised-lua-default-off-test";
+        version = "1";
+        src = pkgs.emptyDirectory;
+        passthru.initLua = ''
+          vim.g.nixvim_plugin_advised_lua = "advised2"
+        '';
+      };
+    in
+    {
+      extraPlugins = [ plugin ];
+
+      test.extraInputs = [
+        (pkgs.runCommandLocal "plugin-advised-lua-default-off-content-test" { } ''
+          if grep -qF 'vim.g.nixvim_plugin_advised_lua = "advised2"' "${config.build.initFile}"; then
+              echo "init.lua should not contain advised Lua unless autoconfigure is on" >&2
+              exit 1
+          fi
+
+          touch $out
+        '')
+      ];
+    };
+
+  plugin-advised-lua-malformed =
+    { pkgs, ... }:
+    {
+      autoconfigure = true;
+
+      extraPlugins = [ pkgs.vimPlugins.fzf-hoogle-vim ];
+
+      # The plugin refuses to load without `hoogle` in `PATH`.
+      test.runNvim = false;
+    };
+
+  # Corrected advice from the same plugin must bypass the exclusion.
+  plugin-advised-lua-corrected =
+    {
+      config,
+      pkgs,
+      ...
+    }:
+    let
+      plugin = pkgs.vimPlugins.fzf-hoogle-vim.overrideAttrs (prev: {
+        passthru = prev.passthru // {
+          initLua = ''
+            vim.g.nixvim_corrected_advice = "corrected"
+          '';
+        };
+      });
+    in
+    {
+      autoconfigure = true;
+
+      extraPlugins = [ plugin ];
+
+      test.extraInputs = [
+        (pkgs.runCommandLocal "plugin-advised-lua-corrected-content-test" { } ''
+          if ! grep -qF 'vim.g.nixvim_corrected_advice = "corrected"' "${config.build.initFile}"; then
+              echo "a corrected snippet from an excluded plugin should still be applied" >&2
+              exit 1
+          fi
+
+          touch $out
+        '')
+      ];
+
+      # The plugin refuses to load without `hoogle` in `PATH`.
+      test.runNvim = false;
+    };
+
+  plugin-advised-lua-byte-compiled =
+    { pkgs, ... }:
+    let
+      plugin = pkgs.vimUtils.buildVimPlugin {
+        pname = "nixvim-plugin-advised-lua-byte-compile-test";
+        version = "1";
+        src = pkgs.emptyDirectory;
+        passthru.initLua = ''
+          vim.g.nixvim_plugin_advised_lua_compiled = "advised3"
+        '';
+      };
+    in
+    {
+      autoconfigure = true;
+
+      performance.byteCompileLua = {
+        enable = true;
+        initLua = true;
+      };
+
+      extraPlugins = [ plugin ];
+
+      extraConfigLuaPre = ''
+        assert(
+          vim.g.nixvim_plugin_advised_lua_compiled == "advised3",
+          "advised Lua was not applied before the user config"
+        )
+      '';
+    };
+
   files-default-empty =
     { config, lib, ... }:
     {
