@@ -53,7 +53,7 @@
           };
           stylua.enable = true;
           # FIXME: re-enable on darwin, currently broken: taplo with options '[format]' failed to apply: exit status 101
-          taplo.enable = pkgs.stdenv.isLinux;
+          taplo.enable = pkgs.stdenv.hostPlatform.isLinux;
           # keep-sorted end
         };
 
