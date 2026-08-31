@@ -1,9 +1,69 @@
-{ lib, config, ... }:
+{
+  lib,
+  config,
+  options,
+  ...
+}:
 let
   cfg = config.lsp;
+  opts = options.lsp;
+
+  # Isolate user code so `return` cannot skip the completion setup that follows.
+  userOnAttachLua = lib.optionalString (cfg.onAttach != "") ''
+    local function __nixvim_user_on_attach()
+      ${cfg.onAttach}
+    end
+
+    __nixvim_user_on_attach()
+  '';
+
+  # Completion needs a client and buffer, so configure it per attached buffer.
+  # Neovim snapshots `completionProvider.triggerCharacters` when completion is
+  # enabled. Run this after `onAttach` so users can extend the list first. See
+  # `:h lsp-attach` and `:h lsp-autocompletion`.
+  # Pass `bufnr` because dynamic registration can target a non-current buffer.
+  completionLua = lib.optionalString cfg.completion.enable ''
+    if client:supports_method('textDocument/completion', bufnr) then
+      vim.lsp.completion.enable(${lib.boolToString cfg.completion.activate}, client.id, bufnr${
+        lib.optionalString (
+          cfg.completion.settings != { }
+        ) ", ${lib.nixvim.toLuaObject cfg.completion.settings}"
+      })
+    end
+  '';
 in
 {
   options.lsp = {
+    completion = {
+      enable = lib.mkEnableOption null // {
+        description = ''
+          Whether Nixvim manages `vim.lsp.completion` for attached clients that
+          support `textDocument/completion`.
+
+          See [`:h lsp-completion`](https://neovim.io/doc/user/lsp/#lsp-completion)
+        '';
+      };
+
+      activate = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        example = false;
+        description = ''
+          Value passed to `vim.lsp.completion.enable()`. To disable completion,
+          set `${opts.completion.enable}` to `true` and this option to `false`.
+        '';
+      };
+
+      settings = lib.nixvim.mkSettingsOption {
+        description = ''
+          Options passed to `vim.lsp.completion.enable()`.
+        '';
+        example = {
+          autotrigger = true;
+        };
+      };
+    };
+
     onAttach = lib.mkOption {
       type = lib.types.lines;
       description = ''
@@ -22,7 +82,7 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.onAttach != "") {
+  config = lib.mkIf (cfg.onAttach != "" || cfg.completion.enable) {
     autoGroups.nixvim_lsp_on_attach.clear = false;
 
     autoCmd = [
@@ -61,7 +121,8 @@ in
 
     extraConfigLua = ''
       local function __nixvim_lsp_on_attach(client, bufnr, event)
-        ${cfg.onAttach}
+        ${userOnAttachLua}
+        ${completionLua}
       end
 
       vim.lsp.handlers["client/registerCapability"] = (function(overridden)
