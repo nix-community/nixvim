@@ -2,14 +2,14 @@
   empty =
     { pkgs, ... }:
     {
-      plugins.perfanno.enable = !pkgs.stdenv.isDarwin;
+      plugins.perfanno.enable = !pkgs.stdenv.hostPlatform.isDarwin;
     };
 
   example =
     { pkgs, ... }:
     {
       plugins.perfanno = {
-        enable = !pkgs.stdenv.isDarwin;
+        enable = !pkgs.stdenv.hostPlatform.isDarwin;
 
         settings = {
           line_highlights.__raw = ''require("perfanno.util").make_bg_highlights(nil, "#CC3300", 10)'';
