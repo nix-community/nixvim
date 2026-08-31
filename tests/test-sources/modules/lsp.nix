@@ -30,6 +30,224 @@
     };
   };
 
+  feature-toggles-defaults =
+    { config, lib, ... }:
+    {
+      assertions = [
+        {
+          assertion = config.lsp.inlayHints.enable == false;
+          message = "Expected lsp.inlayHints.enable to default to false.";
+        }
+        {
+          assertion = config.lsp.codelens.enable == false;
+          message = "Expected lsp.codelens.enable to default to false.";
+        }
+        {
+          assertion = config.lsp.completion.enable == false;
+          message = "Expected lsp.completion.enable to default to false.";
+        }
+        {
+          assertion = config.lsp.completion.settings == { };
+          message = "Expected lsp.completion.settings to default to an empty attrs.";
+        }
+        {
+          assertion = config.lsp.semanticTokens.enable == null;
+          message = "Expected lsp.semanticTokens.enable to default to null.";
+        }
+        {
+          assertion = config.lsp.documentColor.enable == null;
+          message = "Expected lsp.documentColor.enable to default to null.";
+        }
+        {
+          assertion = config.lsp.documentColor.settings == { };
+          message = "Expected lsp.documentColor.settings to default to an empty attrs.";
+        }
+        {
+          assertion = config.lsp.linkedEditingRange.enable == false;
+          message = "Expected lsp.linkedEditingRange.enable to default to false.";
+        }
+        {
+          assertion = config.lsp.onTypeFormatting.enable == false;
+          message = "Expected lsp.onTypeFormatting.enable to default to false.";
+        }
+        {
+          assertion = config.lsp.inlineCompletion.enable == false;
+          message = "Expected lsp.inlineCompletion.enable to default to false.";
+        }
+        {
+          assertion = config.lsp.luaConfig.content == "";
+          message = "Expected LSP feature toggles to emit no global Lua by default.";
+        }
+        {
+          assertion = !lib.hasInfix "__nixvim_lsp_on_attach" config.extraConfigLua;
+          message = "Expected no LSP on-attach handler by default.";
+        }
+      ];
+    };
+
+  feature-toggles-example =
+    { config, lib, ... }:
+    let
+      attachLua = config.extraConfigLua;
+      globalLua = config.lsp.luaConfig.content;
+    in
+    {
+      lsp = {
+        onAttach = "local __nixvim_on_attach_order_probe = true";
+        inlayHints.enable = true;
+        codelens.enable = true;
+        completion = {
+          enable = true;
+          settings.autotrigger = true;
+        };
+        semanticTokens.enable = true;
+        documentColor = {
+          enable = true;
+          settings.style = "virtual";
+        };
+        linkedEditingRange.enable = true;
+        onTypeFormatting.enable = true;
+        inlineCompletion.enable = true;
+      };
+
+      assertions = [
+        {
+          assertion = lib.hasInfix "vim.lsp.inlay_hint.enable(true)" globalLua;
+          message = "Expected inlay hint Lua when enabled.";
+        }
+        {
+          assertion = lib.hasInfix "vim.lsp.codelens.enable(true)" globalLua;
+          message = "Expected codelens Lua when enabled.";
+        }
+        {
+          assertion = lib.hasInfix "vim.lsp.semantic_tokens.enable(true)" globalLua;
+          message = "Expected semantic token Lua when enabled.";
+        }
+        {
+          assertion = lib.hasInfix ''vim.lsp.document_color.enable(true, nil, { style = "virtual" })'' globalLua;
+          message = "Expected document color Lua with settings when enabled.";
+        }
+        {
+          assertion = lib.hasInfix "vim.lsp.linked_editing_range.enable(true)" globalLua;
+          message = "Expected linked editing range Lua when enabled.";
+        }
+        {
+          assertion = lib.hasInfix "vim.lsp.on_type_formatting.enable(true)" globalLua;
+          message = "Expected on-type formatting Lua when enabled.";
+        }
+        {
+          assertion = lib.hasInfix "vim.lsp.inline_completion.enable(true)" globalLua;
+          message = "Expected inline completion Lua when enabled.";
+        }
+        {
+          assertion = lib.hasInfix "client:supports_method('textDocument/completion', bufnr)" attachLua;
+          message = "Expected the completion capability check in the LspAttach callback.";
+        }
+        {
+          assertion = lib.hasInfix "vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })" attachLua;
+          message = "Expected completion Lua with settings in the LspAttach callback.";
+        }
+        {
+          # `enable` snapshots `triggerCharacters`, so `onAttach` must run first.
+          assertion =
+            let
+              beforeEnable = builtins.head (lib.splitString "vim.lsp.completion.enable" attachLua);
+            in
+            lib.hasInfix "__nixvim_on_attach_order_probe" beforeEnable;
+          message = "Expected `onAttach` to run before the completion enable call.";
+        }
+      ];
+    };
+
+  feature-toggles-disabled =
+    { config, lib, ... }:
+    let
+      globalLua = config.lsp.luaConfig.content;
+    in
+    {
+      lsp = {
+        semanticTokens.enable = false;
+        documentColor.enable = false;
+      };
+
+      assertions = [
+        {
+          assertion = lib.hasInfix "vim.lsp.semantic_tokens.enable(false)" globalLua;
+          message = "Expected semantic token Lua when disabled explicitly.";
+        }
+        {
+          assertion = lib.hasInfix "vim.lsp.document_color.enable(false)" globalLua;
+          message = "Expected document color Lua when disabled explicitly.";
+        }
+      ];
+    };
+
+  document-color-settings-need-explicit-enable =
+    { config, lib, ... }:
+    let
+      globalLua = config.lsp.luaConfig.content;
+    in
+    {
+      lsp.documentColor.settings.style = "virtual";
+
+      assertions = [
+        {
+          assertion = !lib.hasInfix "vim.lsp.document_color" globalLua;
+          message = "Expected no document color Lua until `enable` is set.";
+        }
+      ];
+    };
+
+  # Neovim stores `opts` before applying `enable`, so settings survive an
+  # explicit disable for a later manual enable.
+  document-color-disabled-keeps-settings =
+    { config, lib, ... }:
+    let
+      globalLua = config.lsp.luaConfig.content;
+    in
+    {
+      lsp.documentColor = {
+        enable = false;
+        settings.style = "virtual";
+      };
+
+      assertions = [
+        {
+          assertion = lib.hasInfix ''vim.lsp.document_color.enable(false, nil, { style = "virtual" })'' globalLua;
+          message = "Expected document color settings to be kept when disabled.";
+        }
+      ];
+    };
+
+  document-color-enabled-no-settings =
+    { config, lib, ... }:
+    let
+      globalLua = config.lsp.luaConfig.content;
+    in
+    {
+      lsp.documentColor.enable = true;
+
+      assertions = [
+        {
+          assertion = lib.hasInfix "vim.lsp.document_color.enable(true)" globalLua;
+          message = "Expected a bare enable call when document color has no settings.";
+        }
+      ];
+    };
+
+  completion-empty =
+    { config, lib, ... }:
+    {
+      lsp.completion.enable = true;
+
+      assertions = [
+        {
+          assertion = lib.hasInfix "vim.lsp.completion.enable(true, client.id, bufnr, { })" config.extraConfigLua;
+          message = "Expected completion Lua with an empty opts table when no settings are defined.";
+        }
+      ];
+    };
+
   keymaps =
     {
       lib,
