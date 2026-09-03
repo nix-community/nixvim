@@ -74,13 +74,11 @@ let
     name: attrs:
     neovim-unwrapped.lua.pkgs.buildLuarocksPackage (
       let
-        version = "0.0.1";
+        version = "0.0.1-1";
       in
       {
         pname = name;
         inherit version;
-        # write-rockspec appends revision
-        rockspecVersion = "${version}-1";
         src =
           writeTextDir "${name}/init.lua" # lua
             ''
@@ -90,9 +88,13 @@ let
               end
               return M
             '';
-        # Create a simple rockspec manifest
-        postPatch = ''
-          luarocks write-rockspec "${name}" "${version}" .
+        knownRockspec = writeText "${name}-${version}.rockspec" ''
+          rockspec_format = "3.0"
+          package = "${name}"
+          version = "${version}"
+          source = {
+            url = "git://github.com/nix-community/nixvim.git",
+          }
         '';
       }
       // attrs
