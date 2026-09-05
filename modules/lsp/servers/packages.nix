@@ -276,6 +276,39 @@
         };
       };
     };
+
+    zuban = {
+      description = ''
+        Zuban is a language server and linter for Python written in Rust.
+        Zuban needs access to the correct python environment and has a complex way of finding it. If you define a Python environment in a `mkShell` (e.g. used by `nix-shell`, `nix shell` or `nix develop`), it is used if Zuban finds no other environment. It primarily searches for venvs in typical directories in the project. To make sure that the correct one is used, reference the nix-created in the `shellHook` in one of the following ways. Fortunately they are not Zuban-specific:
+        ```
+        pkgs.mkShell {
+          packages = [ (pkgs.python3.withPackages (ps: with ps; [ numpy ])) ];
+          shellHook = "ln -sfn $(which python3 | sed 's|/bin/python3||') .venv";
+        }
+        ```
+        ```
+        let
+          pythonEnv = python.withPackages ( python-pkgs: with python-pkgs; [ numpy ] );
+        in
+        pkgs.mkShell {
+          packages = with pkgs; [ pythonEnv ];
+          shellHook = " ln -snf ''${pythonEnv} .venv ";
+        }
+        ```
+        Zuban also uses the environment variable `$VIRTUAL_ENV` but with a lower priority than virtual environments found in the project directory. Therefore the shellHook in the second variant can be replaced by
+        `shellHook = " export VIRTUAL_ENV=''${pythonEnv} " as long as there are no Python virtual environments in the project directory.
+
+        Another possible `shellHook` directly supplies the Python packages in the `PYTHONPATH`:
+        `export PYTHONPATH="''${pythonEnv}/''${pythonEnv.sitePackages}:$PYTHONPATH"`
+      '';
+      config = {
+        extraDescription = ''
+          As described in the [documentation](https://docs.zubanls.com/en/latest/usage.html#configuration) Zuban is configured in the mypy or `pyproject.toml` configuration file of the project, not globally.
+        '';
+        example = { };
+      };
+    };
     # keep-sorted end
   };
 
