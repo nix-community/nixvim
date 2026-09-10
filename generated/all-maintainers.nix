@@ -55,14 +55,6 @@
     name = "DataHearth";
     source = "nixpkgs";
   };
-  Eveeifyeve = {
-    email = "eveeg1971@gmail.com";
-    github = "Eveeifyeve";
-    githubId = 88671402;
-    matrix = "@eveeifyeve:matrix.org";
-    name = "Eveeifyeve";
-    source = "nixpkgs";
-  };
   FKouhai = {
     email = "frandres00@gmail.com";
     github = "FKouhai";
@@ -251,6 +243,14 @@
     githubId = 50964650;
     name = "gwen";
     source = "nixvim";
+  };
+  eveeifyeve = {
+    email = "open-source@eveeifyeve.dev";
+    github = "eveeifyeve";
+    githubId = 88671402;
+    matrix = "@eveeifyeve:matrix.org";
+    name = "Eveeifyeve";
+    source = "nixpkgs";
   };
   f4z3r = {
     email = "f4z3r-github@pm.me";
