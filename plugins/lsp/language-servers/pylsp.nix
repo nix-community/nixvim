@@ -548,10 +548,7 @@ in
               with cfg.pythonPackage.pkgs;
               {
                 pylsp_mypy = pylsp-mypy.overridePythonAttrs (old: {
-                  postPatch = old.postPatch or "" + ''
-                    substituteInPlace setup.cfg \
-                      --replace-fail "python-lsp-server >=1.7.0" ""
-                  '';
+                  pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "python-lsp-server" ];
                 });
                 isort = pyls-isort.overridePythonAttrs (old: {
                   postPatch = old.postPatch or "" + ''

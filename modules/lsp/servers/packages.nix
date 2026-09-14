@@ -252,13 +252,16 @@
     };
 
     tinymist = {
-      description = "Tinymist is a language server for the typesetting system Typst.";
+      description = "[Tinymist](https://myriad-dreamin.github.io/tinymist/) is a language server for the typesetting system [Typst](https://typst.app/docs/). This language server works well with the plugin [typst-preview](https://nix-community.github.io/nixvim/plugins/typst-preview/index.html), enabled by `plugins.typst-preview.enable = true;`";
       config = {
         extraDescription = ''
-          Configuration options are described in the [Tinymist documentation](https://myriad-dreamin.github.io/tinymist/).
+          Configuration options are described in the [Tinymist documentation](https://myriad-dreamin.github.io/tinymist/config/neovim.html) with some examples [for Neovim](https://myriad-dreamin.github.io/tinymist/frontend/neovim.html#label-Configuration/). Note the extra nesting level with `setting`.
         '';
         example = {
-          settings.formatterMode = "typstyle";
+          settings = {
+            formatterMode = "typstyle";
+            formatterProseWrap = true;
+          };
         };
       };
     };
