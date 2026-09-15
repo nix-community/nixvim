@@ -1,5 +1,131 @@
 { pkgs }:
 {
+  feature-enable-only =
+    { config, lib, ... }:
+    let
+      globalLua = config.lsp.luaConfig.content;
+      expectedLuaNames = {
+        inlayHints = "inlay_hint";
+        codelens = "codelens";
+        semanticTokens = "semantic_tokens";
+        documentColor = "document_color";
+        linkedEditingRange = "linked_editing_range";
+        onTypeFormatting = "on_type_formatting";
+        inlineCompletion = "inline_completion";
+      };
+    in
+    {
+      lsp = lib.mapAttrs (_: _: { enable = true; }) expectedLuaNames;
+
+      assertions = lib.mapAttrsToList (option: luaName: {
+        assertion = lib.hasInfix "vim.lsp.${luaName}.enable(true)" globalLua;
+        message = "Expected `lsp.${option}.enable` to emit `vim.lsp.${luaName}.enable(true)`.";
+      }) expectedLuaNames;
+    };
+
+  feature-forced-off =
+    { config, lib, ... }:
+    {
+      lsp.semanticTokens = {
+        enable = true;
+        activate = false;
+      };
+
+      assertions = [
+        {
+          assertion = lib.hasInfix "vim.lsp.semantic_tokens.enable(false)" config.lsp.luaConfig.content;
+          message = "Expected `activate = false` to emit a disabling call.";
+        }
+      ];
+    };
+
+  feature-disabled-emits-nothing =
+    { config, lib, ... }:
+    {
+      lsp.documentColor = {
+        enable = false;
+        settings.style = "virtual";
+      };
+
+      assertions = [
+        {
+          assertion = !lib.hasInfix "vim.lsp.document_color" config.lsp.luaConfig.content;
+          message = "Expected no document color Lua while `enable` is off.";
+        }
+      ];
+    };
+
+  document-color-settings =
+    { config, lib, ... }:
+    {
+      lsp.documentColor = {
+        enable = true;
+        settings.style = "virtual";
+      };
+
+      assertions = [
+        {
+          assertion = lib.hasInfix ''vim.lsp.document_color.enable(true, nil, { style = "virtual" })'' config.lsp.luaConfig.content;
+          message = "Expected document color settings as the third argument.";
+        }
+      ];
+    };
+
+  completion-survives-onattach-return =
+    { config, lib, ... }:
+    let
+      attachLua = config.extraConfigLua;
+    in
+    {
+      lsp = {
+        completion.enable = true;
+        onAttach = ''
+          if client.name ~= "lua_ls" then
+            return
+          end
+        '';
+      };
+
+      assertions = [
+        {
+          assertion = lib.hasInfix "__nixvim_user_on_attach()" attachLua;
+          message = "Expected the user's `onAttach` body to run in its own function.";
+        }
+        {
+          assertion =
+            let
+              afterUserCall = lib.last (lib.splitString "__nixvim_user_on_attach()" attachLua);
+            in
+            lib.hasInfix "vim.lsp.completion.enable" afterUserCall;
+          message = "Expected the completion call to follow the user's `onAttach`, outside it.";
+        }
+      ];
+    };
+
+  completion-activate =
+    { config, lib, ... }:
+    let
+      attachLua = config.extraConfigLua;
+    in
+    {
+      lsp.completion = {
+        enable = true;
+        activate = false;
+        settings.autotrigger = true;
+      };
+
+      assertions = [
+        {
+          assertion = lib.hasInfix "vim.lsp.completion.enable(false, client.id, bufnr, { autotrigger = true })" attachLua;
+          message = "Expected `activate` and `settings` to reach the completion call.";
+        }
+        {
+          assertion = lib.hasInfix "client:supports_method('textDocument/completion', bufnr)" attachLua;
+          message = "Expected the capability check to pass `bufnr`.";
+        }
+      ];
+    };
+
   example = {
     lsp.servers = {
       "*".config = {
