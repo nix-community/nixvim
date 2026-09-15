@@ -139,6 +139,13 @@
     name = "Jalil David Salamé Messina";
     keys = [ { fingerprint = "7D6B 4D8F EBC5 7CBC 09AC  331F DA33 17E7 5BE9 485C"; } ];
   };
+  libewa = {
+    email = "linus@libewa.xyz";
+    github = "libewa";
+    githubId = 67926131;
+    name = "Linus Warnatz";
+    keys = [ { fingerprint = "EBD0 29E0 73D2 959A 9DC1  A74A 7BCA 3874 C2A0 475C"; } ];
+  };
   phinze = {
     email = "phinze@phinze.com";
     github = "phinze";
