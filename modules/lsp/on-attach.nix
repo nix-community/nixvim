@@ -1,6 +1,19 @@
 { lib, config, ... }:
 let
   cfg = config.lsp;
+
+  # Completion is per client and buffer, so configure it here instead of the
+  # global Lua block. Pass `bufnr` to `supports_method`; otherwise it checks the
+  # current buffer, which is wrong for dynamic registrations.
+  #
+  # Run this after `onAttach`. `enable` snapshots
+  # `completionProvider.triggerCharacters`, so users must extend that list first.
+  # See `:h lsp-attach` and `:h lsp-autocompletion`.
+  completionLua = lib.optionalString cfg.completion.enable ''
+    if client:supports_method('textDocument/completion', bufnr) then
+      vim.lsp.completion.enable(true, client.id, bufnr, ${lib.nixvim.toLuaObject cfg.completion.settings})
+    end
+  '';
 in
 {
   options.lsp = {
@@ -22,7 +35,7 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.onAttach != "") {
+  config = lib.mkIf (cfg.onAttach != "" || cfg.completion.enable) {
     autoGroups.nixvim_lsp_on_attach.clear = false;
 
     autoCmd = [
@@ -62,6 +75,7 @@ in
     extraConfigLua = ''
       local function __nixvim_lsp_on_attach(client, bufnr, event)
         ${cfg.onAttach}
+        ${completionLua}
       end
 
       vim.lsp.handlers["client/registerCapability"] = (function(overridden)
