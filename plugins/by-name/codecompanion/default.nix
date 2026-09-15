@@ -5,7 +5,7 @@ let
     mkNullOrStr'
     mkNullOrStr
     ;
-  inherit (lib) types;
+  inherit (lib) types mkOption;
 in
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "codecompanion";
@@ -13,6 +13,10 @@ lib.nixvim.plugins.mkNeovimPlugin {
   description = "AI-powered coding, seamlessly in Neovim.";
 
   maintainers = [ lib.maintainers.GaetanLepage ];
+
+  imports = [
+    ./extensions
+  ];
 
   settingsOptions = {
     adapters = defaultNullOpts.mkAttrsOf' {
@@ -225,6 +229,12 @@ lib.nixvim.plugins.mkNeovimPlugin {
         use_default_prompts = true;
       };
       pluginDefault = lib.literalExpression "See upstream documentation";
+    };
+
+    extensions = mkOption {
+      type = with types; attrsOf anything;
+      description = "Attribute set for extensions";
+      default = { };
     };
   };
 
