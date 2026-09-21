@@ -13,6 +13,10 @@ let
   };
 
   disabledPackages = [
+    # 2026-09-20: lean4 install prefix build failure
+    # Re-enable when a future lockfile includes https://github.com/NixOS/nixpkgs/pull/563148.
+    "lean4"
+
     # 2026-08-16: broken dependency "sv-lang"
     "veridian"
 
