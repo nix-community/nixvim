@@ -3,6 +3,10 @@ let
   inherit (pkgs.stdenv) hostPlatform;
 
   disabledDeps = [
+    # 2026-09-20: lean4 install prefix build failure
+    # Re-enable when a future lockfile includes https://github.com/NixOS/nixpkgs/pull/563148.
+    "lean"
+
     # TODO: 2025-10-03
     # Transient dependency `vmr` has a build failure
     # https://github.com/NixOS/nixpkgs/issues/431811
