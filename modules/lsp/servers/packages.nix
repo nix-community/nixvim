@@ -537,7 +537,7 @@
     tombi = "tombi";
     ts_ls = "typescript-language-server";
     ts_query_ls = "ts_query_ls";
-    tsgo = "typescript";
+    tsc = "typescript";
     ttags = "ttags";
     ty = "ty";
     typeprof = "ruby";
