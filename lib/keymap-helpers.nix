@@ -139,7 +139,11 @@ rec {
           action = lib.mkOption (
             {
               type = types.maybeRaw types.str;
-              description = "The action to execute.";
+              description = ''
+                The action to execute.
+
+                To run Lua code, set to `lib.generators.mkLuaInline "function () ... end"`
+              '';
             }
             // (optionalAttrs (isAttrs action) action)
             // (optionalAttrs (defaults ? action) { default = defaults.action; })
