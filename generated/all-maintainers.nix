@@ -362,6 +362,18 @@
     name = "Austin Horstman";
     source = "nixpkgs";
   };
+  libewa = {
+    email = "linus@libewa.xyz";
+    github = "libewa";
+    githubId = 67926131;
+    keys = [
+      {
+        fingerprint = "EBD0 29E0 73D2 959A 9DC1  A74A 7BCA 3874 C2A0 475C";
+      }
+    ];
+    name = "Linus Warnatz";
+    source = "nixpkgs";
+  };
   loicreynier = {
     email = "contact@loicreynier.fr";
     github = "loicreynier";
