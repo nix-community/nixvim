@@ -89,9 +89,15 @@ rec {
     # :help nvim_set_hl()
     options = with types; {
       fg = mkNullOrOption (maybeRaw (either int str)) "Color for the foreground (color name, '#RRGGBB', or 24-bit RGB integer).";
+      fg_indexed = mkNullOrOption (maybeRaw bool) "Same as `bg_indexed`, for `fg` and `ctermfg`.";
       bg = mkNullOrOption (maybeRaw (either int str)) "Color for the background (color name, '#RRGGBB', or 24-bit RGB integer).";
+      bg_indexed = mkNullOrOption (maybeRaw bool) ''
+        If true, `bg` is an RGB approximation of `ctermbg` (a palette index).
+        UIs rendering cterm natively may prefer `ctermbg`.
+      '';
       sp = mkNullOrOption (maybeRaw (either int str)) "Special color (color name, '#RRGGBB', or 24-bit RGB integer).";
       blend = mkNullOrOption (maybeRaw (numbers.between 0 100)) "Integer between 0 and 100.";
+      blink = mkNullOrOption (maybeRaw bool) "";
       bold = mkNullOrOption (maybeRaw bool) "";
       standout = mkNullOrOption (maybeRaw bool) "";
       underline = mkNullOrOption (maybeRaw bool) "";
@@ -102,9 +108,36 @@ rec {
       strikethrough = mkNullOrOption (maybeRaw bool) "";
       italic = mkNullOrOption (maybeRaw bool) "";
       reverse = mkNullOrOption (maybeRaw bool) "";
+      overline = mkNullOrOption (maybeRaw bool) "";
       nocombine = mkNullOrOption (maybeRaw bool) "";
+      dim = mkNullOrOption (maybeRaw bool) "";
+      conceal = mkNullOrOption (maybeRaw bool) ''
+        Concealment at the UI level (terminal SGR), unrelated to |:syn-conceal|.
+      '';
+      altfont = mkNullOrOption (maybeRaw bool) "";
       link = mkNullOrOption (maybeRaw (either int str)) "Name or id of another highlight group to link to.";
+      link_global = mkNullOrOption (maybeRaw (either int str)) ''
+        Like `link`, but always resolved in the global namespace (`ns=0`).
+
+        Nixvim applies highlights at `ns=0`, so this behaves as `link` does
+        here. It matters for values handed to a plugin that uses its own
+        namespace.
+      '';
       default = mkNullOrOption (maybeRaw bool) "Don't override existing definition.";
+      force = mkNullOrOption (maybeRaw bool) ''
+        Update the highlight group even if it already exists (default false).
+
+        Only meaningful together with `default`, which is what makes a
+        definition yield to an existing one. Without `default`, `nvim_set_hl`
+        already replaces the group.
+      '';
+      update = mkNullOrOption (maybeRaw bool) ''
+        Update specified attributes only, leave others unchanged (default false).
+
+        Nixvim applies `highlight` before `colorscheme` and `highlightOverride`
+        after it. Since a colorscheme clears existing groups, use this from
+        `highlightOverride`, where the attributes it preserves still exist.
+      '';
       ctermfg = mkNullOrOption (maybeRaw (either int str)) "Sets foreground of cterm color (color name or palette index).";
       ctermbg = mkNullOrOption (maybeRaw (either int str)) "Sets background of cterm color (color name or palette index).";
       cterm = mkNullOrOption (either str attrs) ''
