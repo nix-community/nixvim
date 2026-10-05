@@ -111,10 +111,6 @@
               "swiftformat"
               "swift_format"
 
-              # TODO Added 2025-10-12
-              # mbedtls is marked insecure
-              "haxe_formatter"
-
               # TODO Added 2025-04-01
               # php-cs-fixer is marked as broken
               "phpcsfixer"

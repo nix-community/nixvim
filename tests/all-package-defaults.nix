@@ -52,9 +52,6 @@ let
     "sourcekit-lsp"
     "swift-format"
 
-    # 2025-10-12 dependency mbedtls is marked as insecure
-    "haxe"
-
     # 2026-02-05: build failure
     "skim"
   ]
