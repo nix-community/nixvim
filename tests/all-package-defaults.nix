@@ -84,9 +84,6 @@ let
     # 2026-06-15: semgrep fails its installCheckPhase
     "semgrep"
 
-    # "tabnine"
-    "cmp-tabnine"
-
     # 2026-05-20: vectorcode is marked badPlatforms on aarch64-linux
     "vectorcode.nvim"
 

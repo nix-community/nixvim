@@ -8,6 +8,13 @@ let
     '';
   };
   removed.plugins = {
+    # Added 2026-10-05
+    cmp-tabnine = ''
+      TabNine's source and binary downloads are no longer available.
+      The executable was removed from nixpkgs: https://github.com/NixOS/nixpkgs/pull/569768.
+      Remove `plugins.cmp-tabnine` from your configuration and select another completion source.
+    '';
+
     # Added 2023-08-29
     treesitter-playground = ''
       The `treesitter-playground` plugin has been deprecated since the functionality is included in Neovim.
