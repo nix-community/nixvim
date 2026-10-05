@@ -13,6 +13,14 @@ let
   };
 
   disabledPackages = [
+    # TODO: 2026-10-05 semgrep requires pyjwt ~=2.13.0, but nixpkgs provides 2.14.0
+    # https://github.com/NixOS/nixpkgs/pull/569851
+    "semgrep"
+
+    # TODO: 2026-10-05 re-enable once https://github.com/NixOS/nixpkgs/pull/569679 hits flake.lock
+    "aider-chat"
+    "aider.nvim"
+
     # 2026-09-20: lean4 install prefix build failure
     # Re-enable when a future lockfile includes https://github.com/NixOS/nixpkgs/pull/563148.
     "lean4"
@@ -60,6 +68,12 @@ let
     "swift-format"
   ]
   ++ lib.optionals hostPlatform.isLinux [
+    # TODO: 2026-10-05 atopile fails to compile: uintptr_t requires <cstdint>
+    "atopile"
+
+    # TODO: 2026-10-05 re-enable once https://github.com/NixOS/nixpkgs/pull/569106 hits flake.lock
+    "verilator"
+
     # 2026-07-12 dependency z3 has a build failure
     "fstar"
   ]
