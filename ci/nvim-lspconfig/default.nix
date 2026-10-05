@@ -29,9 +29,9 @@ runCommand "lspconfig-servers.json"
             next
           }
 
-          # Print each line in the doc-comment
-          inbrief && /^--- / {
-            sub(/^--- /, "")
+          # Preserve blank lines so Markdown paragraphs and code fences stay separate
+          inbrief && /^---( |$)/ {
+            sub(/^--- ?/, "")
             print
             next
           }
