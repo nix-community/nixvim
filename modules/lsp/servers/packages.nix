@@ -3,11 +3,13 @@
     # keep-sorted start block=yes newline_separated=no
     "ada_ls"
     "agda_ls"
+    "agentscript"
     "alloy_ls"
     "anakin_language_server"
     "ansiblels"
     "antlersls"
     "apex_ls"
+    "armls"
     "autohotkey_lsp"
     "awk_ls"
     "azure_pipelines_ls"
@@ -26,6 +28,7 @@
     "cir_lsp_server"
     "circom-lsp"
     "clarinet"
+    "clice"
     "cobol_ls"
     "coffeesense"
     "contextive"
@@ -81,6 +84,7 @@
     "hydra_lsp"
     "hylo_ls"
     "janet_lsp"
+    "jetls"
     "jls"
     "julials"
     "kakehashi"
@@ -89,6 +93,7 @@
     "kotlin_lsp"
     "kulala_ls"
     "laravel_ls"
+    "laravel_lsp"
     "lean3ls"
     "lelwel_ls"
     "ltex_plus"
@@ -100,6 +105,7 @@
     "mojo"
     "motoko_lsp"
     "move_analyzer"
+    "ms_terraform_lsp"
     "msbuild_project_tools_server"
     "mutt_ls"
     "nelua_lsp"
@@ -114,6 +120,7 @@
     "pasls"
     "pbls"
     "perlls"
+    "php_lsp"
     "phptools"
     "pico8_ls"
     "please"
@@ -140,6 +147,7 @@
     "rome"
     "rpmspec"
     "ruff_lsp" # deprecated and removed from nixpkgs
+    "rust_glancer"
     "salt_ls"
     "scry" # deprecated and removed from nixpkgs
     "selene3p_ls"
@@ -165,6 +173,8 @@
     "stimulus_ls"
     "stylua3p_ls"
     "svlangserver"
+    "symfony_lsp"
+    "sysml_lsp"
     "tabby_ml"
     "termux_language_server"
     "terragrunt_ls"
@@ -448,6 +458,7 @@
     ];
     phpactor = "phpactor";
     phpantom_lsp = "phpantom-lsp";
+    pkl = "pkl-lsp";
     pony_lsp = "ponyc";
     postgres_lsp = "postgres-language-server";
     prismals = "prisma-language-server";
@@ -537,6 +548,7 @@
     tombi = "tombi";
     ts_ls = "typescript-language-server";
     ts_query_ls = "ts_query_ls";
+    tsc = "typescript_7";
     tsgo = "typescript-go";
     ttags = "ttags";
     ty = "ty";
