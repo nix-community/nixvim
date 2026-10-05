@@ -41,14 +41,21 @@ let
   # Make a classic vim plugin
   mkPlugin =
     name: attrs:
-    vimUtils.buildVimPlugin (
+    (vimUtils.buildVimPlugin (
       {
         pname = name;
         version = "2025-04-27";
         src = mkSrc name;
       }
       // attrs
-    );
+    )).overrideAttrs
+      (
+        final: _: {
+          requiredLuaModules = neovim-unwrapped.lua.pkgs.requiredLuaModules (
+            final.propagatedBuildInputs or [ ]
+          );
+        }
+      );
 
   # Make a plugin built with buildCommand
   mkBuildCommandPlugin =
@@ -90,9 +97,16 @@ let
               end
               return M
             '';
-        # Create a simple rockspec manifest
-        postPatch = ''
-          luarocks write-rockspec "${name}" "${version}" .
+        knownRockspec = writeText "${name}-${version}-1.rockspec" ''
+          rockspec_format = "3.0"
+          package = "${name}"
+          version = "${version}-1"
+          source = {
+            url = "git://github.com/nix-community/nixvim.git",
+          }
+          build = {
+            type = "builtin",
+          }
         '';
       }
       // attrs

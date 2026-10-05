@@ -86,8 +86,8 @@ let
       "numpy"
     ];
 in
-# TODO: 2025-07-25 luajit2.1-lib[1-5]-0.0.1 failing to build
-# Error: /build/init.lua/lib1-0.0.1-1.rockspec: Unknown field build_dependencies (using rockspec format 1.0)
+# TODO: 2026-10-05 restore transitive Lua dependencies (lib2) in byte-compilation tests
+# The init.lua checks also fail when MYVIMRC is unset and getscriptinfo() is empty.
 lib.optionalAttrs false (
   {
     default =
