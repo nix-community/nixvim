@@ -151,6 +151,12 @@
     githubId = 30784060;
     name = "Pedro Sánchez";
   };
+  qacow37 = {
+    email = "daily.cow37@proton.me";
+    github = "qacow37";
+    githubId = 147836833;
+    name = "qacow37";
+  };
   refaelsh = {
     email = "refaelsh@pm.me";
     github = "refaelsh";
