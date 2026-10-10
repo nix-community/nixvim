@@ -17,6 +17,9 @@ lib.nixvim.plugins.mkVimPlugin {
     and their `g:phpactor*` globals). For the language server, use
     `lsp.servers.phpactor` instead — the plugin is not required for that.
 
+    The FZF input-list example requires
+    `extraPlugins = [ pkgs.vimPlugins.fzf-wrapper ];`.
+
     Note: the option names for globals such as `g:phpactorPhpBin` and
     `g:phpactorBranch` are camel-cased upstream, so the settings keys keep
     their upstream casing after the `phpactor` prefix.
