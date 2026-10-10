@@ -24,7 +24,7 @@ lib.nixvim.plugins.mkVimPlugin {
     PhpBin = null;
     Branch = "main";
     InitialCwd = true;
-    InputListStrategy = "fzf";
+    InputListStrategy = "phpactor#input#list#fzf";
     OmniAutoClassImport = true;
     CompletionIgnoreCase = false;
   };
