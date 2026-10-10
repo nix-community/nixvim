@@ -3,7 +3,9 @@
     plugins.phpactor.enable = true;
   };
 
-  example = {
+  example = { pkgs, ... }: {
+    extraPlugins = [ pkgs.vimPlugins.fzf-wrapper ];
+
     plugins.phpactor = {
       enable = true;
       settings = {
