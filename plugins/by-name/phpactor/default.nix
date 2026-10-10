@@ -5,6 +5,8 @@ lib.nixvim.plugins.mkVimPlugin {
 
   globalPrefix = "phpactor";
 
+  dependencies = [ "php" ];
+
   maintainers = [ lib.maintainers.opdavies ];
 
   description = ''
