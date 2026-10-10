@@ -179,6 +179,12 @@
     githubId = 141351086;
     name = "Esther";
   };
+  wokerNM = {
+    email = "wokerNM@proton.me";
+    github = "wokerNM";
+    githubId = "215592475";
+    name = "wokerNM";
+  };
   wvffle = {
     email = "nixvim@wvffle.net";
     github = "wvffle";
