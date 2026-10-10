@@ -8,7 +8,6 @@
       enable = true;
       settings = {
         Branch = "main";
-        InitialCwd = true;
         InputListStrategy = "phpactor#input#list#fzf";
         OmniAutoClassImport = true;
         CompletionIgnoreCase = false;
