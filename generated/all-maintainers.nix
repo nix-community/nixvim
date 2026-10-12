@@ -43,6 +43,12 @@
     name = "George Bals";
     source = "nixpkgs";
   };
+  Che-0129 = {
+    github = "Che-0129";
+    githubId = 95518809;
+    name = "Che-0129";
+    source = "nixvim";
+  };
   DataHearth = {
     email = "dev@antoine-langlois.net";
     github = "DataHearth";
