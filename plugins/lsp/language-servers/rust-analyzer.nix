@@ -18,6 +18,7 @@ let
   optionDefaultPrio = (lib.mkOptionDefault null).priority;
 
   # Based on lib.modules.mkAliasAndWrapDefsWithPriority, but filters out null definition values.
+  # TODO: move to nixvim lib
   mkAliasForNonNullDefs =
     opt:
     let
@@ -45,12 +46,10 @@ in
       type = lib.types.nullOr lib.types.bool;
       apply =
         v:
-        if enabled then
-          if newOpts.cargo.enable.highestPrio < optionDefaultPrio then newCfg.cargo.enable else null
-        else
-          v;
+        if enabled && newOpts.cargo.enable.highestPrio < optionDefaultPrio then newCfg.cargo.enable else v;
       description = "Whether to install `cargo`.";
-      defaultText = null; # effective default from `apply`
+      # A null default does not propagate to the new option, because we filter null definitions.
+      default = null;
       example = true;
     };
 
@@ -64,12 +63,10 @@ in
       type = lib.types.nullOr lib.types.bool;
       apply =
         v:
-        if enabled then
-          if newOpts.rustc.enable.highestPrio < optionDefaultPrio then newCfg.rustc.enable else null
-        else
-          v;
+        if enabled && newOpts.rustc.enable.highestPrio < optionDefaultPrio then newCfg.rustc.enable else v;
       description = "Whether to install `rustc`.";
-      defaultText = null; # effective default from `apply`
+      # A null default does not propagate to the new option, because we filter null definitions.
+      default = null;
       example = true;
     };
 
@@ -83,12 +80,13 @@ in
       type = lib.types.nullOr lib.types.bool;
       apply =
         v:
-        if enabled then
-          if newOpts.rustfmt.enable.highestPrio < optionDefaultPrio then newCfg.rustfmt.enable else null
+        if enabled && newOpts.rustfmt.enable.highestPrio < optionDefaultPrio then
+          newCfg.rustfmt.enable
         else
           v;
       description = "Whether to install `rustfmt`.";
-      defaultText = null; # effective default from `apply`
+      # A null default does not propagate to the new option, because we filter null definitions.
+      default = null;
       example = true;
     };
 
