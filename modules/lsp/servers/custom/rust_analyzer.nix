@@ -6,7 +6,6 @@
   ...
 }:
 let
-  cfg = config;
   mkToolOptions =
     {
       name,
@@ -41,11 +40,11 @@ in
   config = {
     packages =
       lib.pipe
-        [ cfg.cargo cfg.rustc cfg.rustfmt ]
+        [ config.cargo config.rustc config.rustfmt ]
         [
-          (lib.filter (c: c.enable))
-          (lib.groupBy (c: if c.packageFallback then "suffix" else "prefix"))
-          (lib.mapAttrs (_: map (c: c.package)))
+          (lib.filter (tool: tool.enable))
+          (lib.groupBy (tool: if tool.packageFallback then "suffix" else "prefix"))
+          (lib.mapAttrs (_: map (tool: tool.package)))
           (v: lib.mkIf (v != { }) v)
         ];
   };
