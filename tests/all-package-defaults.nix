@@ -114,6 +114,10 @@ let
     "rustaceanvim"
   ]
   ++ lib.optionals hostPlatform.isDarwin [
+    # TODO: 2026-10-17 dependency samurai links -lrt, which Darwin lacks
+    # Re-enable once https://github.com/NixOS/nixpkgs/pull/573015 hits flake.lock
+    "muon"
+
     # 2026-08-26 dependency "dtools" build failure (only in the NixBot CI)
     # std.file.FileException@std/file.d(1091): Failed to remove file /private/tmp/rdmd_app_: Permission denied
     "serve-d"
