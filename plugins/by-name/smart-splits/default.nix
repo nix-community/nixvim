@@ -7,19 +7,13 @@ lib.nixvim.plugins.mkNeovimPlugin {
   maintainers = [ lib.maintainers.GaetanLepage ];
 
   settingsExample = {
-    resize_mode = {
-      quit_key = "<ESC>";
-      resize_keys = [
-        "h"
-        "j"
-        "k"
-        "l"
+    resize = {
+      amount = 5;
+      ignored_events = [
+        "BufEnter"
+        "WinEnter"
       ];
-      silent = true;
     };
-    ignored_events = [
-      "BufEnter"
-      "WinEnter"
-    ];
+    move.at_edge = "stop";
   };
 }

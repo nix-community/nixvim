@@ -8,25 +8,24 @@
       enable = true;
 
       settings = {
-        ignored_filetypes = [
+        ignored_filetypes = [ "NvimTree" ];
+        ignored_buftypes = [
           "nofile"
           "quickfix"
           "prompt"
         ];
-        ignored_buftypes = [ "NvimTree" ];
-        default_amount = 3;
-        move_cursor_same_row = true;
-        cursor_follows_swapped_bufs = true;
-        resize_mode = {
-          quit_key = "<ESC>";
-          resize_keys = [
-            "h"
-            "j"
-            "k"
-            "l"
+        resize = {
+          amount = 3;
+          ignored_events = [
+            "BufEnter"
+            "WinEnter"
           ];
-          silent = true;
         };
+        move = {
+          at_edge = "wrap";
+          same_row = true;
+        };
+        swap.move_cursor = true;
       };
     };
   };
