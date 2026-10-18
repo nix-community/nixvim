@@ -1,5 +1,9 @@
 {
   empty = {
+    # 2026-10-17: TabNine downloads are no longer available
+    # https://github.com/NixOS/nixpkgs/pull/569768
+    test.buildNixvim = false;
+
     plugins = {
       cmp.enable = true;
       cmp-tabnine.enable = true;
@@ -7,6 +11,10 @@
   };
 
   defaults = {
+    # 2026-10-17: TabNine downloads are no longer available
+    # https://github.com/NixOS/nixpkgs/pull/569768
+    test.buildNixvim = false;
+
     plugins = {
       cmp.enable = true;
       cmp-tabnine = {
@@ -26,6 +34,10 @@
   };
 
   example = {
+    # 2026-10-17: TabNine downloads are no longer available
+    # https://github.com/NixOS/nixpkgs/pull/569768
+    test.buildNixvim = false;
+
     plugins = {
       cmp.enable = true;
       cmp-tabnine = {

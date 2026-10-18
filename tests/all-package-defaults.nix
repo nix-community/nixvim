@@ -13,6 +13,10 @@ let
   };
 
   disabledPackages = [
+    # 2026-10-17: TabNine downloads are no longer available
+    # https://github.com/NixOS/nixpkgs/pull/569768
+    "cmp-tabnine"
+
     # 2026-02-02 build failure
     "crystalline"
 
@@ -38,9 +42,6 @@ let
     "skim"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
-    # "tabnine"
-    "cmp-tabnine"
-
     # 2026-09-28: checkPhase build failure
     "ocaml"
 
