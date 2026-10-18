@@ -27,6 +27,8 @@
                 "supermaven"
                 # Sometimes get auth error
                 "codeium"
+                # 2026-10-17: TabNine downloads are no longer available
+                "cmp_tabnine"
               ];
             in
             lib.pipe config.cmpSourcePlugins [
