@@ -1,9 +1,5 @@
 {
   empty = {
-    # 2026-09-20: lean4 install prefix build failure
-    # Re-enable when a future lockfile includes https://github.com/NixOS/nixpkgs/pull/563148.
-    dependencies.lean.enable = false;
-
     # TODO 2025-10-01
     # Calls `require("lspconfig")` which is deprecated, producing a warning
     test.runNvim = false;
@@ -14,10 +10,6 @@
   # Enable the `leanls` LSP directly from `plugins.lsp`. This implies explicitly disabling the lsp
   # in the `lean` plugin configuration.
   lspDisabled = {
-    # 2026-09-20: lean4 install prefix build failure
-    # Re-enable when a future lockfile includes https://github.com/NixOS/nixpkgs/pull/563148.
-    dependencies.lean.enable = false;
-
     plugins = {
       lsp = {
         enable = true;
@@ -37,10 +29,6 @@
   };
 
   default = {
-    # 2026-09-20: lean4 install prefix build failure
-    # Re-enable when a future lockfile includes https://github.com/NixOS/nixpkgs/pull/563148.
-    dependencies.lean.enable = false;
-
     # TODO 2025-10-01
     # Calls `require("lspconfig")` which is deprecated, producing a warning
     test.runNvim = false;

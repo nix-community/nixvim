@@ -40,10 +40,6 @@ let
         # TODO: 2026-10-05 atopile fails to compile: uintptr_t requires <cstdint>
         "atopile"
 
-        # 2026-09-20: lean4 install prefix build failure
-        # Re-enable when a future lockfile includes https://github.com/NixOS/nixpkgs/pull/563148.
-        "lean3ls"
-
         # 2026-08-16: broken dependency "sv-lang"
         "veridian"
 
