@@ -97,7 +97,6 @@
     "lean3ls"
     "lelwel_ls"
     "ltex" # ltex-ls was archived upstream and removed from nixpkgs
-    "ltex_plus"
     "lwc_ls"
     "m68k"
     "marko-js"
@@ -407,6 +406,7 @@
     lemminx = "lemminx";
     lexical = "lexical";
     lsp_ai = "lsp-ai";
+    ltex_plus = "ltex-ls-plus";
     lua_ls = "lua-language-server";
     luau_lsp = "luau-lsp";
     markdown_oxide = "markdown-oxide";
