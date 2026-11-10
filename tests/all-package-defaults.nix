@@ -65,6 +65,10 @@ let
     "fstar"
   ]
   ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+    # TODO: 2026-11-10 biome is not cached on CNO at this nixpkgs revision,
+    # and building it exceeds the silence limit of the nix-community builders
+    "biome"
+
     # 2026-08-09: build failure
     "ponyc"
 
