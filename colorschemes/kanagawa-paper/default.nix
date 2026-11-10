@@ -5,7 +5,7 @@
 lib.nixvim.plugins.mkNeovimPlugin {
   name = "kanagawa-paper";
   isColorscheme = true;
-  package = "kanagawa-paper-nvim";
+  package = "kanagawa-paper";
 
   description = ''
     You can select the theme in two ways:
