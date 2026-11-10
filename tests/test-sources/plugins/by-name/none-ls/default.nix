@@ -100,8 +100,8 @@
         sources =
           let
             disabled = [
-              # TODO: 2026-10-05 semgrep requires pyjwt ~=2.13.0, but nixpkgs provides 2.14.0
-              # https://github.com/NixOS/nixpkgs/pull/569851
+              # TODO: 2026-11-10 semgrep-core fails in fixupPhase (patchelf assertion)
+              # https://github.com/NixOS/nixpkgs/issues/579107
               "semgrep"
 
               # TODO: 2026-07-12 dependency swift is broken
