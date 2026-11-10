@@ -60,9 +60,6 @@ let
     # TODO: 2026-10-05 atopile fails to compile: uintptr_t requires <cstdint>
     "atopile"
 
-    # TODO: 2026-10-05 re-enable once https://github.com/NixOS/nixpkgs/pull/569106 hits flake.lock
-    "verilator"
-
     # 2026-07-12 dependency z3 has a build failure
     "fstar"
   ]
