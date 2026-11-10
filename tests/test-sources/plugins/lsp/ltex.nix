@@ -5,6 +5,8 @@
 
       servers.ltex = {
         enable = true;
+        # ltex-ls is no longer packaged in nixpkgs
+        package = null;
 
         settings = {
           enabled = [
