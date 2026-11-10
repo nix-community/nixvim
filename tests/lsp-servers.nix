@@ -37,6 +37,10 @@ let
     let
 
       disabled = [
+        # TODO: 2026-11-10 transitive dependency posthog is marked broken
+        # https://github.com/NixOS/nixpkgs/issues/581042
+        "vectorcode_server"
+
         # TODO: 2026-10-05 atopile fails to compile: uintptr_t requires <cstdint>
         "atopile"
 

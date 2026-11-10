@@ -3,6 +3,10 @@ let
   inherit (pkgs.stdenv) hostPlatform;
 
   disabledDeps = [
+    # TODO: 2026-11-10 transitive dependency posthog is marked broken
+    # https://github.com/NixOS/nixpkgs/issues/581042
+    "vectorcode"
+
     # TODO: 2025-10-03
     # Transient dependency `vmr` has a build failure
     # https://github.com/NixOS/nixpkgs/issues/431811
