@@ -17,9 +17,12 @@ let
     # https://github.com/NixOS/nixpkgs/issues/579107
     "semgrep"
 
-    # TODO: 2026-10-05 re-enable once https://github.com/NixOS/nixpkgs/pull/569679 hits flake.lock
+    # TODO: 2026-11-10 transitive dependency posthog is marked broken
+    # https://github.com/NixOS/nixpkgs/issues/581042
     "aider-chat"
     "aider.nvim"
+    "vectorcode"
+    "vectorcode.nvim"
 
     # 2026-08-16: broken dependency "sv-lang"
     "veridian"

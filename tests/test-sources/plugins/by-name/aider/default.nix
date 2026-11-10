@@ -1,6 +1,7 @@
 { pkgs }:
 let
-  # TODO: 2026-10-05 remove once https://github.com/NixOS/nixpkgs/pull/569679 hits flake.lock
+  # TODO: 2026-11-10 transitive dependency posthog is marked broken
+  # https://github.com/NixOS/nixpkgs/issues/581042
   # These tests load the Lua plugin without invoking the broken aider-chat executable.
   package = pkgs.vimPlugins.aider-nvim.overrideAttrs { runtimeDeps = [ ]; };
 in

@@ -3,6 +3,10 @@
   empty =
     { config, ... }:
     {
+      # TODO: 2026-11-10 transitive dependency posthog is marked broken
+      # https://github.com/NixOS/nixpkgs/issues/581042
+      test.buildNixvim = false;
+
       plugins.vectorcode.enable = true;
 
       assertions = [
@@ -64,6 +68,10 @@
   };
 
   defaults = {
+    # TODO: 2026-11-10 transitive dependency posthog is marked broken
+    # https://github.com/NixOS/nixpkgs/issues/581042
+    test.buildNixvim = false;
+
     plugins.vectorcode = {
       enable = true;
       settings = {
@@ -98,6 +106,10 @@
   };
 
   example = {
+    # TODO: 2026-11-10 transitive dependency posthog is marked broken
+    # https://github.com/NixOS/nixpkgs/issues/581042
+    test.buildNixvim = false;
+
     plugins.vectorcode = {
       enable = true;
       settings = {
