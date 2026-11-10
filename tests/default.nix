@@ -95,5 +95,11 @@ in
 
   # TODO: consider whether all these tests are needed to be built by nixbot
   nixbot =
-    lib.optionalAttrs (system == "x86_64-linux") (misc // docs // mainGrouped) // platforms // packages;
+    lib.optionalAttrs (system == "x86_64-linux") (misc // docs // mainGrouped)
+    // platforms
+    # TODO: 2026-11-10 the nix-community Darwin builders run Nix 2.35.3 with the sandbox enabled,
+    # which rejects derivations with this many inputs.
+    # https://github.com/NixOS/nix/issues/16613
+    # Re-enable once the builders run Nix 2.35.5 or later.
+    // lib.optionalAttrs (!pkgs.stdenv.hostPlatform.isDarwin) packages;
 }
