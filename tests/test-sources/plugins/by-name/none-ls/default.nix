@@ -104,9 +104,6 @@
               # https://github.com/NixOS/nixpkgs/pull/569851
               "semgrep"
 
-              # TODO: 2026-10-05 re-enable once https://github.com/NixOS/nixpkgs/pull/569106 hits flake.lock
-              "verilator"
-
               # TODO: 2026-07-12 dependency swift is broken
               "swiftformat"
               "swift_format"
