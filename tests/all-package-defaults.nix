@@ -51,12 +51,10 @@ let
     # 2026-02-05: build failure
     "skim"
   ]
-  ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isx86_64) [
+  ++ lib.optionals hostPlatform.isLinux [
     # TODO: 2026-07-12 dependency swift is broken
     "swiftformat"
-    "swift-format"
-  ]
-  ++ lib.optionals hostPlatform.isLinux [
+
     # TODO: 2026-10-05 atopile fails to compile: uintptr_t requires <cstdint>
     "atopile"
 
