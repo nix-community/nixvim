@@ -73,6 +73,7 @@ in
       "mdl"
       "mypy"
       "nixfmt"
+      "phpstan"
       "pmd"
       "prettier"
       "prettierd"
@@ -119,7 +120,6 @@ in
       ocamlPackages = "ocamlformat";
       phpPackages = [
         "phpmd"
-        "phpstan"
       ];
       rubyPackages = "htmlbeautifier";
     }
