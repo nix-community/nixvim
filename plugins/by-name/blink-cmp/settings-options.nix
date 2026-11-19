@@ -76,7 +76,7 @@ in
         "fallback"
       ];
       # Example using raw Lua:
-      "<C-a>" = lib.nixvim.mkRaw "require('some-module').custom_function()";
+      "<C-a>" = lib.nixvim.nestedLiteralLua "require('some-module').custom_function()";
     };
     description = ''
       The keymap can be:
