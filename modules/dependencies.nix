@@ -155,6 +155,7 @@ in
       grep.default = "gnugrep";
       gzip.default = "gzip";
       imagemagick.default = "imagemagick";
+      jq.default = "jq";
       jujutsu.default = "jujutsu";
       jupytext.default = [
         "python313Packages"
