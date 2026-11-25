@@ -34,10 +34,10 @@ in
                 }
               )
               {
-                wl-copy = "wl-clipboard";
-                xclip = "xclip";
-                xsel = "xsel";
                 pbcopy = null;
+                wl-copy = "wl-clipboard";
+                xsel = "xsel";
+                xclip = "xclip";
               };
         };
         default = { };
