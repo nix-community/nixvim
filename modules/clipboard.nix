@@ -36,8 +36,10 @@ in
               {
                 pbcopy = null;
                 wl-copy = "wl-clipboard";
+                wayclip = "wayclip";
                 xsel = "xsel";
                 xclip = "xclip";
+                lemonade = "lemonade";
               };
         };
         default = { };
